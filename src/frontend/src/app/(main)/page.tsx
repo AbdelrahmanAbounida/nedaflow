@@ -1,3 +1,4 @@
+import { NewFlowModal } from "@/components/modals/new-flow-modal";
 import { Button } from "@/components/ui/button";
 import { PlusCircle, PlusIcon, Workflow } from "lucide-react";
 import Image from "next/image";
@@ -18,10 +19,11 @@ export default function Home() {
           Start Creating your flow. Begin with a template, or start from
           scratch.
         </p>
-        <Button className="mt-5 h-8 px-7">
+        {/* <Button className="mt-5 h-8 px-7">
           <PlusCircle className="mr-0 size-4" />
           New Flow
-        </Button>
+        </Button> */}
+        <NewFlowModal className="mt-5 h-8 px-7" />
       </div>
     );
   }
