@@ -1,13 +1,19 @@
-import {  Target } from 'lucide-react'
-import React from 'react'
+import { Target } from "lucide-react";
+import Link, { LinkProps } from "next/link";
+import React, { FC } from "react";
 
-const Logo = () => {
+const Logo: FC<Omit<LinkProps, "href"> & { href?: string }> = ({
+  href = "/",
+  ...props
+}) => {
   return (
-    <div className='flex items-center gap-1 p-2'>
-        <Target className='text-primary size-6 ' />
-        <p className='font-bold text-2xl'>Neda<span className='text-primary'>Lang</span></p>
-    </div>
-  )
-}
+    <Link {...props} href={href} className="flex items-center gap-1 ">
+      <Target className="text-primary size-6 " />
+      <p className="font-bold text-2xl">
+        Neda<span className="text-primary">Lang</span>
+      </p>
+    </Link>
+  );
+};
 
-export default Logo
+export default Logo;
