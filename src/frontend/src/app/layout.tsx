@@ -18,7 +18,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${mont.className}  antialiased overflow-hidden`}
+        className={` antialiased overflow-hidden`}
         style={
           {
             "--header-height": HEADER_HEIGHT,

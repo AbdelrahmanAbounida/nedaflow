@@ -47,7 +47,7 @@ export const AppSidebar = () => {
   const folders: any[] = ["folder1", "Folder2"]; // TODO:: to be loaded with hoosk
 
   return (
-    <Sidebar variant="sidebar" className="">
+    <Sidebar variant="sidebar" className="mt-[--sidebar-m-top]">
       <SidebarContent className="p-1 bg-white">
         {/** List of Folders */}
         <SidebarGroup className="p-3">

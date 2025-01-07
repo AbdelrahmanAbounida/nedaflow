@@ -12,7 +12,7 @@ export default function Home() {
 
   return (
     <main className="flex flex-col w-full h-full">
-      <div className="flex flex-col w-full h-full container mt-9 mx-auto">
+      <div className="flex flex-col w-full h-full container px-9 mt-9 mx-auto">
         <div className="w-full flex items-center justify-between">
           <div className="flex flex-col">
             <h1 className="font-bold text-xl">{selectedFolder}</h1>
@@ -21,10 +21,12 @@ export default function Home() {
             </p>
           </div>
 
-          <Button className="h-8" variant={"outline"}>
-            <PlusIcon className="text-accent-foreground/70 size-4" />
-            New Flow{" "}
-          </Button>
+          <NewFlowModal>
+            <Button className="h-8" variant={"outline"}>
+              <PlusIcon className="text-accent-foreground/70 size-4" />
+              New Flow{" "}
+            </Button>
+          </NewFlowModal>
         </div>
         <Separator className="mt-3" />
 
