@@ -28,6 +28,8 @@ import {
   PlusIcon,
   Ellipsis,
   MoreHorizontal,
+  Folder,
+  Folders,
 } from "lucide-react";
 import React from "react";
 import { SIDEBAR_M_TOP } from "@/constants/layout";
@@ -51,7 +53,10 @@ export const AppSidebar = () => {
         <SidebarGroup className="p-3">
           {/** Folders Label */}
           <SidebarGroupLabel className="flex items-center justify-between p-0  mt-4">
-            <p className="font-semibold text-[15px] text-black">Folders</p>
+            <div className="flex items-center gap-1">
+              <Folders className="size-5 mr-1" />
+              <p className="font-semibold text-[15px] text-black">Folders</p>
+            </div>
             <div className="flex items-center ">
               <CreateNewFolderButton />
               <UploadFlowButton />
@@ -62,7 +67,7 @@ export const AppSidebar = () => {
           <SidebarGroupContent className="mt-3">
             <SidebarMenu className="gap-1">
               {folders.map((folder, index) => (
-                <SidebarMenuItem className="">
+                <SidebarMenuItem key={index} className="group/item">
                   <SidebarMenuButton
                     className={cn("h-9 flex items-center")}
                     isActive={index == 0}
@@ -71,10 +76,7 @@ export const AppSidebar = () => {
                       asd
                     </Link>
                   </SidebarMenuButton>
-                  {/* <SidebarMenuAction className=" my-auto">
-                    <Ellipsis className="mt-1 size-3 text-muted-foreground" />
-                  </SidebarMenuAction> */}
-                  <FolderDropDown />
+                  <FolderDropDown isActive={index == 0} />
                 </SidebarMenuItem>
               ))}
             </SidebarMenu>
@@ -148,11 +150,18 @@ const UploadFlowButton = () => (
   </TooltipProvider>
 );
 
-const FolderDropDown = () => (
+const FolderDropDown = ({ isActive = false }: { isActive?: boolean }) => (
   <DropdownMenu>
-    <DropdownMenuTrigger asChild>
-      <SidebarMenuAction>
-        <MoreHorizontal className="mt-2 text-muted-foreground" />
+    <DropdownMenuTrigger className="" asChild>
+      <SidebarMenuAction
+        className={cn("hidden group-hover/item:flex", isActive && "flex")}
+      >
+        <MoreHorizontal
+          className={cn(
+            "mt-2 text-muted-foreground group-hover/item:text-black",
+            isActive && "text-black"
+          )}
+        />
       </SidebarMenuAction>
     </DropdownMenuTrigger>
     <DropdownMenuContent
