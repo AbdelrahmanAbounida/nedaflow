@@ -1,5 +1,5 @@
 import MainAppHeader from "@/components/layout/header/main-header";
-import { AppSidebar } from "@/components/layout/sidebars/app-sidebar/main";
+import { AppSidebar } from "@/components/layout/sidebar/main";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { Sidebar } from "lucide-react";
 import React, { ReactNode } from "react";
