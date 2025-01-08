@@ -279,7 +279,7 @@ const GetStartedCard = ({
 // *********************
 
 const TemplateViewFooter = () => (
-  <DialogFooter className="pb-7">
+  <DialogFooter className="pb-7 px-1">
     <div className="w-full flex items-center justify-between">
       <div className="flex flex-col">
         <h1 className="text-md font-semibold">Start From Scratch</h1>
