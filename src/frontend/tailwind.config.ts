@@ -70,9 +70,13 @@ const config: Config = {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
-        screen: {
-          "8xl": "1200px",
+        canvas: {
+          DEFAULT: "hsl(var(--canvas))",
+          dot: "hsl(var(--canvas-dot))",
         },
+      },
+      screen: {
+        "8xl": "2000px",
       },
     },
     // screens: {

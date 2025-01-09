@@ -3,7 +3,7 @@
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { VariantProps, cva } from "class-variance-authority";
-import { PanelLeft } from "lucide-react";
+import { PanelLeft, PanelLeftClose } from "lucide-react";
 
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
@@ -148,6 +148,7 @@ const SidebarProvider = React.forwardRef<
               className
             )}
             ref={ref}
+            data-open={open}
             {...props}
           >
             {children}
@@ -264,8 +265,8 @@ Sidebar.displayName = "Sidebar";
 
 const SidebarTrigger = React.forwardRef<
   React.ElementRef<typeof Button>,
-  React.ComponentProps<typeof Button>
->(({ className, onClick, ...props }, ref) => {
+  React.ComponentProps<typeof Button> & { titleClassName?: string }
+>(({ className, titleClassName, title, onClick, ...props }, ref) => {
   const { toggleSidebar } = useSidebar();
 
   return (
@@ -281,8 +282,9 @@ const SidebarTrigger = React.forwardRef<
       }}
       {...props}
     >
-      <PanelLeft />
+      <PanelLeftClose />
       <span className="sr-only">Toggle Sidebar</span>
+      {title && <div className={cn("", titleClassName)}>{title}</div>}
     </Button>
   );
 });
