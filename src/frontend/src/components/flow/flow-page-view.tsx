@@ -16,6 +16,9 @@ import {
 import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
 import "@xyflow/react/dist/style.css";
+import { createFlowNode } from "./utils/create-flow-node";
+import { ComponentTypeEnum } from "@/types/flow/flow-component";
+import GenericComponent from "./flow-components/generic-component/generic-component";
 
 export interface FlowPageProps {
   params: {
@@ -24,10 +27,13 @@ export interface FlowPageProps {
   };
 }
 const initialNodes = [
-  { id: "1", position: { x: 0, y: 0 }, data: { label: "1" } },
-  { id: "2", position: { x: 0, y: 100 }, data: { label: "2" } },
+  createFlowNode({ componentType: ComponentTypeEnum.AGENT }),
 ];
 const initialEdges = [{ id: "e1-2", source: "1", target: "2" }];
+
+const nodeTypes = {
+  geneicNode: GenericComponent,
+};
 
 const FlowPageView = ({ params }: FlowPageProps) => {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
@@ -46,6 +52,7 @@ const FlowPageView = ({ params }: FlowPageProps) => {
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
+        nodeTypes={nodeTypes}
       >
         <Panel
           className={cn(

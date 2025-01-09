@@ -1,0 +1,29 @@
+To Create a flow 
+
+- we have nodes > takes nodeprops and edges 
+- we create custom or generic node with custom data 
+- in that data we add the info that we need to create custom component or task which represents the node view 
+
+ex 
+interface CustomNode extends Node {
+    data: CustomNodeData
+}
+interface CustomNodeData {
+    type: "A" // later when we read the prompt we could read this type to dynamically load custom components/tasks 
+}
+
+interface component {
+    type: "A" // this should be enum 
+    data: ...
+    inputs:
+    outputs:
+}
+
+
+- then we create genericNodeComponent function which takes node data 
+and from this data we can load the type and then render the according component 
+
+- nodeTypes = {
+    CustomNodeData: genericNodeComponent // note left is the customnode we have and right is the generic component 
+}
+

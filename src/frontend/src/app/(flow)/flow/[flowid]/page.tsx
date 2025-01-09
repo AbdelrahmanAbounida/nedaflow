@@ -1,13 +1,14 @@
+import FlowPageView from "@/components/flow/flow-page-view";
 import React from "react";
 
 interface FlowPageProps {
   params: {
-    flowid: string;
+    flowId: string;
   };
 }
 
 const FlowPage = ({ params }: FlowPageProps) => {
-  return <div>{params.flowid}</div>;
+  return <FlowPageView params={params} />;
 };
 
 export default FlowPage;
