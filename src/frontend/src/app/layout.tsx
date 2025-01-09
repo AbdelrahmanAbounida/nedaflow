@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Montserrat } from "next/font/google";
 import "./globals.css";
 import { HEADER_HEIGHT } from "@/constants/layout";
+import { AllProviders } from "@/providers";
 
 const mont = Montserrat({ subsets: ["latin"] });
 
@@ -25,7 +26,7 @@ export default function RootLayout({
           } as React.CSSProperties
         }
       >
-        {children}
+        <AllProviders>{children}</AllProviders>
       </body>
     </html>
   );
