@@ -3,6 +3,7 @@ import { Inter, Montserrat } from "next/font/google";
 import "./globals.css";
 import { HEADER_HEIGHT } from "@/constants/layout";
 import { AllProviders } from "@/providers";
+import MainAppHeader from "@/components/layout/header/main-header";
 
 const mont = Montserrat({ subsets: ["latin"] });
 

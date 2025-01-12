@@ -23,11 +23,7 @@ const MainAppHeader: FC<
           "--header-height": HEADER_HEIGHT,
         } as React.CSSProperties
       }
-      className={cn(
-        "h-[--header-height] w-full ",
-
-        className
-      )}
+      className={cn("h-[--header-height] w-full ", className)}
     >
       <div
         className={cn(
