@@ -26,8 +26,15 @@ import { SidebarItemProps } from "@/constants/flow-sidebar";
 import { Button } from "@/components/ui/button";
 import { SidebarMenuButton } from "@/components/ui/sidebar";
 import { getLucideIcon, LucidIconFromName } from "@/utils/get-lucid-icon";
+import { BundleIcon } from "./bundle-icon";
 
-export const FlowSidebarItem = ({ item }: { item: SidebarItemProps }) => {
+export const FlowSidebarItem = ({
+  item,
+  isBundle = false,
+}: {
+  item: SidebarItemProps;
+  isBundle?: boolean;
+}) => {
   const [activeIndex, setactiveIndex] = useState<number | null>();
 
   const toggleAccordion = (index: number) => {
@@ -46,7 +53,11 @@ export const FlowSidebarItem = ({ item }: { item: SidebarItemProps }) => {
         >
           <div className="flex items-center gap-2">
             {/* <LucidIconFromName name={item.icon as any} /> */}
-            {Icon && <Icon className="size-4" />}
+            {isBundle ? (
+              <BundleIcon icon_name={item.display_name} />
+            ) : (
+              Icon && <Icon className="size-4" />
+            )}
 
             <p className="text-sm">{item.display_name}</p>
           </div>

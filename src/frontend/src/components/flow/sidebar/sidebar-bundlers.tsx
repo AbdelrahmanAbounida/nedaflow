@@ -10,7 +10,7 @@ export const SidebarBundles = () => {
 
         <div className="">
           {SIDEBAR_BUNDLES.map((item, index) => (
-            <FlowSidebarItem key={index} item={item} />
+            <FlowSidebarItem isBundle={true} key={index} item={item} />
           ))}
         </div>
       </div>
