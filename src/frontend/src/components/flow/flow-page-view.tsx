@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback } from "react";
+import React, { DragEventHandler, useCallback, useRef, useState } from "react";
 import { SidebarTrigger } from "../ui/sidebar";
 import {
   ReactFlow,
@@ -10,12 +10,16 @@ import {
   useEdgesState,
   addEdge,
   Panel,
+  useReactFlow,
+  Connection,
+  Edge,
+  Node,
 } from "@xyflow/react";
 import { cn } from "@/lib/utils";
 import "@xyflow/react/dist/style.css";
 import { createFlowNode } from "./utils/create-flow-node";
 import { ComponentTypeEnum } from "@/types/flow/flow-component";
-import { NodeComponent } from "./flow-components/generic-component/generic-component";
+import { GenericNodeComponent } from "./generic-component/generic-component";
 
 export interface FlowPageProps {
   params: {
@@ -29,17 +33,44 @@ const initialNodes = [
 const initialEdges = [{ id: "e1-2", source: "1", target: "2" }];
 
 const nodeTypes = {
-  geneicNode: NodeComponent,
+  geneicNode: GenericNodeComponent,
 };
 
 const FlowPageView = ({ params }: FlowPageProps) => {
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+  const [nodes, setNodes, onNodesChange] = useNodesState<Node>(initialNodes);
+  const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>(initialEdges);
+  const { screenToFlowPosition } = useReactFlow();
 
   const onConnect = useCallback(
-    (params: any) => setEdges((eds) => addEdge(params, eds)),
+    (connection: Connection) => {
+      setEdges((eds) => addEdge({ ...connection }, eds));
+    },
     [setEdges]
   );
+
+  const onDragOver = useCallback((event: any) => {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = "move";
+  }, []);
+
+  const onDrop: DragEventHandler<HTMLDivElement> = useCallback((event) => {
+    event.preventDefault();
+    const type = event.dataTransfer?.getData("application/reactflow");
+
+    // TODO:: get node data , measured and accumulate the width and height
+    const position = screenToFlowPosition({
+      x: event.clientX,
+      y: event.clientY,
+    });
+
+    // TODO >> check how to render data here and to pass them on function on dragstart
+
+    const newNode = createFlowNode({
+      componentType: ComponentTypeEnum.AGENT,
+      position,
+    });
+    setNodes((es) => es.concat(newNode));
+  }, []);
 
   return (
     <div className="w-full  h-full bg-canvas">
@@ -50,6 +81,8 @@ const FlowPageView = ({ params }: FlowPageProps) => {
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
         nodeTypes={nodeTypes}
+        onDrop={onDrop}
+        onDragOver={onDragOver}
       >
         <Panel
           className={cn(

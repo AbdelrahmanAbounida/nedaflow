@@ -2,11 +2,13 @@
  * Base Component that all components will infer from
  */
 
+import { IconDisplyName } from "@/constants/icons/bundles";
+
 // 1- Component >> take inputs + params >> extract output
 // So we have main 4 block types (Component, Input/Output 'sameType' , Param) + (Component Category or Type), (Param Category or Type)
 
 export interface Component {
-  icon: string;
+  icon: IconDisplyName;
   name: string; // TODO:: we need to check a way to map to lucid icons
   descriotion: string;
   inputs: ComponentParam[];

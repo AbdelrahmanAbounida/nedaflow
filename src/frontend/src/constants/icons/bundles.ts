@@ -1,11 +1,10 @@
-import { SIDEBAR_BUNDLES } from "../flow-sidebar";
+import { StarIcon } from "lucide-react";
 
-// iconName > icon link
+export type IconDisplyName =
+  | keyof typeof SVG_ICONS_REGISTERY
+  | keyof typeof LucidIconsRegistery;
 
-export type BundleDisplayNames =
-  (typeof SIDEBAR_BUNDLES)[number]["display_name"];
-
-export const BUNDLES_ICONS: Record<BundleDisplayNames, string> = {
+export const SVG_ICONS_REGISTERY = {
   LangChain: "/bundles-icons/langchain-icon.svg",
   AgentQL: "/bundles-icons/AgentQL.svg",
   AssemblyAI: "/bundles-icons/AssemblyAI.svg",
@@ -25,4 +24,8 @@ export const BUNDLES_ICONS: Record<BundleDisplayNames, string> = {
   Unstructured: "/bundles-icons/Unstructured.svg",
   Git: "/bundles-icons/Git.svg",
   Confluence: "/bundles-icons/Confluence.svg",
+} as const;
+
+export const LucidIconsRegistery = {
+  star: StarIcon,
 };

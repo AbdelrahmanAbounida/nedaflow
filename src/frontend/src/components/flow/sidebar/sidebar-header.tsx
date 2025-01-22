@@ -2,17 +2,11 @@ import { Button } from "@/components/ui/button";
 import { SidebarHeader, SidebarTrigger } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
 import { PanelLeftClose, SlidersHorizontal } from "lucide-react";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
-  AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";

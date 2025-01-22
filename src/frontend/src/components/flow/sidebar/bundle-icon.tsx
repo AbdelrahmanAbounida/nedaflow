@@ -1,19 +1,16 @@
-import { BundleDisplayNames, BUNDLES_ICONS } from "@/constants/icons/bundles";
+import { IconDisplyName, SVG_ICONS_REGISTERY } from "@/constants/icons/bundles";
 import Image from "next/image";
 import React from "react";
 
-export const BundleIcon = ({
-  icon_name,
-}: {
-  icon_name: BundleDisplayNames;
-}) => {
-  if (!(icon_name in BUNDLES_ICONS)) {
+export const BundleIcon = ({ icon_name }: { icon_name: IconDisplyName }) => {
+  if (!(icon_name in SVG_ICONS_REGISTERY)) {
     return null;
   }
+
   return (
     <div className="size-4 relative">
       <Image
-        src={BUNDLES_ICONS[icon_name]}
+        src={SVG_ICONS_REGISTERY[icon_name]}
         alt={icon_name}
         fill
         className="absolute"

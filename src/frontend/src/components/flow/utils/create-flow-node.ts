@@ -19,7 +19,7 @@ export const createFlowNode = ({
       type: componentType,
       showNode: true,
       component: {
-        icon: "Star",
+        icon: "star",
         name: "Agent",
         type: componentType,
         descriotion: "This is description",

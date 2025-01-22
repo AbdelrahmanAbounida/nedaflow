@@ -17,16 +17,13 @@ import {
   Accordion,
   AccordionContent,
   AccordionItem,
-  AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Badge } from "@/components/ui/badge";
-import { Switch } from "@/components/ui/switch";
-import { Separator } from "@/components/ui/separator";
 import { SidebarItemProps } from "@/constants/flow-sidebar";
 import { Button } from "@/components/ui/button";
 import { SidebarMenuButton } from "@/components/ui/sidebar";
 import { getLucideIcon, LucidIconFromName } from "@/utils/get-lucid-icon";
 import { BundleIcon } from "./bundle-icon";
+import { FlowSidebarDraggableItem } from "./sidebar-draggable-item";
 
 export const FlowSidebarItem = ({
   item,
@@ -45,21 +42,19 @@ export const FlowSidebarItem = ({
   const Icon = getLucideIcon(item.icon);
 
   return (
-    <div>
+    <div className="w-full">
       <div className="w-full flex items-center flex-col">
         <SidebarMenuButton
           onClick={() => toggleAccordion(0)}
-          className="flex items-center justify-between w-full"
+          className="flex items-center justify-between w-full "
         >
-          <div className="flex items-center gap-2">
-            {/* <LucidIconFromName name={item.icon as any} /> */}
+          <div className="flex items-center gap-2 w-full ">
             {isBundle ? (
               <BundleIcon icon_name={item.display_name} />
             ) : (
               Icon && <Icon className="size-4" />
             )}
-
-            <p className="text-sm">{item.display_name}</p>
+            <p className="text-md">{item.display_name}</p>
           </div>
           <Button variant={"ghost"} size={"icon"} className="">
             <ChevronRight className="size-4 text-gray-400 " />
@@ -69,16 +64,18 @@ export const FlowSidebarItem = ({
         {/** Data accordion */}
 
         <Accordion
+          className=" w-full"
           type="single"
           collapsible
           value={activeIndex?.toString()}
           onValueChange={(value) => setactiveIndex(Number(value))}
         >
-          <AccordionItem value="0" className="border-none">
-            <AccordionContent className="flex items-center flex-col gap-5 w-full px-2">
-              <div className="flex items-center justify-between w-full my-5">
-                items shown here
-              </div>
+          <AccordionItem value="0" className="border-none ">
+            <AccordionContent className="flex items-center flex-col gap-5 px-1 ">
+              <FlowSidebarDraggableItem
+                icon={item.icon}
+                display_name={item.display_name}
+              />
             </AccordionContent>
           </AccordionItem>
         </Accordion>
