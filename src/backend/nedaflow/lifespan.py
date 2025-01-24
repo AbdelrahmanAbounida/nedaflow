@@ -2,7 +2,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 import logging
 
-from app.database.db import init_db
+from nedaflow.database.db import init_db
 
 @asynccontextmanager
 async def lifespan(app:FastAPI):

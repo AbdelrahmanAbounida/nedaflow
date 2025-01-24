@@ -1,7 +1,7 @@
 from motor.motor_asyncio import AsyncIOMotorClient
 from beanie import init_beanie
-from app.database.models import  Item
-from app.core.config import settings 
+from nedaflow.database.models import  Item
+from nedaflow.core.config import settings 
 
 async def init_db() -> None:
     client = AsyncIOMotorClient(settings.DATABASE_URL)

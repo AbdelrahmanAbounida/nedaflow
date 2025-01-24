@@ -1,13 +1,13 @@
-from app.middlewares.response_middleware import UnifiedResponseMiddleware
+from nedaflow.middlewares.response_middleware import UnifiedResponseMiddleware
 from fastapi.middleware.cors import CORSMiddleware
-from app.api.router import router as main_router
+from nedaflow.api.router import router as main_router
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse
 from fastapi import FastAPI, Request
-from app.lifespan import lifespan
+from nedaflow.lifespan import lifespan
 from dotenv import load_dotenv
-from app.core.config import settings
+from nedaflow.core.config import settings
 
 
 
@@ -21,13 +21,12 @@ app = FastAPI(
     middleware=[],
     openapi_url=f"/openapi_{settings.CURRENT_VERSION}.json",
     description="""
-        Scalable and robust backend server with FastAPI, integrating MongoDB using Beanie ODM. 
-        Includes JWT-based authentication, TypeScript code generation, and modular architecture 
-        using Dependency Injection for clean and maintainable design 🚀.
+        A developer-focused low-code platform that simplifies building advanced AI agents and workflows, enabling seamless 
+        integration with various APIs, models, and databases. 🚀.
     """,
 )
 
-app.mount("/static", StaticFiles(directory="app/static"), name="static")
+app.mount("/static", StaticFiles(directory="nedaflow/static"), name="static")
 
 
 
@@ -40,13 +39,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.add_middleware(UnifiedResponseMiddleware,)
+# app.add_middleware(UnifiedResponseMiddleware,)
 
 
 # *******************
 # Routes
 # *******************
-templates = Jinja2Templates(directory="app/static/templates")
+templates = Jinja2Templates(directory="nedaflow/static/templates")
 
 @app.get("/",tags=["Home"], response_class=HTMLResponse)
 async def root(request:Request):

@@ -1,12 +1,13 @@
 from fastapi.responses import JSONResponse, StreamingResponse, HTMLResponse, PlainTextResponse
 from starlette.middleware.base import BaseHTTPMiddleware, _StreamingResponse
 from starlette.concurrency import iterate_in_threadpool
-from app.middlewares.schemas import UnifiedResponse
+from nedaflow.middlewares.schemas import UnifiedResponse
 from starlette.responses import StreamingResponse
 from fastapi import Request, Response
 import json
 from pydantic_core._pydantic_core import ValidationError
-from app.pipes.validation_pipe import ValidationPipe
+from nedaflow.pipes.validation_pipe import ValidationPipe
+from loguru import logger 
 
 # TODO:: check this 
 # https://github.com/steinnes/content-size-limit-asgi
@@ -23,7 +24,7 @@ class UnifiedResponseMiddleware(BaseHTTPMiddleware):
             if isinstance(response, JSONResponse):
                 return self.handle_json_response(response)
             elif isinstance(response, StreamingResponse):
-                print(f"respoinse:L {response}")
+                # logger.debug(f"response: {response}")
                 return self.handle_streaming_response(response)
             elif isinstance(response, (HTMLResponse, PlainTextResponse)):
                 return self.handle_text_response(response)
@@ -32,7 +33,7 @@ class UnifiedResponseMiddleware(BaseHTTPMiddleware):
             
             return response
         except Exception as e:
-            print(f"error: {e}")
+            logger.debug(f"error: {e}")
             return ValidationPipe.handle_exception(e)
 
     def handle_json_response(self, response:Response):

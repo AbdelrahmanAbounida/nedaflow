@@ -1,7 +1,7 @@
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from pydantic_core._pydantic_core import ValidationError
 from fastapi.exceptions import RequestValidationError
-from app.middlewares.schemas import UnifiedResponse
+from nedaflow.middlewares.schemas import UnifiedResponse
 from fastapi.responses import JSONResponse
 
 

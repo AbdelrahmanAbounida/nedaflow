@@ -1,4 +1,4 @@
-from app.database.models.items import  CreateItemSchema, Item
+from nedaflow.database.models.items import  CreateItemSchema, Item
 
 
 async def create_item(body:CreateItemSchema):
