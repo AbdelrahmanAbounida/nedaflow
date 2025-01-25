@@ -1,0 +1,11 @@
+export const URLs = {
+  COMPONENTS_TYPES: `component/all-types`,
+} as const;
+
+export function getURL(key: keyof typeof URLs, params: any = {}) {
+  let url = URLs[key];
+  Object.keys(params).forEach((key) => (url += `/${params[key]}`));
+  return `${url.toString()}`;
+}
+
+export type URLsType = typeof URLs;

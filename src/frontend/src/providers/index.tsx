@@ -3,14 +3,19 @@ import { AuthProvider } from "./auth-provider";
 import { ThemeProvider } from "next-themes";
 import { GlobalModalsProvider } from "./global-modals-provider";
 import { FLowProvider } from "./flow-provider";
+import { APIInterceptor } from "@/client/api";
+import QueryProvider from "./query-provider";
 
 export const AllProviders = ({ children }: { children: ReactNode }) => {
   return (
     <AuthProvider>
-      <ThemeProvider>
-        <GlobalModalsProvider />
-        <FLowProvider>{children}</FLowProvider>
-      </ThemeProvider>
+      <QueryProvider>
+        <ThemeProvider>
+          <APIInterceptor />
+          <GlobalModalsProvider />
+          <FLowProvider>{children}</FLowProvider>
+        </ThemeProvider>
+      </QueryProvider>
     </AuthProvider>
   );
 };

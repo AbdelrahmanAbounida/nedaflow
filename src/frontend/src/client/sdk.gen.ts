@@ -6,18 +6,34 @@ import {
   type OptionsLegacyParser,
 } from "@hey-api/client-axios";
 import type {
+  GetAllFlowComponentsTypesApiV1ComponentAllGetError,
+  GetAllFlowComponentsTypesApiV1ComponentAllGetResponse,
   CheckHealthApiV1HealthGetError,
   CheckHealthApiV1HealthGetResponse,
   RootGetError,
   RootGetResponse,
-  GetItemsRouteApiV1ItemGetError,
-  GetItemsRouteApiV1ItemGetResponse,
-  CreateItemRouteApiV1ItemPostData,
-  CreateItemRouteApiV1ItemPostError,
-  CreateItemRouteApiV1ItemPostResponse,
 } from "./types.gen";
 
 export const client = createClient(createConfig());
+
+export class FlowComponentService {
+  /**
+   * Get All Flow Components Types
+   * get list of current provided components + the custom components the user created
+   */
+  public static getAllFlowComponentsTypesApiV1ComponentAllGet<
+    ThrowOnError extends boolean = false
+  >(options?: OptionsLegacyParser<unknown, ThrowOnError>) {
+    return (options?.client ?? client).get<
+      GetAllFlowComponentsTypesApiV1ComponentAllGetResponse,
+      GetAllFlowComponentsTypesApiV1ComponentAllGetError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/api/v1/component/all",
+    });
+  }
+}
 
 export class HealthCheckService {
   /**
@@ -51,42 +67,6 @@ export class HomeService {
     >({
       ...options,
       url: "/",
-    });
-  }
-}
-
-export class ITemsRouterService {
-  /**
-   * Get Items Route
-   */
-  public static getItemsRouteApiV1ItemGet<ThrowOnError extends boolean = false>(
-    options?: OptionsLegacyParser<unknown, ThrowOnError>
-  ) {
-    return (options?.client ?? client).get<
-      GetItemsRouteApiV1ItemGetResponse,
-      GetItemsRouteApiV1ItemGetError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/api/v1/item/",
-    });
-  }
-
-  /**
-   * Create Item Route
-   */
-  public static createItemRouteApiV1ItemPost<
-    ThrowOnError extends boolean = false
-  >(
-    options: OptionsLegacyParser<CreateItemRouteApiV1ItemPostData, ThrowOnError>
-  ) {
-    return (options?.client ?? client).post<
-      CreateItemRouteApiV1ItemPostResponse,
-      CreateItemRouteApiV1ItemPostError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/api/v1/item/",
     });
   }
 }

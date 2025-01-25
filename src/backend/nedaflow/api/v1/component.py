@@ -7,7 +7,7 @@ router = APIRouter(tags=["FlowComponent"],prefix="/component")
 
 
 
-@router.get("/all", description="get list of current provided components + the custom components the user created")
+@router.get("/all-types", description="get list of current provided components + the custom components the user created")
 async def get_all_flow_components_types():
     """
         TODO::
@@ -15,6 +15,5 @@ async def get_all_flow_components_types():
             - DirectoryReader Class for that 
             - 
     """ 
-
     all_components = fetch_native_langflow_components()
     return all_components

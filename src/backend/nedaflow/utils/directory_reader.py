@@ -88,7 +88,6 @@ def fetch_native_langflow_components(components_path:Optional[list[str]]=[]) -> 
                 logger.debug(f"calss: {name}")
                 if issubclass(obj, BaseComponent) and obj is not BaseComponent:
                     instance = obj()  # Attempt to create an instance
-                    print(f"obj: {instance}")
                     components.append(instance.to_dict() | {"code": get_file_content(file_path)})
                     
         except Exception as e:

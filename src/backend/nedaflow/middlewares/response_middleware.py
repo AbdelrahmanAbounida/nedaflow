@@ -18,8 +18,14 @@ class UnifiedResponseMiddleware(BaseHTTPMiddleware):
         handle unified resposne schema  
     """
     async def dispatch(self, request: Request, call_next):
+
         try:
+            # if the route is not the api route like / , /docs
+            path = request.url.path
             response = await call_next(request)
+
+            if not "/api" in path:
+                return response
             
             if isinstance(response, JSONResponse):
                 return self.handle_json_response(response)
@@ -30,10 +36,9 @@ class UnifiedResponseMiddleware(BaseHTTPMiddleware):
                 return self.handle_text_response(response)
             elif isinstance(response, _StreamingResponse):
                 return await self.handle_streaming_response_async(response)
-            
             return response
         except Exception as e:
-            logger.debug(f"error: {e}")
+            logger.error(f"error: {e}")
             return ValidationPipe.handle_exception(e)
 
     def handle_json_response(self, response:Response):
@@ -68,13 +73,23 @@ class UnifiedResponseMiddleware(BaseHTTPMiddleware):
         )
 
     async def handle_streaming_response_async(self, response:StreamingResponse):
-        response_body = [chunk async for chunk in response.body_iterator]
-
+        """mostly this is the function that will be called
         
-        response.body_iterator = iterate_in_threadpool(iter(response_body))
-        response_body = (b''.join(response_body)).decode()
-        unified_response = self.create_unified_response(response.status_code, json.loads(response_body))
-        return JSONResponse(content=unified_response.model_dump())
+        not sure if there are some other kind of responses that returned from fastapi"""
+        try:
+            response_body = [chunk async for chunk in response.body_iterator]
+            response.body_iterator = iterate_in_threadpool(iter(response_body))
+            response_body = (b''.join(response_body)).decode()
+
+            if response_body.startswith('<!DOCTYPE html>') or '<html>' in response_body:
+                logger.warning(f"HTML response detected. Returning as HTML.")
+                return response
+            
+            unified_response = self.create_unified_response(response.status_code, json.loads(response_body))
+            return JSONResponse(content=unified_response.model_dump())
+        except Exception as e:
+            logger.warning(f'Failed to unify this resposne > {e}')
+            return response
 
     def create_unified_response(self, status_code, content=None):
         if status_code == 422 and "detail" in content: # pydantic validation error 

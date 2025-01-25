@@ -8,6 +8,7 @@ from fastapi import FastAPI, Request
 from nedaflow.lifespan import lifespan
 from dotenv import load_dotenv
 from nedaflow.core.config import settings
+from pathlib import Path
 
 
 
@@ -26,11 +27,13 @@ app = FastAPI(
     """,
 )
 
-app.mount("/static", StaticFiles(directory="nedaflow/static"), name="static")
+static_dir = Path(__file__).resolve().parent / "static"
+app.mount("/static", StaticFiles(directory=str(static_dir)), name="static")
 
 
 
 ## Middlewares 
+app.add_middleware(UnifiedResponseMiddleware,)
 app.add_middleware(
     CORSMiddleware,
     allow_origins = ["*"],
@@ -39,7 +42,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# app.add_middleware(UnifiedResponseMiddleware,)
 
 
 # *******************

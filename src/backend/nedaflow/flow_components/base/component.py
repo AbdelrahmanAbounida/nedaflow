@@ -1,11 +1,13 @@
 from nedaflow.flow_components.base.io import Input, Output
-from pydantic import BaseModel , ConfigDict
+from pydantic import BaseModel , ConfigDict,VERSION as PYDANTIC_VERSION
 from abc import abstractmethod, ABC 
 from typing import Optional
 from uuid import UUID
+from dataclasses import dataclass
 import json 
 
 # TODO:: think about how to store it in the database 
+
 
 class BaseComponent(ABC,BaseModel): # BaseModel
     """Abstract class for any flow component
@@ -32,6 +34,9 @@ class BaseComponent(ABC,BaseModel): # BaseModel
 
     code: Optional[str] 
     "Code that represents the component"
+
+    if int(PYDANTIC_VERSION.split(".")[0]) >= 2:
+        model_config = {"extra": "allow"}
 
     # model_config = ConfigDict(
     #     ignored_types=(

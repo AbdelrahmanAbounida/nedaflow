@@ -1,8 +1,9 @@
 #! /usr/bin/env bash
 
-# TO be run from the main folder outside backend 
+set -e
+set -x
 
-export PYTHONPATH=$PYTHONPATH:$(pwd)/src/backend
+export PYTHONPATH=$PYTHONPATH:$(pwd)/src
 echo "PYTHONPATH is: $PYTHONPATH" 
 
 cd src/backend/nedaflow
