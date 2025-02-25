@@ -5,9 +5,9 @@ from pydantic import Field
 
 class ChatInputComponent(BaseComponent):
     display_name: str = "Chat Input"
+    name: str = "Chat Input" # nonesense name  for now 
     description: str = "Get chat inputs from the Playground."
     icon: str = "MessagesSquare"
-    name: str = "ChatInput"
     minimized: bool = True
     code: str = ""
 

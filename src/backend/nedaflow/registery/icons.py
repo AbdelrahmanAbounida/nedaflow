@@ -1,0 +1,2 @@
+
+ALL_ICONS_NAMES = ["Download", "Upload", "TerminalSquare", "Database", "ListFilter", "BrainCircuit", "Layers", "Binary", "Bot", "Cpu", "Hammer", "Wand2", "ArrowRightLeft", "MessagesSquare", "CircleAlert", "LangChain", "AgentQL", "AssemblyAI", "DataStax", "LangWatch", "Notion", "Needle", "NVIDIA", "Vectara", "Icosa Computing", "Google", "CrewAI", "NotDiamond", "Composio", "Cohere", "Firecrawl", "Unstructured", "Git", "Confluence", ""]

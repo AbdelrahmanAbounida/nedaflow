@@ -1,0 +1,5 @@
+{
+  "watch": ["src/constants/icons.ts"],
+  "ext": "ts",
+  "exec": "ts-node src/utils/generate-python-icons.js"
+}

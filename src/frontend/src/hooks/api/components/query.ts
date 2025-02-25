@@ -10,6 +10,7 @@ import { useQuery } from "@tanstack/react-query";
 // ******************************
 
 export const useGetComponentsTypes = () => {
+  // >> This is the good thing of puttting the fetcher here so we can access other hooks too
   const { setLoadingComponentTypes, setComponentTypes } = useFlowStore();
 
   const getTypesFn = async () => {
@@ -30,10 +31,8 @@ export const useGetComponentsTypes = () => {
       setLoadingComponentTypes(false);
     }
   };
-  const queryResult = useQuery({
-    queryKey: ["useGetComponentsTypes"],
+  return useQuery({
+    queryKey: ["componentsTypes"],
     queryFn: getTypesFn,
   });
-
-  return queryResult;
 };

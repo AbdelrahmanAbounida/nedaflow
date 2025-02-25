@@ -1,27 +1,26 @@
 import React from "react";
-import * as LucideIcons from "lucide-react";
-
-const checkLucidIcon = (icon: string) => {
-  return LucideIcons[icon as keyof typeof LucideIcons] as any;
-};
+import { LoadIcon } from "@/utils/load-icon-from-name";
+import { ImageProps } from "next/image";
+import { IconDisplyName } from "@/constants/icons";
 
 export const ComponentIcon = ({
   icon,
+  className,
   ...props
 }: {
-  icon: string;
-  props?: LucideIcons.LucideProps;
+  icon: IconDisplyName;
+  className?: string;
+  props?: Omit<ImageProps, "alt" | "src">;
 }) => {
-  const LucideIcon = checkLucidIcon(icon);
-
-  if (!LucideIcon) {
-    console.warn(`Icon "${icon}" not found in Lucide Icons`);
-    return null;
-  }
-
   return (
-    <div>
-      <LucideIcon {...props} />
+    <div className="bg-gray-100/80 p-1.5 rounded-md">
+      <LoadIcon
+        className={className}
+        name={icon}
+        {...props}
+        width={18}
+        height={18}
+      />
     </div>
   );
 };

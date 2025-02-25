@@ -2,14 +2,13 @@
     - used for reading the files from a folder 
     - building schema from code base dynamically instead of having fixed registery
 """
-
-from typing import Optional
 from nedaflow.flow_components.base import BaseComponent
 from nedaflow.core.config import settings
-from pathlib import Path 
-from loguru import logger 
-import importlib.util
 from types import ModuleType
+from typing import Optional
+from loguru import logger 
+from pathlib import Path 
+import importlib.util
 import inspect
 import os 
 
@@ -23,12 +22,12 @@ def get_folder_files(folder_path:str) -> list[str]:
 
     file_list = []
     path = Path(folder_path) 
-    safe_path_obj = path if Path.is_absolute(path) else Path.resolve(path)
+    abs_folder_path = path if Path.is_absolute(path) else Path.resolve(path)
 
-    for file_path in safe_path_obj.rglob("*.py"):
+    for file_path in abs_folder_path.rglob("*.py"):
         if "deactivated" in file_path.parent.name:
             continue
-        if file_path.is_file() and file_path.parent.parent == safe_path_obj and not file_path.name.startswith("__"):
+        if file_path.is_file() and file_path.parent.parent == abs_folder_path and not file_path.name.startswith("__"):
             file_list.append(str(file_path))
     return file_list
 
@@ -61,8 +60,9 @@ def import_module_from_filepath(file_path:str) -> ModuleType | None :
     spec.loader.exec_module(module)  # type: ignore
     return module
 
-def fetch_native_langflow_components(components_path:Optional[list[str]]=[]) -> list[BaseComponent]: 
+def fetch_native_langflow_components(components_path:Optional[list[str]]=[]) -> dict[list[BaseComponent]]: 
     # TODO:: use asyncio to read that 
+    # TODO:: add fixed schema 
     """get all current components to export to the ui to be used in the flow builder
     
     will walk through this folder files list and check any class inherits from BaseComponent
@@ -70,26 +70,27 @@ def fetch_native_langflow_components(components_path:Optional[list[str]]=[]) -> 
     """
     # components_paths or settings.components_paths
     paths = components_path or settings.components_path 
-    logger.debug(f"Reading nedflow components form paths: {paths}")
 
     components_files_list = []
     for path in paths:
         path_files = get_folder_files(path)
         components_files_list.extend(path_files)
     
-    # TODO:: add classes categories by module name s
-    components = []
+    all_components = {} 
     for file_path in components_files_list:
         try:
             module = import_module_from_filepath(file_path)
             if not module:
                 continue
             for name, obj in inspect.getmembers(module, inspect.isclass):
-                logger.debug(f"calss: {name}")
+                logger.debug(f"class: {name}, Module: {module.__name__}")
                 if issubclass(obj, BaseComponent) and obj is not BaseComponent:
                     instance = obj()  # Attempt to create an instance
-                    components.append(instance.to_dict() | {"code": get_file_content(file_path)})
+                    category_name =   Path(file_path).parent.name # file folder name whis will be usefult too in the sidebar (should match with it )
+                    if category_name not in all_components:
+                        all_components[category_name] = []
+                    all_components[category_name].append(instance.to_dict() | {"code": get_file_content(file_path)})
                     
         except Exception as e:
             logger.error(f"Error processing file {file_path}: {e}")
-    return components
+    return all_components

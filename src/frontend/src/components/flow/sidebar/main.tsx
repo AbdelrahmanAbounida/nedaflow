@@ -3,7 +3,6 @@ import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
-  SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar";
 import React, { useEffect } from "react";
@@ -22,21 +21,31 @@ export const FlowSidebar = () => {
   const { isFetched } = useGetComponentsTypes();
   const { componentTypes, loadingComponentsTypes } = useFlowStore();
 
-  console.log({ isFetched, loadingComponentsTypes });
-
   useEffect(() => {
     if (!loadingComponentsTypes) {
-      console.log(componentTypes);
     }
   }, [isFetched, loadingComponentsTypes]);
+
+  const sideBarItemsWithSubItems = SIDEBAR_CATEGORIES.map((cat) => {
+    return {
+      ...cat,
+      subItems:
+        componentTypes[
+          Object.keys(componentTypes).find(
+            (key) => key.toLowerCase() === cat.name.toLowerCase()
+          )!
+        ],
+    };
+  });
+
   return (
     <Sidebar className=" !bg-white pt-12">
       <FlowSidebarHeader className="!bg-white px-1 pt-2 " />
       <FlowSidebarSearchBar className="mx-1" />
-      <SidebarContent className="pl-2 bg-white pt-4">
+      <SidebarContent className="pl-2 bg-white pt-4 ">
         {/** Main  */}
-        {SIDEBAR_CATEGORIES.map((item, index) => (
-          <FlowSidebarItem key={index} item={item} />
+        {sideBarItemsWithSubItems.map((item, index) => (
+          <FlowSidebarItem key={index} item={item} subItems={item.subItems} />
         ))}
         {/** Bundles  */}
         <SidebarBundles />

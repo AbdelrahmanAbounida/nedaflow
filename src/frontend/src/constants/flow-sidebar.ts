@@ -1,9 +1,11 @@
 // TODO:: To be moved to backend and load from api (seed in db)
 
+import { IconDisplyName } from "./icons";
+
 export interface SidebarItemProps {
   display_name: string;
   name: string;
-  icon: string;
+  icon: IconDisplyName;
 }
 
 export const SIDEBAR_CATEGORIES: SidebarItemProps[] = [
@@ -38,21 +40,25 @@ export const SIDEBAR_BUNDLES: SidebarItemProps[] = [
   {
     display_name: "DataStax",
     name: "astra_assistants",
-    icon: "AstraDB",
+    icon: "DataStax",
   },
-  { display_name: "LangWatch", name: "langwatch", icon: "Langwatch" },
+  { display_name: "LangWatch", name: "langwatch", icon: "LangWatch" },
   { display_name: "Notion", name: "Notion", icon: "Notion" },
   { display_name: "Needle", name: "needle", icon: "Needle" },
   // { display_name: "NVIDIA", name: "nvidia", icon: "NVIDIA" },
   { display_name: "Vectara", name: "vectara", icon: "Vectara" },
-  { display_name: "Icosa Computing", name: "icosacomputing", icon: "Icosa" },
+  {
+    display_name: "Icosa Computing",
+    name: "icosacomputing",
+    icon: "Icosa Computing",
+  },
   { display_name: "Google", name: "google", icon: "Google" },
   { display_name: "CrewAI", name: "crewai", icon: "CrewAI" },
   { display_name: "NotDiamond", name: "notdiamond", icon: "NotDiamond" },
   { display_name: "Composio", name: "composio", icon: "Composio" },
   { display_name: "Cohere", name: "cohere", icon: "Cohere" },
-  { display_name: "Firecrawl", name: "firecrawl", icon: "FirecrawlCrawlApi" },
+  { display_name: "Firecrawl", name: "firecrawl", icon: "Firecrawl" },
   { display_name: "Unstructured", name: "unstructured", icon: "Unstructured" },
-  { display_name: "Git", name: "git", icon: "GitLoader" },
+  { display_name: "Git", name: "git", icon: "Git" },
   { display_name: "Confluence", name: "confluence", icon: "Confluence" },
 ];

@@ -9,7 +9,7 @@ export interface Flow {}
 
 export type NodeData = {
   id: string;
-  type: ComponentTypeEnum; // this type must match the type in the nodeTypes
+  // type: ComponentTypeEnum; // will be loaded from copmponent
   showNode?: boolean;
   component: Component;
 };

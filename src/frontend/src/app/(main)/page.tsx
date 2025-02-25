@@ -24,7 +24,7 @@ export default function Home() {
           <NewFlowModal>
             <Button className="h-8" variant={"outline"}>
               <PlusIcon className="text-accent-foreground/70 size-4" />
-              New Flow{" "}
+              New Flow
             </Button>
           </NewFlowModal>
         </div>

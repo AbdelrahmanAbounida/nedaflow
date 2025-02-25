@@ -2,6 +2,8 @@ import { lazy, Suspense } from "react";
 import dynamicIconImports from "lucide-react/dynamicIconImports";
 import * as LucideIcons from "lucide-react";
 import { cn } from "@/lib/utils";
+import { ALL_ICONS, IconDisplyName } from "@/constants/icons";
+import Image, { ImageProps } from "next/image";
 
 type IconProps = {
   name: keyof typeof dynamicIconImports;
@@ -32,3 +34,13 @@ export function getLucideIcon(iconName: string): any {
 
   return null;
 }
+
+export const LoadIcon = ({
+  name,
+  ...props
+}: { name: IconDisplyName } & Omit<ImageProps, "alt" | "src">) => {
+  const iconSrc = ALL_ICONS[name];
+  if (!iconSrc) return null;
+
+  return <Image src={iconSrc} alt={name} width={24} height={24} {...props} />;
+};

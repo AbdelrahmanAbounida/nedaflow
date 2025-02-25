@@ -1,12 +1,7 @@
 import React from "react";
-import { Counter } from "../../../../tests/unit/counter";
 
 const AllFlows = () => {
-  return (
-    <div>
-      <Counter />
-    </div>
-  );
+  return <div>asd</div>;
 };
 
 export default AllFlows;

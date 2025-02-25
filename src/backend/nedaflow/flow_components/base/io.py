@@ -1,11 +1,6 @@
 from pydantic import BaseModel, ConfigDict, Field, model_serializer
 from typing_extensions import Any , Callable
-from enum import Enum
-
-
-
-class FieldTypes(str,Enum):
-    TEXT = "str"
+from nedaflow.flow_components.types import FieldTypes
 
 
 # TODO:: check both those types and remove what u see not required 
@@ -13,7 +8,7 @@ class Input(BaseModel):
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
     field_type: FieldTypes # str | type | None = Field(default=str, serialization_alias="type") # it could be literal but lets keep it like that for flexiablilty 
-    """The type of field this is. Default is a string."""
+    """The type of field this is. This is the main type by which we will categorize the input."""
 
     required: bool = False
     """Specifies if the field is required. Defaults to False."""

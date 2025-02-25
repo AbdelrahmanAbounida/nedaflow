@@ -1,4 +1,4 @@
-import { IconDisplyName, SVG_ICONS_REGISTERY } from "@/constants/icons/bundles";
+import { IconDisplyName, SVG_ICONS_REGISTERY } from "@/constants/icons";
 import Image from "next/image";
 import React from "react";
 

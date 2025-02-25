@@ -2,7 +2,7 @@ import React, { HTMLProps, ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 interface BaseModalProps {
-  className?: HTMLProps<HTMLElement["className"]>;
+  className?: string; // HTMLProps<HTMLElement["className"]>;
   //   open?: boolean;
   //   setOpen: (val: boolean) => void;
   children: ReactNode;

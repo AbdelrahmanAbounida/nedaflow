@@ -2,7 +2,7 @@
  * Base Component that all components will infer from
  */
 
-import { IconDisplyName } from "@/constants/icons/bundles";
+import { IconDisplyName } from "@/constants/icons";
 
 // 1- Component >> take inputs + params >> extract output
 // So we have main 4 block types (Component, Input/Output 'sameType' , Param) + (Component Category or Type), (Param Category or Type)
@@ -10,10 +10,14 @@ import { IconDisplyName } from "@/constants/icons/bundles";
 export interface Component {
   icon: IconDisplyName;
   name: string; // TODO:: we need to check a way to map to lucid icons
-  descriotion: string;
+  description: string;
   inputs: ComponentParam[];
   outputs: ComponentParam[];
   type: ComponentTypeEnum;
+  beta?: boolean;
+  code: string;
+  minimized?: boolean;
+  disabled?: boolean;
 }
 
 // add here list of all categories we have or will have >> it should be loaded from backend
@@ -36,17 +40,20 @@ export enum ComponentTypeEnum {
 
 export interface ComponentParam {
   name: string;
+  display_name: string;
+  info: string;
+  field_type: ComponentParamTypeEnum;
   value?: string;
   disabled: boolean;
   placeholder?: string;
   required?: boolean;
   hideHandle?: boolean;
-  type: ComponentParamEnum; // string input, textarea, slider,...
+  type: ComponentParamTypeEnum; // NO need for this in general as it is param type
 }
 
-export enum ComponentParamEnum {
-  STRING = "STRING",
-  TEXT_AREA = "TEXT_AREA",
-  SLIDER = "SLIDER",
-  FILE = "FILE",
+export enum ComponentParamTypeEnum {
+  TEXT = "TEXT",
+  TEXTAREA = "TEXTAREA",
+  // SLIDER = "SLIDER",
+  // FILE = "FILE",
 }
