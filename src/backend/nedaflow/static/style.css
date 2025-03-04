@@ -1,0 +1,3 @@
+.no-underline .hover:underline {
+  display: none;
+}
