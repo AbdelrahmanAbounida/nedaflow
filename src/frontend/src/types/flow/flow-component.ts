@@ -44,12 +44,14 @@ export interface ComponentParam {
   display_name: string;
   info: string;
   field_type: ComponentParamTypeEnum;
+  is_handle?: boolean;
   value?: string;
   disabled: boolean;
   placeholder?: string;
   required?: boolean;
   hideHandle?: boolean;
   show: boolean;
+  is_secret?: boolean;
   type: ComponentParamTypeEnum; // NO need for this in general as it is param type
 }
 
@@ -62,6 +64,7 @@ export enum ComponentParamTypeEnum {
   NUMBER = "NUMBER",
   JSON = "JSON",
   DATA = "DATA",
+  DROPDOWN = "DROPDOWN",
   // SLIDER = "SLIDER",
   // FILE = "FILE",
 }

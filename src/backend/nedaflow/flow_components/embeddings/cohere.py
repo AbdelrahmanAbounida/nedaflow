@@ -14,41 +14,30 @@ class CohereEmbedding(BaseComponent):
 
     inputs: list = [
         TextInput(
-            name="urls",
-            display_name="URLs",
+            name="cohere_api_key",
+            display_name="Cohere API Key",
             description="Entter one or more URLs, separated by commas",
-            info="Enter one or more URLs, separated by commas."
+            required=True,
+            is_secret=True
         ),
-        MultilineInput(
-            name="cURL",
-            display_name="cURL Command",
-            value="",
-            placeholder="Type Something",
-            info="Paste a curl command to populate the fields. This will fill in the dictionary fields for headers and body.",
-        ),
-        DropdownInput[str](
-            name="method",
-            display_name="Method",
-            default="GET",
-            options=["GET", "POST", "PUT", "DELETE"],
-            info="Select the HTTP method to use for the request.",
-        ),
-        BooleanInput(
-            name="Use cURL",
-            display_name="Use cURL",
-            default=True,
-            info="Enable cURL mode to populate fields from a curl command",
-            show=True 
+       DropdownInput[str](
+            name="model",
+            display_name="Model",
+            options=[
+                "embed-english-v2.0",
+                "embed-multilingual-v2.0",
+                "embed-english-light-v2.0",
+                "embed-multilingual-light-v2.0",
+            ],
+            default="embed-english-v2.0",
         ),
     ]
 
     outputs: list = [
         Output(
-            name="data",
-            display_name="API Response",
-            method="api_response",
-            description="The API response as a dictionary",
-            info="The API response as a dictionary",
+            name="Embeddings",
+            display_name="Embeddings",
+            method="generate_emebddings",
             output_type=FieldTypes.DATA,
         )
     ]

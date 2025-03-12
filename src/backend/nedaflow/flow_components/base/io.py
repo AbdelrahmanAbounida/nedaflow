@@ -7,6 +7,9 @@ from nedaflow.flow_components.types import FieldTypes
 class Input(BaseModel):
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
+    is_handle: bool = False
+    """if true input will be handled from anthor component (has reactflow handle)"""
+
     field_type: FieldTypes # str | type | None = Field(default=str, serialization_alias="type") # it could be literal but lets keep it like that for flexiablilty 
     """The type of field this is. This is the main type by which we will categorize the input."""
 
@@ -45,9 +48,6 @@ class Input(BaseModel):
 
     display_name: str | None = None
     """Display name of the field. Defaults to None."""
-
-    advanced: bool = False
-    """Specifies if the field will an advanced parameter (hidden). Defaults to False."""
 
     input_types: list[str] | None = None
     """List of input types for the handle when the field has more than one type. Default is an empty list."""

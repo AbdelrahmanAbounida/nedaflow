@@ -9,3 +9,6 @@ class FieldTypes(str,Enum):
     JSON="JSON"
     FILE="FILE"
     DATA="DATA"
+    DROPDOWN="DROPDOWN"
+    LIST_STRING="LIST_STRING"
+    LIST_NUMBER="LIST_NUMBER"

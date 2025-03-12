@@ -14,41 +14,29 @@ class SplitText(BaseComponent):
 
     inputs: list = [
         TextInput(
-            name="urls",
-            display_name="URLs",
+            name="input_text",
+            display_name="Input Text",
+            is_handle=True,
             description="Entter one or more URLs, separated by commas",
-            info="Enter one or more URLs, separated by commas."
+            info="Enter one or more URLs, separated by commas.",
+            required=True
         ),
-        MultilineInput(
-            name="cURL",
-            display_name="cURL Command",
-            value="",
-            placeholder="Type Something",
-            info="Paste a curl command to populate the fields. This will fill in the dictionary fields for headers and body.",
-        ),
-        DropdownInput[str](
-            name="method",
-            display_name="Method",
-            default="GET",
-            options=["GET", "POST", "PUT", "DELETE"],
-            info="Select the HTTP method to use for the request.",
-        ),
-        BooleanInput(
-            name="Use cURL",
-            display_name="Use cURL",
-            default=True,
-            info="Enable cURL mode to populate fields from a curl command",
-            show=True 
-        ),
+       NumberInput(
+           name="chunk_size",
+           display_name="Chunk Size",
+           description="The maximum number of characters in each chunk",
+           info="The maximum number of characters in each chunk",
+           default=1000
+       )
     ]
 
     outputs: list = [
         Output(
-            name="data",
-            display_name="API Response",
-            method="api_response",
-            description="The API response as a dictionary",
-            info="The API response as a dictionary",
-            output_type=FieldTypes.DATA,
+            name="Chunks",
+            display_name="Chunks",
+            method="split_text_input",
+            description="",
+            info="",
+            output_type=FieldTypes.LIST_STRING,
         )
     ]

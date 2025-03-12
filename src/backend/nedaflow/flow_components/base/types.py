@@ -12,6 +12,7 @@ class MultilineInput(Input,MultilineMixin):
 
 class TextInput(Input):
     field_type:FieldTypes = FieldTypes.TEXT
+    is_secret: bool = False 
 
 class BooleanInput(Input):
     field_type: FieldTypes = FieldTypes.BOOLEAN
@@ -28,7 +29,7 @@ class NumberInput(Input):
 
 T = TypeVar("T", str, int, float, bool)
 class DropdownInput(Generic[T], Input):
-    field_type:FieldTypes = FieldTypes.TEXT if type(T) == str else FieldTypes.BOOLEAN if type(T) == bool else FieldTypes.NUMBER
+    field_type:FieldTypes = FieldTypes.DROPDOWN # if type(T) == str else FieldTypes.BOOLEAN if type(T) == bool else FieldTypes.NUMBER
     default: T 
     options: list[T]
 

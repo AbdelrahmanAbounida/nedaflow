@@ -5,6 +5,8 @@ import { LoadIcon } from "@/utils/load-icon-from-name";
 import { AlertCircle } from "lucide-react";
 import React from "react";
 import { ParamComponent } from "../utils/load-param-component";
+import { Handle, Position } from "@xyflow/react";
+import CustomHandle from "../utils/custom-handle";
 
 export const ComponentParams = ({
   className,
@@ -20,16 +22,23 @@ export const ComponentParams = ({
       <div className="flex flex-col gap-2">
         {params?.map((param, index) => (
           <div className={cn("", !param.show && "hidden")}>
-            <div key={index} className="flex  items-center w-full  gap-2">
+            <div key={index} className="flex  items-center w-full  gap-1">
               <div className="text-sm font-medium">{param.display_name}</div>
-              <CustomTooltip title={param.info}>
-                <AlertCircle className="size-3 text-gray-500 cursor-help" />
-              </CustomTooltip>
+              {param.required && <p className="text-red-500">*</p>}
+              {param.info && (
+                <CustomTooltip title={param.info}>
+                  <AlertCircle className="size-3 text-gray-500 cursor-help" />
+                </CustomTooltip>
+              )}
             </div>
             <ParamComponent
               className="mt-2"
               componentName={param.field_type as any}
+              {...param}
             />
+            {param.is_handle && (
+              <CustomHandle id="asd" position={Position.Left} type="target" />
+            )}
           </div>
         ))}
       </div>
