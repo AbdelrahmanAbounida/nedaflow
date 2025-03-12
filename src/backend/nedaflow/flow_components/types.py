@@ -4,4 +4,8 @@ from enum import Enum
 
 class FieldTypes(str,Enum):
     TEXT = "TEXT"
-    TEXTAREA="TEXTAREA"
+    BOOLEAN="BOOLEAN"
+    NUMBER="NUMBER"
+    JSON="JSON"
+    FILE="FILE"
+    DATA="DATA"

@@ -40,7 +40,20 @@ export const LoadIcon = ({
   ...props
 }: { name: IconDisplyName } & Omit<ImageProps, "alt" | "src">) => {
   const iconSrc = ALL_ICONS[name];
-  if (!iconSrc) return null;
+  if (!iconSrc) {
+    return null;
+    // const Icon = <LucidIconFromName name={name as any} />;
+    // return Icon;
+  }
 
-  return <Image src={iconSrc} alt={name} width={24} height={24} {...props} />;
+  return (
+    <Image
+      className="text-white"
+      src={iconSrc}
+      alt={name}
+      width={24}
+      height={24}
+      {...props}
+    />
+  );
 };

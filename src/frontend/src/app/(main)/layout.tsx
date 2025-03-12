@@ -7,7 +7,7 @@ import React, { ReactNode } from "react";
 const MainLayout = ({ children }: { children: ReactNode }) => {
   return (
     <SidebarProvider className="flex flex-col gap-2 ">
-      <MainAppHeader className="z-10" />
+      {/* <MainAppHeader className="z-10" /> */}
       <div className="w-full h-full ">
         <div className="flex items-center">
           <AppSidebar />

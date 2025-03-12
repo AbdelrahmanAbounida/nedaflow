@@ -1,5 +1,6 @@
+from nedaflow.flow_components.types import FieldTypes
 from nedaflow.flow_components.base.io import Output
-from nedaflow.flow_components.base.inputs_types import MultilineInput
+from nedaflow.flow_components.base.types import MultilineInput
 from nedaflow.flow_components.base import BaseComponent
 from pydantic import Field
 
@@ -21,5 +22,5 @@ class ChatInputComponent(BaseComponent):
         
     ]
     outputs: list = [
-        Output(display_name="Message", name="message", method="message_response"), # see how to have fixed output schema
+        Output(display_name="Message", name="message", method="message_response", output_type=FieldTypes.TEXT), # see how to have fixed output schema
     ] 

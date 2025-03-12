@@ -10,7 +10,12 @@ export const SidebarBundles = memo(() => {
 
         <div className="flex flex-col gap-2">
           {SIDEBAR_BUNDLES.map((item, index) => (
-            <FlowSidebarItem isBundle={true} key={index} item={item} />
+            <FlowSidebarItem
+              isBundle={true}
+              key={index}
+              item={item}
+              subItems={item.subItems!}
+            />
           ))}
         </div>
       </div>

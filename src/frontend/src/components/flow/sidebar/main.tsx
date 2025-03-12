@@ -32,7 +32,8 @@ export const FlowSidebar = () => {
       subItems:
         componentTypes[
           Object.keys(componentTypes).find(
-            (key) => key.toLowerCase() === cat.name.toLowerCase()
+            (key) =>
+              key.replace("_", "").toLowerCase() === cat.name.toLowerCase()
           )!
         ],
     };
@@ -43,11 +44,9 @@ export const FlowSidebar = () => {
       <FlowSidebarHeader className="!bg-white px-1 pt-2 " />
       <FlowSidebarSearchBar className="mx-1" />
       <SidebarContent className="pl-2 bg-white pt-4 ">
-        {/** Main  */}
         {sideBarItemsWithSubItems.map((item, index) => (
           <FlowSidebarItem key={index} item={item} subItems={item.subItems} />
         ))}
-        {/** Bundles  */}
         <SidebarBundles />
       </SidebarContent>
       <SidebarFooter className="!bg-white">Footer</SidebarFooter>

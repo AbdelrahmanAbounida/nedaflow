@@ -1,10 +1,11 @@
 import { CustomTooltip } from "@/components/global/custom-tooltip";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { IconDisplyName } from "@/constants/icons";
 import { cn } from "@/lib/utils";
 import { NodeData } from "@/types/flow/flow";
 import { Component } from "@/types/flow/flow-component";
-import { getLucideIcon } from "@/utils/load-icon-from-name";
+import { getLucideIcon, LoadIcon } from "@/utils/load-icon-from-name";
 import { GripVertical, Plus } from "lucide-react";
 import React from "react";
 
@@ -13,7 +14,7 @@ export const FlowSidebarDraggableItem = ({
   data,
   error,
 }: {
-  icon: string;
+  icon: IconDisplyName;
   data?: Component;
   error?: any;
 }) => {
@@ -48,7 +49,8 @@ export const FlowSidebarDraggableItem = ({
           }
         }}
       >
-        {Icon && <Icon className="size-4 text-primary shrink-0" />}
+        {/* {Icon && <Icon className="size-4 text-primary shrink-0" />} */}
+        <LoadIcon name={icon!} className="size-4" />
 
         <div className="flex flex-1 items-center overflow-hidden">
           <CustomTooltip title={data?.name!} className="z-50">

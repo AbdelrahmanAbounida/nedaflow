@@ -96,7 +96,7 @@ class Input(BaseModel):
 class Output(BaseModel):
     # types: list[str] = Field(default=[])
     # """List of output types for the field."""
-    # output_type: FieldTypes
+    output_type: FieldTypes
     """output type """
 
     selected: str | None = Field(default=None)

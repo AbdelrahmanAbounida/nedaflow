@@ -39,6 +39,7 @@ export enum ComponentTypeEnum {
 }
 
 export interface ComponentParam {
+  // match with input type in the base/types.py
   name: string;
   display_name: string;
   info: string;
@@ -48,12 +49,19 @@ export interface ComponentParam {
   placeholder?: string;
   required?: boolean;
   hideHandle?: boolean;
+  show: boolean;
   type: ComponentParamTypeEnum; // NO need for this in general as it is param type
 }
 
+// should match components/types.py
 export enum ComponentParamTypeEnum {
   TEXT = "TEXT",
   TEXTAREA = "TEXTAREA",
+  FILE = "FILE",
+  BOOLEAN = "BOOLEAN",
+  NUMBER = "NUMBER",
+  JSON = "JSON",
+  DATA = "DATA",
   // SLIDER = "SLIDER",
   // FILE = "FILE",
 }

@@ -80,10 +80,11 @@ def fetch_native_langflow_components(components_path:Optional[list[str]]=[]) -> 
     for file_path in components_files_list:
         try:
             module = import_module_from_filepath(file_path)
+            
             if not module:
                 continue
             for name, obj in inspect.getmembers(module, inspect.isclass):
-                logger.debug(f"class: {name}, Module: {module.__name__}")
+                
                 if issubclass(obj, BaseComponent) and obj is not BaseComponent:
                     instance = obj()  # Attempt to create an instance
                     category_name =   Path(file_path).parent.name # file folder name whis will be usefult too in the sidebar (should match with it )

@@ -9,7 +9,6 @@ load_dotenv()
 
 
 BASE_COMPONENTS_PATH = str(Path(__file__).parent.parent / "flow_components")
-logger.debug(f"BASE_COMPONENTS_PATH: {BASE_COMPONENTS_PATH}")
 
 class Settings(BaseSettings):
     PROJECT_NAME: Optional[str] = Field(default="",description="The project name") 
@@ -34,13 +33,13 @@ class Settings(BaseSettings):
     def set_components_path(cls, value):
         if not value:
             value = [BASE_COMPONENTS_PATH]
-            logger.debug("Setting default components path to components_path")
+            # logger.debug("Setting default components path to components_path")
         elif BASE_COMPONENTS_PATH not in value:
             value.append(BASE_COMPONENTS_PATH)
-            logger.debug("Adding default components path to components_path")
-        logger.debug(f"Components path: {value}")
+            # logger.debug("Adding default components path to components_path")
+        # logger.debug(f"Components path: {value}")
 
-        logger.debug(f"value: {value}")
+        # logger.debug(f"value: {value}")
         for index,path in enumerate(value):
             if not os.path.exists(path):
                 logger.warning(f"path: {path} not exist")

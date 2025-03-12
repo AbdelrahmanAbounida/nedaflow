@@ -19,7 +19,7 @@ export const ComponentParams = ({
       {/** TOOD:: create separate elemets like input, text area ,.. acc to param type */}
       <div className="flex flex-col gap-2">
         {params?.map((param, index) => (
-          <div>
+          <div className={cn("", !param.show && "hidden")}>
             <div key={index} className="flex  items-center w-full  gap-2">
               <div className="text-sm font-medium">{param.display_name}</div>
               <CustomTooltip title={param.info}>

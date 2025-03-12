@@ -8,12 +8,13 @@ import {
   AccordionItem,
 } from "@/components/ui/accordion";
 import { SidebarItemProps } from "@/constants/flow-sidebar";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { SidebarMenuButton } from "@/components/ui/sidebar";
 import { LoadIcon } from "@/utils/load-icon-from-name";
 import { BundleIcon } from "./bundle-icon";
 import { FlowSidebarDraggableItem } from "./sidebar-draggable-item";
 import { Component } from "@/types/flow/flow-component";
+import { cn } from "@/lib/utils";
 
 export const FlowSidebarItem = ({
   item,
@@ -34,6 +35,11 @@ export const FlowSidebarItem = ({
   // if (subItems) {
   //   console.log({ subItems });
   // }
+
+  const orderedSubitems = subItems?.sort((a, b) =>
+    a.name.localeCompare(b.name)
+  );
+
   return (
     <div className="w-full">
       <div className="w-full flex items-center flex-col">
@@ -50,14 +56,16 @@ export const FlowSidebarItem = ({
             )}
             <p className="text-md">{item.display_name}</p>
           </div>
-          <Button variant={"ghost"} size={"icon"} className="">
+          <div
+            className={cn(buttonVariants({ variant: "ghost", size: "icon" }))}
+          >
             <ChevronRight className="size-4 text-gray-400  data-[state=open]:rotate-180" />
-          </Button>
+          </div>
         </SidebarMenuButton>
 
         {/** item content  */}
         <div className="flex flex-col gap-0 w-full">
-          {subItems?.map((subitem, index) => (
+          {orderedSubitems?.map((subitem, index) => (
             <Accordion
               key={index}
               className=" w-full"

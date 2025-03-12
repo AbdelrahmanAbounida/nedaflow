@@ -1,6 +1,7 @@
-from nedaflow.flow_components.base.inputs_types import MultilineInput
+from nedaflow.flow_components.base.types import MultilineInput
 from nedaflow.flow_components.base.io import Output
 from nedaflow.flow_components.base import BaseComponent
+from nedaflow.flow_components.types import FieldTypes
 
 class TextInputComponent(BaseComponent):
 
@@ -8,7 +9,7 @@ class TextInputComponent(BaseComponent):
     name: str = "Text Input"
     display_name: str = "Text Input" 
     description: str = "Get text inputs from the Playground."
-    icon: str = "type" # See how to match this icon from a registery
+    icon: str = "Text" # See how to match this icon from a registery
     code: str = ""
 
     # these are specific fields for the params 
@@ -20,5 +21,5 @@ class TextInputComponent(BaseComponent):
         ),
     ]
     outputs: list = [
-        Output(display_name="Text", name="text", method="text_response"),
+        Output(display_name="Text", name="text", method="text_response", output_type=FieldTypes.TEXT),
     ]

@@ -1,12 +1,13 @@
-from nedaflow.flow_components.base.inputs_types import MultilineInput
+from nedaflow.flow_components.base.types import MultilineInput
 from nedaflow.flow_components.base.io import Output
 from nedaflow.flow_components.base import BaseComponent
+from nedaflow.flow_components.types import FieldTypes
 
 class TextOutputComponent(BaseComponent):
     name: str = "Text Output"
     display_name: str = "Text Output" 
     description: str = "Get text outputs to the Playground."
-    icon: str = "type" 
+    icon: str = "Text" 
     code: str = ""
 
     inputs: list = [
@@ -17,5 +18,5 @@ class TextOutputComponent(BaseComponent):
         ),
     ]
     outputs: list = [
-        Output(display_name="Text", name="text", method="text_response"),
+        Output(display_name="Text", name="text", method="text_response", output_type=FieldTypes.TEXT),
     ]
