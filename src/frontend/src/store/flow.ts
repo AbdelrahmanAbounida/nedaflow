@@ -9,6 +9,9 @@ export type FlowStoreType = {
   setLoadingComponentTypes: (va: boolean) => void;
   loadingFlow: boolean;
   setLoadingFlow: (val: boolean) => void;
+
+  currentSelectedNodeId: string;
+  setCurrentSelectedNodeId: (id: string) => void;
 };
 
 export const useFlowStore = create<FlowStoreType>((set, get) => ({
@@ -26,5 +29,10 @@ export const useFlowStore = create<FlowStoreType>((set, get) => ({
   loadingFlow: false,
   setLoadingFlow: (val) => {
     set(() => ({ loadingFlow: val }));
+  },
+
+  currentSelectedNodeId: "",
+  setCurrentSelectedNodeId: (id) => {
+    set(() => ({ currentSelectedNodeId: id }));
   },
 }));

@@ -1,5 +1,11 @@
 "use client";
-import React, { DragEventHandler, useCallback, useRef, useState } from "react";
+import React, {
+  DragEventHandler,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { SidebarTrigger } from "../ui/sidebar";
 import {
   ReactFlow,
@@ -25,6 +31,7 @@ import { GenericNodeComponent } from "./generic-component/generic-component";
 import { GenericNode } from "@/types/flow/flow";
 import { DeletableEdge } from "./edges/deletable-edge";
 import ConnectionLineComponent from "./edges/connection-line";
+import { useFlowStore } from "@/store/flow";
 
 export interface FlowPageProps {
   params: {
@@ -48,6 +55,8 @@ const FlowPageView = ({ params }: FlowPageProps) => {
     useNodesState<GenericNode>(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>(initialEdges);
   const [isConnecting, setIsConnecting] = useState(false);
+  const { setCurrentSelectedNodeId } = useFlowStore();
+
   const { screenToFlowPosition } = useReactFlow();
 
   const onConnect = useCallback(
@@ -94,11 +103,19 @@ const FlowPageView = ({ params }: FlowPageProps) => {
     setNodes((es) => es.concat(newNode));
   }, []);
 
+  const handleCurrentSelectedNode = useCallback((_: any, node: any) => {
+    setCurrentSelectedNodeId(node.id);
+  }, []);
+
   return (
     <div className="w-full  h-full bg-canvas">
       <ReactFlow
         nodes={nodes}
         edges={edges}
+        onNodeDrag={handleCurrentSelectedNode}
+        onNodeClick={handleCurrentSelectedNode}
+        // onNodeMouseEnter={handleCurrentSelectedNode}
+        onPaneClick={() => setCurrentSelectedNodeId("")}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}

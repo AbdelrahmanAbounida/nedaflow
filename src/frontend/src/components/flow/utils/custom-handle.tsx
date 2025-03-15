@@ -21,8 +21,6 @@ const CustomHandle = ({
     ? ComponentHandleColors[handleType]
     : ComponentHandleColors.TEXT;
 
-  console.log({ handleType });
-
   return (
     <div>
       <Handle

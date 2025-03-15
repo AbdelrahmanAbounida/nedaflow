@@ -1,6 +1,6 @@
 import { apiClient } from "@/client/api";
 import { getURL } from "@/client/helpers/get-url";
-import { useFlowStore } from "@/hooks/local/flow";
+import { useFlowStore } from "@/store/flow";
 import { APIResponseBody } from "@/types/api";
 import { FlowComponentSchema } from "@/types/flow";
 import { useQuery } from "@tanstack/react-query";
