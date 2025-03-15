@@ -36,8 +36,18 @@ export const ComponentParams = ({
               componentName={param.field_type as any}
               {...param}
             />
+            {param.only_handle && <p className="!h-4 "></p>}
             {param.is_handle && (
-              <CustomHandle id="asd" position={Position.Left} type="target" />
+              <CustomHandle
+                id={param.display_name}
+                position={Position.Left}
+                handleType={param.field_type}
+                type="target"
+                style={{
+                  top: index * 70 + 140,
+                  // background: "orange !important",
+                }}
+              />
             )}
           </div>
         ))}

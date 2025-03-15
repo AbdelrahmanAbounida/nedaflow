@@ -40,7 +40,6 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
     },
     ref
   ) => {
-    console.log({ defaultValue });
     const [value, setValue] = useState<number | undefined>(
       controlledValue ?? defaultValue
     );

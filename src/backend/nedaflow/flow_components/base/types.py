@@ -14,6 +14,10 @@ class TextInput(Input):
     field_type:FieldTypes = FieldTypes.TEXT
     is_secret: bool = False 
 
+class DataInput(Input):
+    field_type: FieldTypes = FieldTypes.DATA
+    only_handle:bool = True 
+
 class BooleanInput(Input):
     field_type: FieldTypes = FieldTypes.BOOLEAN
 
@@ -39,3 +43,8 @@ class JsonInput(Input):
 
 class DataInput(Input):
     field_type: FieldTypes = FieldTypes.DATA
+    only_handle: bool = True
+
+class EmbeddingInput(Input):
+    field_type: FieldTypes = FieldTypes.EMBEDDING
+    only_handle:bool = True

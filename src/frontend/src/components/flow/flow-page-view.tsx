@@ -14,6 +14,8 @@ import {
   Connection,
   Edge,
   Node,
+  ConnectionMode,
+  ConnectionLineType,
 } from "@xyflow/react";
 import { cn } from "@/lib/utils";
 import "@xyflow/react/dist/style.css";
@@ -21,6 +23,8 @@ import { createFlowNode } from "./utils/create-flow-node";
 import { Component, ComponentTypeEnum } from "@/types/flow/flow-component";
 import { GenericNodeComponent } from "./generic-component/generic-component";
 import { GenericNode } from "@/types/flow/flow";
+import { DeletableEdge } from "./edges/deletable-edge";
+import ConnectionLineComponent from "./edges/connection-line";
 
 export interface FlowPageProps {
   params: {
@@ -34,19 +38,33 @@ const initialEdges = [{ id: "e1-2", source: "1", target: "2" }];
 const nodeTypes = {
   geneicNode: GenericNodeComponent,
 };
+const edgeTypes = {
+  default: DeletableEdge,
+};
 
 const FlowPageView = ({ params }: FlowPageProps) => {
   // TODO:: Load flow data from params.flowId >> dataabse
-  const [nodes, setNodes, onNodesChange] = useNodesState<Node>(initialNodes);
+  const [nodes, setNodes, onNodesChange] =
+    useNodesState<GenericNode>(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>(initialEdges);
+  const [isConnecting, setIsConnecting] = useState(false);
   const { screenToFlowPosition } = useReactFlow();
 
   const onConnect = useCallback(
     (connection: Connection) => {
-      setEdges((eds) => addEdge({ ...connection }, eds));
+      console.log("Start connection");
+      setEdges((eds) => addEdge({ ...connection, animated: true }, eds));
     },
     [setEdges]
   );
+
+  const onConnectStart = useCallback(() => {
+    setIsConnecting(true);
+  }, []);
+
+  const onConnectEnd = useCallback(() => {
+    setIsConnecting(false);
+  }, []);
 
   const onDragOver = useCallback((event: any) => {
     event.preventDefault();
@@ -84,14 +102,26 @@ const FlowPageView = ({ params }: FlowPageProps) => {
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
+        onConnectStart={onConnectStart}
+        onConnectEnd={onConnectEnd}
         nodeTypes={nodeTypes}
+        edgeTypes={edgeTypes}
         onDrop={onDrop}
         onDragOver={onDragOver}
         maxZoom={10}
+        connectionMode={ConnectionMode.Strict}
+        connectionLineType={ConnectionLineType.Bezier}
+        connectionLineStyle={{
+          stroke: "#747a86",
+          strokeWidth: 2,
+          strokeDasharray: "5 5",
+          animationPlayState: "running",
+        }}
+        // connectionLineComponent={ConnectionLineComponent}
       >
         <Panel
           className={cn(
-            " z-10 w-fit transition-all  gap-1.5  delay-10 bg-background fill-background stroke-background   m-2 rounded-md flex items-center justify-center group-data-[open=true]/sidebar-wrapper:opacity-0 group-data-[open=true]/sidebar-wrapper:translate-x-full opacity-100"
+            " z-10 w-fit transition-all text-[#747a86]  gap-1.5  delay-10 bg-background fill-background stroke-background   m-2 rounded-md flex items-center justify-center group-data-[open=true]/sidebar-wrapper:opacity-0 group-data-[open=true]/sidebar-wrapper:translate-x-full opacity-100"
           )}
           position="top-left"
         >

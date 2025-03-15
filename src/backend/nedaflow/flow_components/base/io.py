@@ -10,6 +10,9 @@ class Input(BaseModel):
     is_handle: bool = False
     """if true input will be handled from anthor component (has reactflow handle)"""
 
+    only_handle: bool = False
+    """if true will show only handle for this input """
+
     field_type: FieldTypes # str | type | None = Field(default=str, serialization_alias="type") # it could be literal but lets keep it like that for flexiablilty 
     """The type of field this is. This is the main type by which we will categorize the input."""
 

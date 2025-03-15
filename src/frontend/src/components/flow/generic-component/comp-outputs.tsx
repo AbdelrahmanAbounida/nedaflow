@@ -66,9 +66,10 @@ export const ComponentOutputs = ({
               </CustomTooltip>
             </div>
             <CustomHandle
-              type="target"
+              type="source"
               position={Position.Right}
               className=""
+              handleType={param.field_type}
             />
           </div>
         </div>

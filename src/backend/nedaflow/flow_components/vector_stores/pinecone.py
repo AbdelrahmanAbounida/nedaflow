@@ -1,5 +1,5 @@
 from nedaflow.flow_components.base.io import Output
-from nedaflow.flow_components.base.types import TextInput, MultilineInput,DropdownInput,BooleanInput,JsonInput,NumberInput
+from nedaflow.flow_components.base.types import DataInput, TextInput, MultilineInput,EmbeddingInput,BooleanInput,JsonInput,NumberInput
 from nedaflow.flow_components.base import BaseComponent
 from nedaflow.flow_components.types import FieldTypes
 
@@ -7,48 +7,58 @@ from nedaflow.flow_components.types import FieldTypes
 class Pinecone(BaseComponent):
     name: str  = "Pinecone"
     display_name: str  = "Pinecone"
-    description: str  = "Make HTTP requests using URLs or cURL commands."
+    description: str  = "Pinecone Vector Store with search capabilities"
     icon: str  = "Pinecone"
     minimized: bool = False
     code: str  = ""
 
     inputs: list = [
         TextInput(
-            name="urls",
-            display_name="URLs",
+            name="index_name",
+            display_name="Index Name",
+            required=True,
             description="Entter one or more URLs, separated by commas",
             info="Enter one or more URLs, separated by commas."
         ),
+        TextInput(
+            name="name_space",
+            display_name="Namespace",
+            description="Pinecone namespace for this index",
+            info="Pinecone namespace for this index",
+        ),
+        TextInput(
+            name="pinecone_api_key",
+            display_name="Pinecone API Key",
+            required=True,
+            description="Pinecone API Key",
+            is_secret=True,
+            info="Pinecone API Key",
+        ),
+        DataInput(
+            name="ingest_data",
+            display_name="Ingest Data",
+            required=False,
+            is_handle=True,
+        ),
         MultilineInput(
-            name="cURL",
-            display_name="cURL Command",
-            value="",
-            placeholder="Type Something",
-            info="Paste a curl command to populate the fields. This will fill in the dictionary fields for headers and body.",
+            name="search_query",
+            display_name="Search Query",
+            description="Search query",
+            is_handle=True
         ),
-        DropdownInput[str](
-            name="method",
-            display_name="Method",
-            default="GET",
-            options=["GET", "POST", "PUT", "DELETE"],
-            info="Select the HTTP method to use for the request.",
-        ),
-        BooleanInput(
-            name="Use cURL",
-            display_name="Use cURL",
-            default=True,
-            info="Enable cURL mode to populate fields from a curl command",
-            show=True 
-        ),
+        EmbeddingInput(
+            name="embedding_model",
+            display_name="Embedding Model",
+            required=False,
+            only_handle=True,
+        )
     ]
 
     outputs: list = [
         Output(
-            name="data",
-            display_name="API Response",
-            method="api_response",
-            description="The API response as a dictionary",
-            info="The API response as a dictionary",
+            name="search_results",
+            display_name="Search Results",
+            method="get_search_results",
             output_type=FieldTypes.DATA,
         )
     ]

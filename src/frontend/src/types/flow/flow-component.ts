@@ -45,6 +45,7 @@ export interface ComponentParam {
   info: string;
   field_type: ComponentParamTypeEnum;
   is_handle?: boolean;
+  only_handle?: boolean;
   value?: string;
   disabled: boolean;
   placeholder?: string;
@@ -68,3 +69,17 @@ export enum ComponentParamTypeEnum {
   // SLIDER = "SLIDER",
   // FILE = "FILE",
 }
+
+export const ComponentHandleColors: Record<
+  keyof typeof ComponentParamTypeEnum,
+  string
+> = {
+  TEXT: `!border-blue-100  !bg-blue-500 before:bg-blue-500  !shadow-blue-500  hover:shadow-[0_0_10px_5px_rgba(59,130,246,0.5)]`,
+  NUMBER: `!border-blue-100  !bg-blue-500 before:bg-blue-500  !shadow-blue-500  hover:shadow-[0_0_10px_5px_rgba(59,130,246,0.5)]`,
+  TEXTAREA: `!border-blue-100  !bg-blue-500 before:bg-blue-500  !shadow-blue-500  hover:shadow-[0_0_10px_5px_rgba(59,130,246,0.5)]`,
+  FILE: `!border-blue-100  !bg-blue-500 before:bg-blue-500  !shadow-blue-500  hover:shadow-[0_0_10px_5px_rgba(59,130,246,0.5)]`,
+  DROPDOWN: `!border-blue-100  !bg-blue-500 before:bg-blue-500  !shadow-blue-500  hover:shadow-[0_0_10px_5px_rgba(59,130,246,0.5)]`,
+  JSON: `!border-blue-100  !bg-blue-500 before:bg-blue-500  !shadow-blue-500  hover:shadow-[0_0_10px_5px_rgba(59,130,246,0.5)]`,
+  DATA: `!border-blue-100  !bg-blue-500 before:bg-blue-500  !shadow-blue-500  hover:shadow-[0_0_10px_5px_rgba(59,130,246,0.5)]`,
+  BOOLEAN: `!border-blue-100  !bg-blue-500 before:bg-blue-500  !shadow-blue-500  hover:shadow-[0_0_10px_5px_rgba(59,130,246,0.5)]`,
+};

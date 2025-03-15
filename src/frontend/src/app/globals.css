@@ -123,6 +123,16 @@
   transition-duration: 0.7s;
 }
 
+.react-flow__connection {
+  animation: dash-animation 0.4s linear infinite;
+}
+
+@keyframes dash-animation {
+  to {
+    stroke-dashoffset: -11;
+  }
+}
+
 @layer base {
   * {
     @apply border-border;
@@ -131,8 +141,6 @@
     @apply bg-background text-foreground;
   }
 }
-
-
 
 @layer base {
   * {
