@@ -32,6 +32,7 @@ import { GenericNode } from "@/types/flow/flow";
 import { DeletableEdge } from "./edges/deletable-edge";
 import ConnectionLineComponent from "./edges/connection-line";
 import { useFlowStore } from "@/store/flow";
+import { OptionsPanel } from "./options-panel/options-panel";
 
 export interface FlowPageProps {
   params: {
@@ -150,6 +151,7 @@ const FlowPageView = ({ params }: FlowPageProps) => {
           </SidebarTrigger>
         </Panel>
 
+        <OptionsPanel />
         <Controls />
         <Background gap={12} size={1} />
       </ReactFlow>
