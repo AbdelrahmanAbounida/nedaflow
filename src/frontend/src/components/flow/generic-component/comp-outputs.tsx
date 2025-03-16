@@ -69,7 +69,7 @@ export const ComponentOutputs = ({
               type="source"
               position={Position.Right}
               className=""
-              handleType={param.field_type}
+              handleType={param.output_type}
             />
           </div>
         </div>

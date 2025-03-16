@@ -16,7 +16,6 @@ const CustomHandle = ({
   handleType: ComponentParamTypeEnum;
 } & HandleProps) => {
   // generate color according to type
-
   const shadowColors = handleType
     ? ComponentHandleColors[handleType]
     : ComponentHandleColors.TEXT;
@@ -26,13 +25,14 @@ const CustomHandle = ({
       <Handle
         {...props}
         className={cn(
-          ` !border-2 !w-3 !h-3 
-             rounded-full !shadow-4xl 
-              relative before:absolute before:inset-0 before:m-auto 
-              before:w-full before:h-full before:rounded-full 
-              before:opacity-0 hover:!border-white  hover:before:opacity-50 
+          ` !border-2 !w-3 !h-3
+             rounded-full !shadow-4xl
+              relative before:absolute before:inset-0 before:m-auto
+              before:w-full before:h-full before:rounded-full
+              before:opacity-0 hover:!border-white  hover:before:opacity-50
               hover:before:animate-ping`,
           shadowColors,
+          // handleType == ComponentParamTypeEnum.DATA && "!bg-orange-500",
           className
         )}
       />
