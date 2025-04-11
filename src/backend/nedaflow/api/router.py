@@ -3,7 +3,7 @@
 """
 
 from fastapi import APIRouter
-from nedaflow.api.v1 import component_router
+from nedaflow.api.v1 import component_router, flow_router, chat_router
 from nedaflow.core.config import settings
 from nedaflow.api.health_check import router as health_check_router
 
@@ -16,5 +16,7 @@ router = APIRouter(
 )
 
 # TODO >> register more routers here 
+router.include_router(flow_router)
 router.include_router(component_router)
+router.include_router(chat_router)
 router.include_router(health_check_router)

@@ -22,6 +22,7 @@ import {
   Node,
   ConnectionMode,
   ConnectionLineType,
+  SelectionMode,
 } from "@xyflow/react";
 import { cn } from "@/lib/utils";
 import "@xyflow/react/dist/style.css";
@@ -33,6 +34,10 @@ import { DeletableEdge } from "./edges/deletable-edge";
 import ConnectionLineComponent from "./edges/connection-line";
 import { useFlowStore } from "@/store/flow";
 import { OptionsPanel } from "./options-panel/options-panel";
+import { Button } from "../ui/button";
+import { MessageCircle, Play, PlayCircle, Share2 } from "lucide-react";
+import { Card } from "../ui/card";
+import { FlowPlayground } from "./options-panel/playground";
 
 export interface FlowPageProps {
   params: {
@@ -41,7 +46,7 @@ export interface FlowPageProps {
   };
 }
 const initialNodes: GenericNode[] = [];
-const initialEdges = [{ id: "e1-2", source: "1", target: "2" }];
+const initialEdges: Edge[] = [];
 
 const nodeTypes = {
   geneicNode: GenericNodeComponent,
@@ -108,8 +113,23 @@ const FlowPageView = ({ params }: FlowPageProps) => {
     setCurrentSelectedNodeId(node.id);
   }, []);
 
+  const buildFlow = async () => {
+    const res = await fetch(
+      `http://localhost:7000/api/v1/flows/${params.flowId}/build`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ nodes, edges }),
+      }
+    );
+    const data = await res.json();
+    console.log({ data });
+  };
+
   return (
-    <div className="w-full  h-full bg-canvas">
+    <div className="w-full  h-full bg-canvas/30">
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -135,6 +155,10 @@ const FlowPageView = ({ params }: FlowPageProps) => {
           strokeDasharray: "5 5",
           animationPlayState: "running",
         }}
+        panOnDrag={[1, 2]} // prevent drag with left mouse but allow with scroll wheel
+        panOnScroll
+        selectionOnDrag
+        selectionMode={SelectionMode.Full}
         // connectionLineComponent={ConnectionLineComponent}
       >
         <Panel
@@ -151,9 +175,32 @@ const FlowPageView = ({ params }: FlowPageProps) => {
           </SidebarTrigger>
         </Panel>
 
-        <OptionsPanel />
+        <Panel position="top-right">
+          <Button className="">
+            <Share2 />
+            Publish
+          </Button>
+        </Panel>
+
+        <Panel
+          className={cn(
+            " z-10  transition-all   gap-1.5  delay-10 bg-background fill-background stroke-background   m-2 rounded-md flex items-center justify-center  opacity-100"
+          )}
+          position="bottom-center"
+        >
+          {/* <Button className="!h-9">
+            <MessageCircle className="" />
+            Chat
+          </Button> */}
+          <FlowPlayground />
+          <Button className="!h-9">
+            <PlayCircle className="" />
+            Build Flow
+          </Button>
+        </Panel>
+
         <Controls />
-        <Background gap={12} size={1} />
+        <Background gap={19} size={1} />
       </ReactFlow>
     </div>
   );

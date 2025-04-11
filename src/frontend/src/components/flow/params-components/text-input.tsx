@@ -9,7 +9,7 @@ export const TextInputParam = ({ className, ...props }: any) => {
   const [hideText, sethideText] = useState(props.is_secret!);
   return (
     <div className={cn("relative flex items-center ", className)} {...props}>
-      <Input className="" type={!hideText ? "password" : "text"} />
+      <Input className="" type={hideText ? "password" : "text"} />
       {props.is_secret && (
         <Button
           className="absolute right-0 hover:bg-transparent hover:text-gray-600 group"

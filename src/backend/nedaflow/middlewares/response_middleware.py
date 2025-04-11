@@ -6,7 +6,7 @@ from starlette.responses import StreamingResponse
 from fastapi import Request, Response
 import json
 from pydantic_core._pydantic_core import ValidationError
-from nedaflow.pipes.validation_pipe import ValidationPipe
+from nedaflow.middlewares.validation_pipe import ValidationPipe
 from loguru import logger 
 
 # TODO:: check this 

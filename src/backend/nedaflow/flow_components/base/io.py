@@ -40,7 +40,7 @@ class Input(BaseModel):
     file_path: str | None = ""
     """The file path of the field if it is a file. Defaults to None."""
 
-    is_password: bool | None = None
+    is_secret: bool | None = Field(alias="is_password", default=False)
     """Specifies if the field is a password. Defaults to None."""
 
     options: list[str] | Callable | None = None

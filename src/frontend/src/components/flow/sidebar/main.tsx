@@ -29,13 +29,14 @@ export const FlowSidebar = () => {
   const sideBarItemsWithSubItems = SIDEBAR_CATEGORIES.map((cat) => {
     return {
       ...cat,
-      subItems:
-        componentTypes[
-          Object.keys(componentTypes).find(
-            (key) =>
-              key.replace("_", "").toLowerCase() === cat.name.toLowerCase()
-          )!
-        ],
+      subItems: componentTypes
+        ? componentTypes[
+            Object.keys(componentTypes).find(
+              (key) =>
+                key.replace("_", "").toLowerCase() === cat.name.toLowerCase()
+            )!
+          ]
+        : [],
     };
   });
 

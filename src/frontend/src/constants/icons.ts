@@ -95,7 +95,7 @@ export const SVG_ICONS_REGISTERY = {
   Notion: "/bundles-icons/Notion-logo.svg",
   Needle: "/bundles-icons/needle-icon.svg",
   NVIDIA: "/bundles-icons/nvidia.svg",
-  Vectara: "/bundles-icons/vectara.png",
+  Vectara: "/bundles-icons/vectra.png",
   "Icosa Computing": "/bundles-icons/Icosa.svg",
   Google: "/bundles-icons/google.svg",
   CrewAI: "/bundles-icons/crewai.png",

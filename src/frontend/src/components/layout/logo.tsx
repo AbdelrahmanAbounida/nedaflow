@@ -15,7 +15,7 @@ const Logo: FC<
       <Target className={cn("text-primary size-6 ", logoClassName)} />
       {withTitle && (
         <p className="font-bold text-2xl">
-          Neda<span className="text-primary">Lang</span>
+          Neda<span className="text-primary">Flow</span>
         </p>
       )}
     </Link>

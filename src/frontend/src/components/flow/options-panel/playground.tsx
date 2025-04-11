@@ -4,6 +4,7 @@ import {
   Edit,
   Ellipsis,
   Loader,
+  MessageCircle,
   MessageSquareText,
   Play,
   Plus,
@@ -49,9 +50,9 @@ export const FlowPlayground = () => {
 const PlaygroundModal = () => {
   return (
     <Dialog>
-      <DialogTrigger className={cn("", buttonVariants({ variant: "ghost" }))}>
-        <Play className="" />
-        Playground
+      <DialogTrigger className={cn("", buttonVariants({ variant: "default" }))}>
+        <MessageCircle className="" />
+        Chat
       </DialogTrigger>
       <DialogContent
         className={cn(
