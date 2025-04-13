@@ -97,7 +97,7 @@ export function ComponentToolbar({ nodeId }: NodeToolbarProps) {
     // >
     <div
       className={cn(
-        "absolute -top-12 left-1/2 z-50 -translate-x-1/2 w-[325px] hidden",
+        "absolute -top-12 left-1/2 z-50 -translate-x-1/2 w-[285px] hidden",
         currentSelectedNodeId == nodeId && "block flex-1 "
       )}
     >
@@ -140,7 +140,8 @@ export function ComponentToolbar({ nodeId }: NodeToolbarProps) {
             Delete
           </Button>
 
-          <ComponentDropDown />
+          {/** TODO:: handle the reach max stack issue here  */}
+          {/* <ComponentDropDown /> */}
         </div>
       </div>
     </div>

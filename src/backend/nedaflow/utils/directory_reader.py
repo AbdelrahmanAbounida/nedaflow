@@ -2,7 +2,7 @@
     - used for reading the files from a folder 
     - building schema from code base dynamically instead of having fixed registery
 """
-from nedaflow.flow_components.base import BaseComponent
+from nedaflow.flow_nodes.base import BaseNode
 from nedaflow.core.config import settings
 from types import ModuleType
 from typing import Optional
@@ -60,12 +60,12 @@ def import_module_from_filepath(file_path:str) -> ModuleType | None :
     spec.loader.exec_module(module)  # type: ignore
     return module
 
-def fetch_native_langflow_components(components_path:Optional[list[str]]=[]) -> dict[list[BaseComponent]]: 
+def fetch_native_langflow_nodes(components_path:Optional[list[str]]=[]) -> dict[list[BaseNode]]: 
     # TODO:: use asyncio to read that 
     # TODO:: add fixed schema 
     """get all current components to export to the ui to be used in the flow builder
     
-    will walk through this folder files list and check any class inherits from BaseComponent
+    will walk through this folder files list and check any class inherits from BaseNode
     and get its json version to be exported to the ui 
     """
     # components_paths or settings.components_paths
@@ -85,7 +85,7 @@ def fetch_native_langflow_components(components_path:Optional[list[str]]=[]) -> 
                 continue
             for name, obj in inspect.getmembers(module, inspect.isclass):
                 
-                if issubclass(obj, BaseComponent) and obj is not BaseComponent:
+                if issubclass(obj, BaseNode) and obj is not BaseNode:
                     instance = obj()  # Attempt to create an instance
                     category_name =   Path(file_path).parent.name # file folder name whis will be usefult too in the sidebar (should match with it )
                     if category_name not in all_components:

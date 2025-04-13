@@ -1,5 +1,5 @@
 // // This should match with these types
-// // from nedaflow.flow_components.types import FieldTypes
+// // from nedaflow.flow_nodes.base.types import FieldTypes
 
 // import { TextAreaParam } from "@/components/flow/params-components/text-area";
 // import { TextInputParam } from "@/components/flow/params-components/text-input";

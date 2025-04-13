@@ -35,9 +35,19 @@ import ConnectionLineComponent from "./edges/connection-line";
 import { useFlowStore } from "@/store/flow";
 import { OptionsPanel } from "./options-panel/options-panel";
 import { Button } from "../ui/button";
-import { MessageCircle, Play, PlayCircle, Share2 } from "lucide-react";
+import {
+  Loader,
+  Loader2,
+  MessageCircle,
+  Play,
+  PlayCircle,
+  Share2,
+} from "lucide-react";
 import { Card } from "../ui/card";
 import { FlowPlayground } from "./options-panel/playground";
+import { useBuildFlow } from "@/hooks/api/flow/mutations";
+import { IBuildWorkflow } from "@/types/api";
+import { toast } from "sonner";
 
 export interface FlowPageProps {
   params: {
@@ -113,20 +123,28 @@ const FlowPageView = ({ params }: FlowPageProps) => {
     setCurrentSelectedNodeId(node.id);
   }, []);
 
-  const buildFlow = async () => {
-    const res = await fetch(
-      `http://localhost:7000/api/v1/flows/${params.flowId}/build`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ nodes, edges }),
-      }
-    );
-    const data = await res.json();
-    console.log({ data });
+  const { mutate: mutateBuildFlow, isPending, isError, error } = useBuildFlow();
+
+  const handleBuildFlow = () => {
+    try {
+      const flow: IBuildWorkflow = {
+        nodes,
+        edges,
+        name: "test",
+      };
+      mutateBuildFlow(flow);
+    } catch (err) {
+      console.log({ err });
+      toast.error(err + "");
+    }
   };
+
+  useEffect(() => {
+    if (isError && error) {
+      console.log({ error });
+      toast.error(error + "");
+    }
+  }, [isError]);
 
   return (
     <div className="w-full  h-full bg-canvas/30">
@@ -193,10 +211,20 @@ const FlowPageView = ({ params }: FlowPageProps) => {
             Chat
           </Button> */}
           <FlowPlayground />
-          <Button className="!h-9">
-            <PlayCircle className="" />
-            Build Flow
-          </Button>
+          {isPending ? (
+            <Button disabled className="!h-9">
+              <Loader className="animate-spin" /> Building
+            </Button>
+          ) : (
+            <Button
+              onClick={handleBuildFlow}
+              disabled={isPending}
+              className="!h-9"
+            >
+              <PlayCircle className="" />
+              Build Flow
+            </Button>
+          )}
         </Panel>
 
         <Controls />

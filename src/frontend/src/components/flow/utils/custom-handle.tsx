@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import {
   ComponentHandleColors,
   ComponentParamTypeEnum,
+  NodeDependencyTypeEnum,
 } from "@/types/flow/flow-component";
 import { Handle, HandleProps } from "@xyflow/react";
 import React, { useCallback } from "react";
@@ -13,7 +14,7 @@ const CustomHandle = ({
   ...props
 }: {
   className?: string;
-  handleType: ComponentParamTypeEnum;
+  handleType: ComponentParamTypeEnum | NodeDependencyTypeEnum;
 } & HandleProps) => {
   // generate color according to type
   const shadowColors = handleType

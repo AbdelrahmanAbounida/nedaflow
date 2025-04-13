@@ -39,7 +39,7 @@ export const DeletableEdge = (props: EdgeProps) => {
     } else {
       setIsExpiredEdge(false);
     }
-  }, [edges, props, props, getNode, nodes]);
+  }, [edges]);
 
   return (
     <>

@@ -37,7 +37,7 @@ export const FlowSidebarItem = ({
   // }
 
   const orderedSubitems = subItems?.sort((a, b) =>
-    a.name.localeCompare(b.name)
+    a.name?.localeCompare(b.name)
   );
 
   return (

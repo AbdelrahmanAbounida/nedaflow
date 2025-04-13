@@ -1,1 +1,50 @@
-{"openapi": "3.1.0", "info": {"title": "FastAPI", "description": "\n        A developer-focused low-code platform that simplifies building advanced AI agents and workflows, enabling seamless \n        integration with various APIs, models, and databases. \ud83d\ude80.\n    ", "version": "0.1.0"}, "paths": {"/": {"get": {"tags": ["Home"], "summary": "Root", "operationId": "root__get", "responses": {"200": {"description": "Successful Response", "content": {"text/html": {"schema": {"type": "string"}}}}}}}, "/api/v1/component/all": {"get": {"tags": ["FlowComponent"], "summary": "Get All Flow Components Types", "description": "get list of current provided components + the custom components the user created", "operationId": "get_all_flow_components_types_api_v1_component_all_get", "responses": {"200": {"description": "Successful Response", "content": {"application/json": {"schema": {}}}}}}}, "/api/v1/health/": {"get": {"tags": ["Health check"], "summary": "Check Health", "operationId": "check_health_api_v1_health__get", "responses": {"200": {"description": "Successful Response", "content": {"application/json": {"schema": {}}}}}}}}}
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "FastAPI",
+    "description": "\n        A developer-focused low-code platform that simplifies building advanced AI agents and workflows, enabling seamless \n        integration with various APIs, models, and databases. \ud83d\ude80.\n    ",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/": {
+      "get": {
+        "tags": ["Home"],
+        "summary": "Root",
+        "operationId": "root__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "text/html": { "schema": { "type": "string" } } }
+          }
+        }
+      }
+    },
+    "/api/v1/component/all": {
+      "get": {
+        "tags": ["FlowComponent"],
+        "summary": "Get All Flow Components Types",
+        "description": "get list of current provided components + the custom components the user created",
+        "operationId": "get_all_flow_nodes_types_api_v1_component_all_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          }
+        }
+      }
+    },
+    "/api/v1/health/": {
+      "get": {
+        "tags": ["Health check"],
+        "summary": "Check Health",
+        "operationId": "check_health_api_v1_health__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          }
+        }
+      }
+    }
+  }
+}

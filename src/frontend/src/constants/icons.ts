@@ -106,6 +106,7 @@ export const SVG_ICONS_REGISTERY = {
   Unstructured: "/bundles-icons/Unstructured.svg",
   Git: "/bundles-icons/Git.svg",
   Confluence: "/bundles-icons/Confluence.svg",
+  Zap: "/bundles-icons/zap.svg",
   // Confluence2: "/bundles-icons/Confluence.svg",
 } as const;
 

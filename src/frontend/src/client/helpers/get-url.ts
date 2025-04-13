@@ -1,5 +1,6 @@
 export const URLs = {
   COMPONENTS_TYPES: `component/all-types`,
+  BUILD_FLOW: `flow/build`,
 } as const;
 
 export function getURL(key: keyof typeof URLs, params: any = {}) {

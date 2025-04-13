@@ -10,12 +10,14 @@ export interface SidebarItemProps {
 
 export const SIDEBAR_CATEGORIES: SidebarItemProps[] = [
   // { display_name: "Saved", name: "saved_components", icon: "GradientSave" },
+  { display_name: "Triggers", name: "triggers", icon: "Zap" },
   { display_name: "Inputs", name: "inputs", icon: "Download" },
   { display_name: "Outputs", name: "outputs", icon: "Upload" },
   { display_name: "Prompts", name: "prompts", icon: "TerminalSquare" },
   { display_name: "Data", name: "data", icon: "Database" },
   { display_name: "Processing", name: "processing", icon: "ListFilter" },
-  { display_name: "Models", name: "models", icon: "BrainCircuit" },
+  { display_name: "LLMs", name: "llms", icon: "BrainCircuit" },
+  { display_name: "Chains", name: "chains", icon: "Route" },
   { display_name: "Vector Stores", name: "vectorstores", icon: "Layers" },
   { display_name: "Embeddings", name: "embeddings", icon: "Binary" },
   { display_name: "Agents", name: "agents", icon: "Bot" },

@@ -19,6 +19,7 @@ export const ComponentParams = ({
     <div className={cn("", className)}>
       {/** Loop over all param types and display them accordingly  */}
       {/** TOOD:: create separate elemets like input, text area ,.. acc to param type */}
+      {/** TODO:: show this in Modal */}
       <div className="flex flex-col gap-2">
         {params?.map((param, index) => (
           <div className={cn("", !param.show && "hidden")}>

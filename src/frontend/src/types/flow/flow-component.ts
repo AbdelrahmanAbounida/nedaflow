@@ -12,12 +12,15 @@ export interface Component {
   name: string; // TODO:: we need to check a way to map to lucid icons
   description: string;
   inputs: ComponentParam[];
-  outputs: ComponentParam[];
-  type: ComponentTypeEnum;
+  outputs: ComponentParam[]; // TODO:: make custom output interface and sync with backend
+  dependencies: NodeDependencyTypeEnum[]; // TODO:: custom depenedecies interface and sync with backend
+  options: string[]; // TODO:: custom Type
+  type: ComponentTypeEnum; // TODO:: MAKE SURE TO ADD THIS TYPE TO ANY NEW REGISTERED NODE
   beta?: boolean;
   code: string;
   minimized?: boolean;
   disabled?: boolean;
+  is_dep?: boolean;
 }
 
 // add here list of all categories we have or will have >> it should be loaded from backend
@@ -27,7 +30,7 @@ export enum ComponentTypeEnum {
   PROMPT = "PROMPT",
   DATA = "DATA",
   PROCESSING = "PROCESSING",
-  MODEL = "MODEL",
+  LLM = "LLM",
   VECTOR_STORE = "VECTOR_STORE",
   EMBEDDING = "EMBEDDING",
   AGENT = "AGENT",
@@ -36,6 +39,7 @@ export enum ComponentTypeEnum {
   LOGIC = "LOGIC",
   HELPER = "HELPER",
   BUNDLE = "BUNDLE",
+  TRIGGER = "TRIGGER",
 }
 
 export interface ComponentParam {
@@ -71,8 +75,12 @@ export enum ComponentParamTypeEnum {
   // FILE = "FILE",
 }
 
+export enum NodeDependencyTypeEnum {
+  LLM = "LLM",
+}
+
 export const ComponentHandleColors: Record<
-  keyof typeof ComponentParamTypeEnum,
+  keyof typeof ComponentParamTypeEnum | NodeDependencyTypeEnum,
   string
 > = {
   TEXT: `!border-blue-100 !bg-blue-500 before:bg-blue-500 !shadow-blue-500 hover:shadow-[0_0_10px_5px_rgba(59,130,246,0.5)]`,
@@ -83,4 +91,5 @@ export const ComponentHandleColors: Record<
   JSON: `!border-pink-100 !bg-pink-500 before:bg-pink-500 !shadow-pink-500 hover:shadow-[0_0_10px_5px_rgba(236,72,153,0.5)]`,
   DATA: `!border-orange-100 !bg-orange-500 before:bg-orange-500 !shadow-orange-500 hover:shadow-[0_0_10px_5px_rgba(249,115,22,0.5)]`,
   BOOLEAN: `!border-teal-100 !bg-teal-500 before:bg-teal-500 !shadow-teal-500 hover:shadow-[0_0_10px_5px_rgba(20,184,166,0.5)]`,
+  LLM: `!border-sky-100 !bg-sky-500 before:bg-sky-500 !shadow-sky-500 hover:shadow-[0_0_10px_5px_rgba(14,165,233,0.5)]`,
 };

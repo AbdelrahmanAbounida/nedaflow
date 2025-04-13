@@ -8,7 +8,7 @@ import os
 load_dotenv()
 
 
-BASE_COMPONENTS_PATH = str(Path(__file__).parent.parent / "flow_components")
+BASE_COMPONENTS_PATH = str(Path(__file__).parent.parent / "flow_nodes")
 
 class Settings(BaseSettings):
     PROJECT_NAME: Optional[str] = Field(default="",description="The project name") 
