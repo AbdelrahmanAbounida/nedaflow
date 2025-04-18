@@ -1,5 +1,5 @@
 import { NodeData } from "@/types/flow/flow";
-import { NodeProps, Position } from "@xyflow/react";
+import { Handle, NodeProps, Position } from "@xyflow/react";
 import React, { memo } from "react";
 import { ComponentHeader } from "./comp-header";
 import { ComponentParams } from "./comp-params";
@@ -62,11 +62,13 @@ export const GenericNodeComponent = memo(
         {/** TODO:: Loop over all required inputs */}
         {data.inputs.map((input, index) => (
           <CustomHandle
-            key={index}
+            key={`left-${index}`}
             position={Position.Left}
             handleType={input.type}
             type="target"
+            id={`input-handle-${index}`}
             // className="!w-4 !h-4"
+            onConnect={(e) => console.log("connect", e)}
           />
         ))}
 
@@ -76,16 +78,17 @@ export const GenericNodeComponent = memo(
 
         {data.dependencies?.map((dep, index) => (
           <CustomHandle
-            key={index}
+            key={`bottom-${index}`}
+            id={`dependency-handle-${index}`}
             position={Position.Bottom}
             handleType={dep} // TODO:: see how to have custom dependecies type
             type="target"
-            // className="!w-4 !h-4"
+            onConnect={(e) => console.log("connect", e)}
           />
         ))}
 
         {/** ********************* */}
-        {/** dependecies >> what nodes provide */}
+        {/** dependecies >> what nodes provide ex in case of node like LLM */}
         {/** ********************* */}
         {data.is_dep && (
           <CustomHandle

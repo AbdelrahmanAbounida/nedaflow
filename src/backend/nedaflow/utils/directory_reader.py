@@ -2,8 +2,8 @@
     - used for reading the files from a folder 
     - building schema from code base dynamically instead of having fixed registery
 """
-from nedaflow.flow_nodes.base import BaseNode
-from nedaflow.core.config import settings
+from nedaflow.flow.nodes.base import BaseNode
+from nedaflow.services.settings.config import settings
 from types import ModuleType
 from typing import Optional
 from loguru import logger 

@@ -7,7 +7,7 @@ from fastapi.responses import HTMLResponse
 from fastapi import FastAPI, Request
 from nedaflow.lifespan import lifespan
 from dotenv import load_dotenv
-from nedaflow.core.config import settings
+from nedaflow.services.settings.config import settings
 from pathlib import Path
 from scalar_fastapi import get_scalar_api_reference
 
