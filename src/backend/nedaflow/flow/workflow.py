@@ -1,3 +1,4 @@
+from nedaflow.services.events.managers.workflow import WorkflowEvents
 from nedaflow.flow.nodes.base import VertexState
 from nedaflow.flow.vertex import Vertex
 from nedaflow.flow.edge import Edge
@@ -5,11 +6,11 @@ from nedaflow.schema import BuildWorkflow
 import time 
 import uuid 
 from loguru import logger 
-from typing import Any,Optional
+from typing import Any,Optional, Self
 from functools import lru_cache, cached_property
 import asyncio
 
-from nedaflow.services import BasePubSub, BaseTaskQueue
+from nedaflow.services import BasePubSub, TaskQueueService,BaseEventManager
 
 class WorkflowEngine:
     """Engine for managing and executing workflows"""
@@ -18,9 +19,9 @@ class WorkflowEngine:
                  flow_id:str, 
                  vertexes: list[Vertex], 
                  edges: list[Edge],
-                 task_queue_service: BaseTaskQueue,
-                 
+                 task_queue_service: TaskQueueService,
                  pubsub_service: BasePubSub = None ,
+                 event_manager: BaseEventManager[WorkflowEvents]
                  # TODO:: add cache , event emitter, workflow service (crud), event emitter
                  ):
 
@@ -44,20 +45,42 @@ class WorkflowEngine:
 
         # injected Services 
         self.pubsub_service = pubsub_service
-        self.task_queue_service = task_queue_service
+        self.task_queue_service = task_queue_service # use flow_id as job_id
+        self.event_manager = event_manager
 
         self._prepare_graph()
+        self.task_queue_service.create_task_queue(job_id=self.id, queue_type="asyncio")
 
         # TODO:: use Workflow service to load the flow data from database 
         # TODO:: use cache service to cache the build data 
         # TODO:: use EventEmitter to emit events at specicfic points like after building is done 
         # TODO:: pubsub service also could be required here to update the building progress as stream 
+    
+
+    @property
+    def vertexes(self):
+        return self._vertexes
+    
+    @vertexes.setter
+    def vertexes(self, vertexes):
+        self._vertexes = vertexes
+
+    @property
+    def edges(self):
+        return self._edges
+    
+    @edges.setter
+    def edges(self, edges):
+        self._edges = edges
 
     @classmethod
-    def from_payload(cls,payload: BuildWorkflow):
-        vertexes = [Vertex(**vertex.model_dump()) for vertex in payload.vertexes]
+    def from_payload(cls,payload: BuildWorkflow) -> Self:
+        workflow = cls(flow_id=payload.flow_id,vertexes=[], edges=[])
+        vertexes = [Vertex(**vertex.model_dump(), workflow=workflow) for vertex in payload.vertexes]
         edges = [Edge(**edge.model_dump()) for edge in payload.edges]
-        return cls(flow_id=payload.flow_id,vertexes=vertexes, edges=edges)
+        workflow.vertexes = vertexes
+        workflow.edges = edges
+        return workflow
     
     def _prepare_graph(self) -> None:
         """Prepare the graph for execution
@@ -182,7 +205,14 @@ class WorkflowEngine:
         if not self.task_queue_service:
             raise ValueError("Workflow does not have a task queue service")
 
-        # TODO:: See how to design TAsk Queue 
+        # TODO:: See how to design Task Queue 
+        inital_tasks = [asyncio.create_task(vertex.build()) for vertex in root_vertexes]
+
+        await self.task_queue_service.run(inital_tasks)
+        self.is_running = False
+
+        end_time = time.time()
+        self.last_execution_time = end_time - start_time
 
         
         # try:

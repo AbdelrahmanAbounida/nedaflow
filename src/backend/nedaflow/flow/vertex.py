@@ -1,6 +1,6 @@
-from abc import ABC, abstractmethod
-from nedaflow.schema import VertexPosition
+from nedaflow.flow.workflow import WorkflowEngine
 from nedaflow.flow.nodes.base import BaseNode, VertexState
+from nedaflow.services.events.managers.workflow import WorkflowEvents
 from nedaflow.flow.edge  import Edge
 from typing import Optional, Self
 from loguru import logger 
@@ -16,17 +16,19 @@ class Vertex:
     """
     def __init__(self, *,
                 #  position: Optional[VertexPosition] = None,
-                 name: Optional[str] = None,
-                 data: BaseNode,
-                 id:Optional[str]=None,
-                 type: Optional[str]=None,
-                  params: Optional[dict] = None ,
-                  **kwargs) -> None:
+                workflow: WorkflowEngine,
+                name: Optional[str] = None,
+                data: BaseNode,
+                id:Optional[str]=None,
+                type: Optional[str]=None,
+                params: Optional[dict] = None ,
+                **kwargs) -> None:
         self.id = id 
         self.data = data
         self.type = type
         self.params = params
         self.error_message: str = None
+        self.workflow = workflow
 
         # Building Context 
         self._is_built = False
@@ -58,8 +60,10 @@ class Vertex:
     async def build(self, *args, **kwargs):
         await asyncio.sleep(random.randint(1,3))
         logger.success(f"Building Vertex: {self.id}")
-        ...
-        # TODO:: use the self.data function and execute it using the input edges data  
+        self.workflow.event_manager.emit(WorkflowEvents.VERTEX_BUILT, vertex=self, task_queue=self.workflow.task_queue_service) # TODO:: has enum for events 
+        res = await self.data.execute(*args, **kwargs) # TODO:: How to pass the params, settings 
+        for edge in self._output_edges:
+            edge.data = res # TODO:: check how this res whould be passed in case of llm , stream, ...
 
     def to_dict(self):
         return {
@@ -67,10 +71,33 @@ class Vertex:
             "data": self.data.to_dict(),
             "type": self.type
         }
-
-    def add_input_vertex(self, vertex: Self):
-        self._input_vertexes.add(vertex)
-
-    def add_output_vertex(self, vertex: Self):
-        self._output_vertexes.add(vertex)
     
+    @property
+    def successors(self) -> list[Self]:
+        out_edges = self._output_edges
+        out_vertexes = []
+        for edge in out_edges:
+            vertex_id = edge.target_id
+            if v := self.workflow.get_vertex(vertex_id):
+                out_vertexes.append(v)
+        return out_vertexes
+
+    
+    @property
+    def predecessors(self) -> list[Self]:
+        in_edges = self._input_edges
+        in_vertexes = []
+        for edge in in_edges:
+            vertex_id = edge.source_id
+            if v := self.workflow.get_vertex(vertex_id):
+                in_vertexes.append(v)
+        return in_vertexes
+    
+
+    def is_ready_for_execution(self) -> bool:
+        """
+        Check if the vertex is ready for execution which is True if all its input edges are built
+        """
+        if self._is_built:
+            return False 
+        return all([edge.data for edge in self._input_edges])

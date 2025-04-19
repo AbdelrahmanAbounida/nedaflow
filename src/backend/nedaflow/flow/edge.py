@@ -11,6 +11,7 @@ class Edge:
         self.id = id
         self.source_id = source_id
         self.target_id = target_id
+        self.data: Any = None # this will hold the data after building process of the connected source Noode are done
     
     def __repr__(self) -> str:
         return f"Edge(source_id={self.source_id}, target_id={self.target_id})"
@@ -24,3 +25,4 @@ class Edge:
             "source_id": self.source_id,
             "target_id": self.target_id
         }
+    
