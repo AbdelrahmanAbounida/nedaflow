@@ -65,7 +65,7 @@ class Vertex:
 
     async def build(self, *args, **kwargs):
         await asyncio.sleep(random.randint(1,3))
-        logger.success(f"Building Vertex: {self.id}")
+        logger.success(f"Building Vertex: {self.id}  {self.execution_time}")
         self.workflow.event_manager.emit(WorkflowEvents.VERTEX_BUILT, vertex=self, task_queue_service=self.workflow.task_queue_service) # TODO:: has enum for events 
         
         # TODO:: See how to execute as data for now is dict not node
