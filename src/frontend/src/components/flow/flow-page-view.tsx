@@ -23,6 +23,7 @@ import {
   ConnectionMode,
   ConnectionLineType,
   SelectionMode,
+  BackgroundVariant,
 } from "@xyflow/react";
 import { cn } from "@/lib/utils";
 import "@xyflow/react/dist/style.css";
@@ -41,6 +42,7 @@ import {
   MessageCircle,
   Play,
   PlayCircle,
+  PlusIcon,
   Share2,
 } from "lucide-react";
 import { Card } from "../ui/card";
@@ -148,7 +150,7 @@ const FlowPageView = ({ params }: FlowPageProps) => {
   }, [isError]);
 
   return (
-    <div className="w-full  h-full bg-canvas/30">
+    <div className="w-full  h-full bg-canvas/10">
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -182,15 +184,17 @@ const FlowPageView = ({ params }: FlowPageProps) => {
       >
         <Panel
           className={cn(
-            " z-10 w-fit transition-all text-[#747a86]  gap-1.5  delay-10 bg-background fill-background stroke-background   m-2 rounded-md flex items-center justify-center group-data-[open=true]/sidebar-wrapper:opacity-0 group-data-[open=true]/sidebar-wrapper:translate-x-full opacity-100"
+            " group-data-[open=true]/sidebar-wrapper:opacity-0 group-data-[open=true]/sidebar-wrapper:translate-x-full opacity-100",
+            "bg-gradient-to-br delay-10 hover:opacity-100 opacity-90 from-primary via-primary/90 to-primary p-3 z-10 rounded-full transition-all delay-10 fill-background stroke-background m-2 w-12 h-12 flex items-center justify-center"
           )}
           position="top-left"
         >
           <SidebarTrigger
-            title="Components"
-            className="px-3 py-1.5 border w-full"
+            size={"icon"}
+            variant={"ghost"}
+            className=" text-white z-1000 w-full hover:bg-transparent"
           >
-            Components
+            <PlusIcon className="text-white !z-1000 w-5 h-5" />
           </SidebarTrigger>
         </Panel>
 
@@ -229,7 +233,13 @@ const FlowPageView = ({ params }: FlowPageProps) => {
         </Panel>
 
         <Controls />
-        <Background gap={31} size={1} />
+        <Background
+          color="#000"
+          variant={BackgroundVariant.Dots}
+          className=" "
+          gap={51}
+          size={1}
+        />
       </ReactFlow>
     </div>
   );
