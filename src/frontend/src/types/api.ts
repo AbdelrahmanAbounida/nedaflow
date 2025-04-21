@@ -7,9 +7,10 @@ export interface APIResponseBody<T> {
 
 export interface INode {
   id: string;
-  // name: string;
+  name?: string;
   type?: string;
   position: { x: number; y: number };
+  data?: any; // could be like param or settings TODO:: check how to pass this
 }
 
 export interface IEdge {
@@ -19,8 +20,9 @@ export interface IEdge {
 }
 
 export interface IBuildWorkflow {
-  name: string;
-  nodes: INode[];
+  flow_id: string;
+  name?: string;
+  vertexes: INode[];
   edges: IEdge[];
 }
 

@@ -12,7 +12,7 @@ import { FlowSidebarItem } from "./sidebar-item";
 import { SIDEBAR_CATEGORIES } from "@/constants/flow-sidebar";
 import { SidebarBundles } from "./sidebar-bundlers";
 import { useFlowStore } from "@/store/flow";
-import { useGetComponentsTypes } from "@/hooks/api/components/query";
+import { useGetComponentsTypes } from "@/controllers/components/query";
 
 export const FlowSidebar = () => {
   // SIDEBAR_CATEGORIES

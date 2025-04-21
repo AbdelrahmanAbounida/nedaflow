@@ -1,11 +1,16 @@
-from nedaflow.flow.workflow import WorkflowEngine
+from functools import cached_property
+from nedaflow.schema import VertexPosition
 from nedaflow.flow.nodes.base import BaseNode, VertexState
 from nedaflow.services.events.managers.workflow import WorkflowEvents
 from nedaflow.flow.edge  import Edge
-from typing import Optional, Self
+from typing import Optional, Self, TYPE_CHECKING
 from loguru import logger 
 import asyncio
 import random
+
+
+if TYPE_CHECKING:
+    from nedaflow.flow.workflow import WorkflowEngine
 
 class Vertex:
     """
@@ -16,9 +21,10 @@ class Vertex:
     """
     def __init__(self, *,
                 #  position: Optional[VertexPosition] = None,
-                workflow: WorkflowEngine,
+                workflow: "WorkflowEngine",
                 name: Optional[str] = None,
-                data: BaseNode,
+                position: VertexPosition,
+                data: BaseNode, # TODO:: See how to validate with node coming from ui
                 id:Optional[str]=None,
                 type: Optional[str]=None,
                 params: Optional[dict] = None ,
@@ -60,8 +66,11 @@ class Vertex:
     async def build(self, *args, **kwargs):
         await asyncio.sleep(random.randint(1,3))
         logger.success(f"Building Vertex: {self.id}")
-        self.workflow.event_manager.emit(WorkflowEvents.VERTEX_BUILT, vertex=self, task_queue=self.workflow.task_queue_service) # TODO:: has enum for events 
-        res = await self.data.execute(*args, **kwargs) # TODO:: How to pass the params, settings 
+        self.workflow.event_manager.emit(WorkflowEvents.VERTEX_BUILT, vertex=self, task_queue_service=self.workflow.task_queue_service) # TODO:: has enum for events 
+        
+        # TODO:: See how to execute as data for now is dict not node
+        # res = await self.data.execute(*args, **kwargs) # TODO:: How to pass the params, settings 
+        res = {"vertex_id": self.id}
         for edge in self._output_edges:
             edge.data = res # TODO:: check how this res whould be passed in case of llm , stream, ...
 
@@ -72,7 +81,7 @@ class Vertex:
             "type": self.type
         }
     
-    @property
+    @cached_property
     def successors(self) -> list[Self]:
         out_edges = self._output_edges
         out_vertexes = []
@@ -82,8 +91,7 @@ class Vertex:
                 out_vertexes.append(v)
         return out_vertexes
 
-    
-    @property
+    @cached_property
     def predecessors(self) -> list[Self]:
         in_edges = self._input_edges
         in_vertexes = []
@@ -93,7 +101,6 @@ class Vertex:
                 in_vertexes.append(v)
         return in_vertexes
     
-
     def is_ready_for_execution(self) -> bool:
         """
         Check if the vertex is ready for execution which is True if all its input edges are built
@@ -101,3 +108,11 @@ class Vertex:
         if self._is_built:
             return False 
         return all([edge.data for edge in self._input_edges])
+
+    def add_input_edges(self, edges: list[Edge]):
+        for edge in edges:
+            self._input_edges.add(edge)
+
+    def add_output_edges(self, edges: list[Edge]):
+        for edge in edges:
+            self._output_edges.add(edge)

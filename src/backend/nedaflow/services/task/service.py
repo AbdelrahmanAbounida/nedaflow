@@ -2,6 +2,8 @@
 from nedaflow.services import BaseTaskQueue, AsyncioTaskQueue
 from typing import Literal
 from collections.abc import Iterable, Awaitable
+from loguru import logger 
+
 
 class TaskQueueService:
     """This will be like an orchastrator for the task queues 
@@ -21,10 +23,11 @@ class TaskQueueService:
         """
         if queue_type == "asyncio":
             self._task_queues[job_id] = AsyncioTaskQueue()
+            logger.success(f"Task queue for job {job_id} created")
             return self._task_queues[job_id] 
         else:
             raise NotImplementedError
-    
+        
     async def add_task(self,job_id:str, task:Iterable[Awaitable]):
         task_queue = self.get_task_queue(job_id)
         if task_queue:
@@ -38,5 +41,5 @@ class TaskQueueService:
     
     def get_task_queue(self, job_id: str) -> BaseTaskQueue:
         if not job_id in self._task_queues:
-            raise KeyError(f"Task queue for job {job_id} not found")
+            raise KeyError(f"Task queue for job {job_id} not found") # TODO:: see how to initaite the task queue with this 
         return self._task_queues[job_id]        

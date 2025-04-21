@@ -6,11 +6,11 @@ class Edge:
 
     # TOODO:: update to match reactflow 
 
-    def __init__(self,id:str, source_id: str, target_id: str) -> None:
+    def __init__(self,id:str, source: str, target: str) -> None:
         self.data  = None # this will hold the data after building process are done 
         self.id = id
-        self.source_id = source_id
-        self.target_id = target_id
+        self.source_id = source
+        self.target_id = target
         self.data: Any = None # this will hold the data after building process of the connected source Noode are done
     
     def __repr__(self) -> str:

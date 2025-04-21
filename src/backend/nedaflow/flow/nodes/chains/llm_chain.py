@@ -1,10 +1,6 @@
-
-
-
-from nedaflow.nodes.base.io import Output
-from nedaflow.nodes.base.types import DependencyType, TextInput
-from nedaflow.nodes.base import BaseNode
-from nedaflow.nodes.base.types import FieldTypes
+from nedaflow.flow.types import TextInput, DependencyType,FieldTypes
+from nedaflow.flow.nodes.io import Output
+from nedaflow.flow.nodes.base import BaseNode
 
 
 class LLMChain(BaseNode):

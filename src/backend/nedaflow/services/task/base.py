@@ -12,14 +12,6 @@ class BaseTaskQueue(ABC):
     def run_tasks(self):
         ...
 
-    
-    @abstractmethod
-    def stop(self):
-        ...
-    
-    @abstractmethod
-    def get_task(self, task_id:str):
-        ...
 
     async def add_tasks(self, tasks: list[Iterable[Awaitable]] = []) -> None:
         ...

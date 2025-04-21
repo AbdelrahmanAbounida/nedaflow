@@ -6,6 +6,9 @@ router = APIRouter()
 
 @router.post("/")
 async def send_chat(self):
+    """
+        You cah handle the chat here by sending a message after going through the flow vertecies
+    """
     pass 
 
 

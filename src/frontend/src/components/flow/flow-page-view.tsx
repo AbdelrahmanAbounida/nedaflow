@@ -45,7 +45,7 @@ import {
 } from "lucide-react";
 import { Card } from "../ui/card";
 import { FlowPlayground } from "./options-panel/playground";
-import { useBuildFlow } from "@/hooks/api/flow/mutations";
+import { useBuildFlow } from "@/controllers/flow/mutations";
 import { IBuildWorkflow } from "@/types/api";
 import { toast } from "sonner";
 
@@ -128,9 +128,10 @@ const FlowPageView = ({ params }: FlowPageProps) => {
   const handleBuildFlow = () => {
     try {
       const flow: IBuildWorkflow = {
-        nodes,
+        flow_id: params.flowId,
+        vertexes: nodes,
         edges,
-        name: "test",
+        name: "asd",
       };
       mutateBuildFlow(flow);
     } catch (err) {
@@ -228,7 +229,7 @@ const FlowPageView = ({ params }: FlowPageProps) => {
         </Panel>
 
         <Controls />
-        <Background gap={19} size={1} />
+        <Background gap={31} size={1} />
       </ReactFlow>
     </div>
   );

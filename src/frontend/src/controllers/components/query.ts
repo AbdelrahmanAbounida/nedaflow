@@ -1,5 +1,5 @@
-import { apiClient } from "@/client/api";
-import { getURL } from "@/client/helpers/get-url";
+import { apiClient } from "@/controllers/api";
+import { getURL } from "@/controllers/helpers/get-url";
 import { useFlowStore } from "@/store/flow";
 import { APIResponseBody } from "@/types/api";
 import { FlowComponentSchema } from "@/types/flow";

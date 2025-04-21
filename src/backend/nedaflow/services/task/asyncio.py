@@ -19,6 +19,10 @@ class AsyncioTaskQueue(BaseTaskQueue):
         for task in tasks:
             await self._queue.put(task)
     
+    async def run_task(self, fn, *args, **kwargs):
+        await self.add_tasks([fn(*args, **kwargs)])
+        await self.run_tasks()
+    
     async def run_tasks(self, tasks: list[Iterable[Awaitable]] = ()) -> None:
         """
         Run all tasks in the queue

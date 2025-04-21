@@ -10,8 +10,8 @@ class NedaFlowSidebarEntity(BaseModel):
 
 
 class VertexPosition(BaseModel):
-    x: int
-    y: int
+    x: float
+    y: float
 
 class VertexProps(BaseModel):
     type: Optional[str] = None
@@ -22,8 +22,8 @@ class VertexProps(BaseModel):
 
 class EdgeProps(BaseModel):
     id: str
-    source_id: str
-    target_id: str
+    source: str
+    target: str
 
 
 class BuildWorkflow(BaseModel):

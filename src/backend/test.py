@@ -1,6 +1,3 @@
-
-
-
 # Mock data
 from nedaflow.flow.workflow import WorkflowEngine
 from nedaflow.schema import BuildWorkflow, VertexProps, EdgeProps, VertexPosition

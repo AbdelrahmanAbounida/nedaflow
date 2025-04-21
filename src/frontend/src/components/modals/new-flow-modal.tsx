@@ -29,7 +29,7 @@ import {
   SidebarProvider,
 } from "@/components/ui/sidebar";
 import { BaseModal } from "./base-modal";
-import { useIsMobile } from "@/hooks/utility/use-mobile";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
 import { GET_STARTED_CARDS, TEMPLATE_CATEGORIES } from "@/constants/templates";
 import { useState } from "react";
