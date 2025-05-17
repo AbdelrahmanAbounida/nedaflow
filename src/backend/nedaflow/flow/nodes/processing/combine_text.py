@@ -4,7 +4,7 @@ from nedaflow.flow.nodes.base import BaseNode, ComponentTypeEnum
 from nedaflow.flow.types import FieldTypes
 
 
-class CombineData(BaseNode):
+class CombineText(BaseNode):
     type: ComponentTypeEnum = ComponentTypeEnum.PROCESSING
     name: str  = "Combine Text"
     display_name: str  = "Combine Text"

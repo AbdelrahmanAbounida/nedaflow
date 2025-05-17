@@ -11,7 +11,7 @@ async def lifespan(app:FastAPI):
         You can do more like initate db table, migration , others
     """
     logging.log(1,"initalizing database")
-    await init_db()
+    # await init_db()
     yield
 
 

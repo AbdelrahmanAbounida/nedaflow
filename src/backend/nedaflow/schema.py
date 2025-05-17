@@ -1,4 +1,5 @@
 # TODO:: define schemas here 
+from nedaflow.flow.nodes.base import BaseNode
 from pydantic import BaseModel 
 from typing import Optional, Any
 
@@ -13,12 +14,18 @@ class VertexPosition(BaseModel):
     x: float
     y: float
 
+
+class VertexData(BaseModel):
+    id: str 
+    showNode: bool
+    component: BaseNode
+    
 class VertexProps(BaseModel):
     type: Optional[str] = None
     position: VertexPosition
     id: str 
     name: Optional[str] = None
-    data: Any # should be Node interface 
+    data: VertexData # should be Node interface 
 
 class EdgeProps(BaseModel):
     id: str

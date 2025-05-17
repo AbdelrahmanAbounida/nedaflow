@@ -4,11 +4,11 @@ from nedaflow.flow.types import FieldTypes
 from nedaflow.flow.nodes.vector_stores.base import BaseVectorStoreNode
 
 
-class Vectra(BaseVectorStoreNode):
-    name: str  = "Vectra"
-    display_name: str  = "Vectra"
+class Upstash(BaseVectorStoreNode):
+    name: str  = "Upstash"
+    display_name: str  = "Upstash"
     description: str  = "Make HTTP requests using URLs or cURL commands."
-    icon: str  = "Vectra"
+    icon: str  = "Upstash"
     minimized: bool = False
     code: str  = ""
 

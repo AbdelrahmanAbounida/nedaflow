@@ -1,4 +1,4 @@
-from nedaflow.utils.directory_reader import fetch_native_langflow_nodes
+from nedaflow.flow.utils import get_all_nedaflow_nodes
 from fastapi.routing import APIRouter
 
 
@@ -10,9 +10,16 @@ router = APIRouter(tags=["FlowComponent"],prefix="/component")
 async def get_all_flow_nodes_types():
     """
         TODO::
-            - Loop throught the components folder files read each folder as category and each file as a component 
-            - DirectoryReader Class for that 
-            - 
+            - Schema definintion 
     """ 
-    all_components = fetch_native_langflow_nodes()
+    # all_components[category_name].append(instance.to_dict() | {"code": get_file_content(file_path)})
+    all_components = {}
+
+    all_nedaflow_nodes = get_all_nedaflow_nodes()
+    # change from dict[str, NodeRegisteryItem] to dict[str, list[BaseNode]]
+
+    for category, nodes in all_nedaflow_nodes.items():
+        all_components[category] = [node.instance().model_dump() for node in nodes]
     return all_components
+
+

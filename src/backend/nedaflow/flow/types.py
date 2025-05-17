@@ -63,7 +63,7 @@ class NumberInput(Input):
     default: int 
 
 T = TypeVar("T", str, int, float, bool)
-class DropdownInput(Generic[T], Input):
+class DropdownInput(Input, Generic[T]):
     field_type:FieldTypes = FieldTypes.DROPDOWN # if type(T) == str else FieldTypes.BOOLEAN if type(T) == bool else FieldTypes.NUMBER
     default: T 
     options: list[T]

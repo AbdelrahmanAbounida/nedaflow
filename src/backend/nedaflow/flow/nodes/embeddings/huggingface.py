@@ -4,8 +4,8 @@ from nedaflow.flow.types import FieldTypes
 from nedaflow.flow.nodes.embeddings.base import BaseEmbeddingNode
 
 
-class HuggingfaceEmbedding (BaseEmbeddingNode):
-    name: str  = "HuggingfaceEmbedding "
+class HuggingFaceEmbedding (BaseEmbeddingNode):
+    name: str  = "HuggingFaceEmbedding "
     display_name: str  = "HuggingfaceEmbedding "
     description: str  = "Generate text using AIML LLMs."
     icon: str  = "Huggingface"

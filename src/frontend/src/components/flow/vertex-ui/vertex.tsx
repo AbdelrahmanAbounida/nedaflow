@@ -66,7 +66,7 @@ const NodeWithDependenciesUI = ({ data }: { data: Component }) => {
   const nodeType = data.type.toLowerCase().replace("_", " ");
 
   return (
-    <div className={cn("flex flex-col !rounded-2xl !bg-slate-100 gap-2 ")}>
+    <div className={cn("flex flex-col !rounded-2xl !bg-white gap-2 ")}>
       {/** ********************* */}
       {/** Inputs */}
       {/** ********************* */}
@@ -82,7 +82,11 @@ const NodeWithDependenciesUI = ({ data }: { data: Component }) => {
       ))}
       <div className="flex items-center gap-4 justify-start p-5">
         <div className={cn("p-4  rounded-lg !bg-white", iconColors)}>
-          <ComponentIcon type={data.type} icon={data.icon} />{" "}
+          <ComponentIcon
+            type={data.type}
+            icon={data.icon}
+            className={iconColors}
+          />
         </div>
 
         <div className="flex flex-col gap-1">

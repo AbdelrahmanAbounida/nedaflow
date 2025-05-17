@@ -11,7 +11,7 @@ load_dotenv()
 
 os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
 
-class LLMChain(BaseNode):
+class LLMChainNode(BaseNode):
     type: ComponentTypeEnum = ComponentTypeEnum.CHAIN
     name: str  = "LLM Chain"
     display_name: str  = "LLM Chain"

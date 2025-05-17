@@ -2,8 +2,8 @@ from functools import cached_property
 from nedaflow.schema import VertexPosition
 from nedaflow.flow.nodes.base import BaseNode, VertexState
 from nedaflow.services.events.managers.workflow import WorkflowEvents
-from nedaflow.flow.edge  import Edge
 from typing import Optional, Self, TYPE_CHECKING
+from nedaflow.flow.edge  import Edge
 from loguru import logger 
 import asyncio
 import random

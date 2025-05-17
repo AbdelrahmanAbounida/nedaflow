@@ -33,7 +33,13 @@ async def build_flow( body: BuildWorkflow,
         edges=[],
         task_queue_service=task_queue_service
     )
+    data = body.vertexes[0].data.component
+    # TODO:: how to get specific node type , import its class and feed it to vertex
+    # So lateron u can call execute , trigger or other methods on it 
+
+    # TODO:: use Model Registery instead of dynamic importlib
     vertexes = [Vertex(**vertex.model_dump(), workflow=flow_execution_engine) for vertex in body.vertexes]
+
     edges = [Edge(**edge.model_dump()) for edge in body.edges]
     flow_execution_engine.add_vertexes(vertexes)
     flow_execution_engine.add_edges(edges)
@@ -44,12 +50,6 @@ async def build_flow( body: BuildWorkflow,
     # Later the flow could have chat 
 
     return WorkflowBuildResponse(execution_id=execution_id)
-
-
-
-# @router.get("/stream/{execution_id}")
-# async def stream_flow(execution_id: Annotated[str, Path(title="Execution ID")], task_queue_service: TaskQueueServiceDep):
-#     task_queue_service.stream_task_queue(execution_id)
 
 
 @router.get("/stream/{execution_id}")
@@ -97,3 +97,7 @@ class StreamingFlowResponse(StreamingResponse):
     # }
 
     ## This info will contain info like building process and if it is a message it will be displayed in the chat interface
+
+
+
+# How to map the data from loaded flow payload to Node Type and then path to vertex

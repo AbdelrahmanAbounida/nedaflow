@@ -2,9 +2,10 @@ from nedaflow.flow.types import DependencyType
 from nedaflow.flow.nodes.io.io import Input, Output
 from pydantic import BaseModel , ConfigDict,VERSION as PYDANTIC_VERSION
 from abc import abstractmethod, ABC 
-from typing import Optional, Any, Literal
+from typing import Optional, Any, Literal, ClassVar
 from uuid import UUID
 from dataclasses import dataclass
+from loguru import logger
 from enum import Enum 
 
 # TODO:: think about how to store it in the database 
@@ -41,12 +42,22 @@ class ComponentTypeEnum(str,Enum):
 LibraryType = Literal["Langchain", "LamaIndex", "CrewAI", "Dspy"]
 
 
+
+@dataclass
+class NodeRegisteryItem:
+    instance: "BaseNode"
+    category: str
+
 class BaseNode(ABC,BaseModel): # BaseModel
     """Abstract class for any flow Node
 
     Node refers to any tool/Node u need in your AI flow 
     ex: prompt, input message, search tool, api call, agent,....
     """
+
+    nodes_registry: ClassVar[dict[str,list[NodeRegisteryItem]]] = {} # className , instance 
+    """List of all subclasses of BaseNode as a registery """
+
     name: Optional[str] = None
     "Name of the Node"
 
@@ -110,6 +121,26 @@ class BaseNode(ABC,BaseModel): # BaseModel
     # pinned: Optional[bool] = False 
     # tool_mode: Optional[bool] = False
     # template: dict  # Check how to define this type and why we will need it 
+
+
+    def __init_subclass__(cls, **kwargs):
+        super().__init_subclass__(**kwargs)
+        logger.info(f"registering new node {cls.__name__}")
+        # cls.nodes_registry.append(cls)
+        class_name = cls.__name__ # make sure it is unique 
+        category_name = cls.__module__.split(".")[-2]
+
+        if "base" in class_name.lower():
+            return
+
+        if category_name in BaseNode.nodes_registry and class_name in BaseNode.nodes_registry[category_name]:
+            logger.error(f"Node with name {class_name} already exists in category {category_name}")
+            raise ValueError(f"Node with name {class_name} already exists")
+        
+        if category_name not in BaseNode.nodes_registry:
+            BaseNode.nodes_registry[category_name] = []
+        BaseNode.nodes_registry[category_name].append(NodeRegisteryItem(instance=cls,category=category_name))
+        
 
     # TODO:: Think how to prettify inputs and outputs 
     def to_dict(self):
