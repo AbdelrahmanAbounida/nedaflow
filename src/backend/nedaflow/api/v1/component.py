@@ -19,7 +19,7 @@ async def get_all_flow_nodes_types():
     # change from dict[str, NodeRegisteryItem] to dict[str, list[BaseNode]]
 
     for category, nodes in all_nedaflow_nodes.items():
-        all_components[category] = [node.instance().model_dump() for node in nodes]
+        all_components[category] = [node.instance().model_dump() | {"class_name": node.instance_name} | {"category": category} for node in nodes]
     return all_components
 
 

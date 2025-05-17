@@ -1,4 +1,5 @@
 from nedaflow.schema import BuildWorkflow, WorkflowBuildResponse
+from nedaflow.flow.utils import  get_class_instance_by_name
 from nedaflow.flow import Vertex, Edge, WorkflowEngine
 from nedaflow.api.deps import TaskQueueServiceDep
 from fastapi.responses import StreamingResponse
@@ -34,6 +35,10 @@ async def build_flow( body: BuildWorkflow,
         task_queue_service=task_queue_service
     )
     data = body.vertexes[0].data.component
+    ins = get_class_instance_by_name(data.class_name, data.category)
+    print(f"ins(): {ins.execute()}")
+
+
     # TODO:: how to get specific node type , import its class and feed it to vertex
     # So lateron u can call execute , trigger or other methods on it 
 

@@ -46,6 +46,7 @@ LibraryType = Literal["Langchain", "LamaIndex", "CrewAI", "Dspy"]
 @dataclass
 class NodeRegisteryItem:
     instance: "BaseNode"
+    instance_name: str 
     category: str
 
 class BaseNode(ABC,BaseModel): # BaseModel
@@ -139,7 +140,7 @@ class BaseNode(ABC,BaseModel): # BaseModel
         
         if category_name not in BaseNode.nodes_registry:
             BaseNode.nodes_registry[category_name] = []
-        BaseNode.nodes_registry[category_name].append(NodeRegisteryItem(instance=cls,category=category_name))
+        BaseNode.nodes_registry[category_name].append(NodeRegisteryItem(instance=cls,instance_name=class_name,category=category_name))
         
 
     # TODO:: Think how to prettify inputs and outputs 

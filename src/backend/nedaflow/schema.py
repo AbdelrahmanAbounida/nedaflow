@@ -3,6 +3,9 @@ from nedaflow.flow.nodes.base import BaseNode
 from pydantic import BaseModel 
 from typing import Optional, Any
 
+class UINode(BaseModel):
+    class_name: str 
+    category: str 
 
 # Base Sidebar entity 
 class NedaFlowSidebarEntity(BaseModel):
@@ -18,7 +21,7 @@ class VertexPosition(BaseModel):
 class VertexData(BaseModel):
     id: str 
     showNode: bool
-    component: BaseNode
+    component: UINode
     
 class VertexProps(BaseModel):
     type: Optional[str] = None

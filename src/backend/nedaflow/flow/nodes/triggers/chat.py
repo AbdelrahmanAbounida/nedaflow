@@ -1,6 +1,7 @@
 from nedaflow.flow.types import FieldTypes
 from nedaflow.flow.nodes.io.io import Output
 from nedaflow.flow.nodes.triggers.base import BaseTriggerNode
+from loguru import logger
 
 class ChatTriggerComponent(BaseTriggerNode):
     display_name: str = "Chat Trigger"
@@ -20,5 +21,8 @@ class ChatTriggerComponent(BaseTriggerNode):
 
     def trigger(self):
         """ Trigger on getting a chat message"""
+    
+    def execute(self):
+        logger.warning("You are executing chat trigger now ")
 
         
