@@ -1,10 +1,10 @@
 from nedaflow.flow.nodes.io.io import Output
 from nedaflow.flow.types import TextInput, MultilineInput,DropdownInput,BooleanInput,JsonInput,NumberInput
-from nedaflow.flow.nodes.base import BaseNode
 from nedaflow.flow.types import FieldTypes
+from nedaflow.flow.nodes.memories.base import BaseMemoryNode
 
 
-class Mem0ChatMemory(BaseNode):
+class Mem0ChatMemory(BaseMemoryNode):
     name: str  = "Mem0 Chat Memory"
     display_name: str  = "Mem0 Chat Memory"
     description: str  = "Make HTTP requests using URLs or cURL commands."

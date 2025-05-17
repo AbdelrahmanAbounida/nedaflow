@@ -1,9 +1,10 @@
 from nedaflow.flow.types import MultilineInput
 from nedaflow.flow.nodes.io.io import Output
-from nedaflow.flow.nodes.base import BaseNode
+from nedaflow.flow.nodes.base import BaseNode, ComponentTypeEnum
 from nedaflow.flow.types import FieldTypes
 
 class TextOutputComponent(BaseNode):
+    type: ComponentTypeEnum = ComponentTypeEnum.OUTPUT
     name: str = "Text Output"
     display_name: str = "Text Output" 
     description: str = "Get text outputs to the Playground."

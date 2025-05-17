@@ -2,7 +2,7 @@
     - used for reading the files from a folder 
     - building schema from code base dynamically instead of having fixed registery
 """
-from nedaflow.flow.nodes.base import BaseNode
+from nedaflow.flow.nodes.base import BaseNode, ComponentTypeEnum
 from nedaflow.services.settings.config import settings
 from types import ModuleType
 from typing import Optional
@@ -83,14 +83,26 @@ def fetch_native_langflow_nodes(components_path:Optional[list[str]]=[]) -> dict[
             
             if not module:
                 continue
-            for name, obj in inspect.getmembers(module, inspect.isclass):
-                
+
+            class_exist_in_file = inspect.getmembers(module, inspect.isclass) 
+
+            for name, obj in class_exist_in_file:
+                if obj.__module__ != module.__name__:
+                    continue
                 if issubclass(obj, BaseNode) and obj is not BaseNode:
                     instance = obj()  # Attempt to create an instance
                     category_name =   Path(file_path).parent.name # file folder name whis will be usefult too in the sidebar (should match with it )
                     if category_name not in all_components:
                         all_components[category_name] = []
-                    all_components[category_name].append(instance.to_dict() | {"code": get_file_content(file_path)})
+                    
+                    # if file name is base dont add it
+                    file_name = Path(file_path).name
+                    if file_name == "base.py":
+                        continue
+                    
+                    component_title = instance.display_name or instance.name
+                    if component_title:
+                        all_components[category_name].append(instance.to_dict() | {"code": get_file_content(file_path)})
                     
         except Exception as e:
             logger.error(f"Error processing file {file_path}: {e}")

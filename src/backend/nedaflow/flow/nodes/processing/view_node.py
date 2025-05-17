@@ -1,10 +1,11 @@
 from nedaflow.flow.nodes.io.io import Output
 from nedaflow.flow.types import TextInput, MultilineInput,DropdownInput,BooleanInput,JsonInput,NumberInput
-from nedaflow.flow.nodes.base import BaseNode
+from nedaflow.flow.nodes.base import BaseNode, ComponentTypeEnum
 from nedaflow.flow.types import FieldTypes
 
 
 class ViewNode(BaseNode):
+    type: ComponentTypeEnum = ComponentTypeEnum.PROCESSING
     name: str  = "View Data"
     display_name: str  = "View Data"
     description: str  = "View Data in a panel"

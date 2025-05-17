@@ -3,11 +3,12 @@
 
 from nedaflow.flow.nodes.io.io import Output
 from nedaflow.flow.types import TextInput, MultilineInput,DropdownInput,BooleanInput,JsonInput,NumberInput
-from nedaflow.flow.nodes.base import BaseNode
+from nedaflow.flow.nodes.base import BaseNode, ComponentTypeEnum
 from nedaflow.flow.types import FieldTypes
 
 
 class SQLQuery(BaseNode):
+    type: ComponentTypeEnum = ComponentTypeEnum.DATA
     name: str  = "SQLQuery"
     display_name: str  = "SQLQuery"
     description: str  = "Make HTTP requests using URLs or cURL commands."

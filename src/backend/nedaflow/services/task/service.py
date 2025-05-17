@@ -12,7 +12,7 @@ class TaskQueueService:
     """
 
     def __init__(self) -> None:
-        self._task_queues: dict[str, BaseTaskQueue] = {}
+        self._task_queues: dict[str, BaseTaskQueue] = {} # execution id -> task queue
     
 
     def create_task_queue(self,*,job_id:str,queue_type: Literal["asyncio", "celery"] = "asyncio" ) -> BaseTaskQueue:
@@ -42,4 +42,7 @@ class TaskQueueService:
     def get_task_queue(self, job_id: str) -> BaseTaskQueue:
         if not job_id in self._task_queues:
             raise KeyError(f"Task queue for job {job_id} not found") # TODO:: see how to initaite the task queue with this 
-        return self._task_queues[job_id]        
+        return self._task_queues[job_id]      
+
+    def stream_task_queue(self, job_id: str) -> BaseTaskQueue:
+        pass  

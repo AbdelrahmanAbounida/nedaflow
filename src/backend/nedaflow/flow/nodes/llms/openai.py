@@ -1,10 +1,10 @@
 from nedaflow.flow.nodes.io.io import Output
 from nedaflow.flow.types import TextInput, MultilineInput,DropdownInput,BooleanInput,JsonInput,NumberInput
-from nedaflow.flow.nodes.base import BaseNode
 from nedaflow.flow.types import FieldTypes
+from nedaflow.flow.nodes.llms.base import BaseLLM
 
 
-class OpenAILLM(BaseNode):
+class OpenAILLM(BaseLLM):
     name: str  = "OpenAI"
     display_name: str  = "OpenAI"
     description: str  = "Make HTTP requests using URLs or cURL commands."

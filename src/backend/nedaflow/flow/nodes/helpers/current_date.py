@@ -1,10 +1,10 @@
 from nedaflow.flow.nodes.io.io import Output
 from nedaflow.flow.types import TextInput, MultilineInput,DropdownInput,BooleanInput,JsonInput,NumberInput
-from nedaflow.flow.nodes.base import BaseNode
 from nedaflow.flow.types import FieldTypes
+from nedaflow.flow.nodes.helpers.base import BaseHelperNode
 
 
-class CurrentDate(BaseNode):
+class CurrentDate(BaseHelperNode):
     name: str  = "CurrentDate"
     display_name: str  = "CurrentDate"
     description: str  = "Generate text using AIML LLMs."

@@ -1,10 +1,11 @@
 from nedaflow.flow.nodes.base import Output
 from nedaflow.flow.types import TextInput, MultilineInput,DropdownInput,BooleanInput,JsonInput,NumberInput
-from nedaflow.flow.nodes.base import BaseNode
+from nedaflow.flow.nodes.base import BaseNode, ComponentTypeEnum
 from nedaflow.flow.types import FieldTypes
 
 
 class Agent(BaseNode):
+    type: ComponentTypeEnum = ComponentTypeEnum.AGENT
     name: str  = "Agent"
     display_name: str  = "Agent"
     description: str  = "Make HTTP requests using URLs or cURL commands."

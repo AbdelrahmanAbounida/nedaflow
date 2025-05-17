@@ -1,10 +1,10 @@
 from nedaflow.flow.nodes.io.io import Output
 from nedaflow.flow.types import TextInput, MultilineInput,DropdownInput,BooleanInput,JsonInput,NumberInput
-from nedaflow.flow.nodes.base import BaseNode
 from nedaflow.flow.types import FieldTypes
+from nedaflow.flow.nodes.tools.base import BaseTool
 
 
-class GleanSearch(BaseNode):
+class GleanSearch(BaseTool):
     name: str  = "GleanSearch"
     display_name: str  = "GleanSearch"
     description: str  = "Generate text using AIML LLMs."

@@ -196,7 +196,7 @@ class WorkflowEngine:
 
         return list(reversed(order))
 
-    async def run_workflow(self, input_data: Optional[dict[str, dict[str, Any]]] = None) -> dict[str, dict[str, Any]]:
+    async def run_workflow(self, input_data: Optional[dict[str, dict[str, Any]]] = None) -> str :
         """Execute a workflow asynchronously
             - first we should clean the workflow vertexs and organize them 
             - go through vertexs and check which one has all input edges are ready with data then build it and update 
@@ -228,7 +228,8 @@ class WorkflowEngine:
         if not self.task_queue_service:
             raise ValueError("Workflow does not have a task queue service")
 
-        # TODO:: See how to design Task Queue 
+        # TODO:: See how to design Task Queue  >> pass job_id to vertex 
+        # so that it can update the task queue status while working 
         inital_tasks = [asyncio.create_task(vertex.build()) for vertex in root_vertexes]
 
         await self.task_queue_service.run_tasks(job_id=self.execution_id, tasks=inital_tasks)
@@ -236,12 +237,13 @@ class WorkflowEngine:
 
         end_time = time.time()
         self.last_execution_time = end_time - start_time
-        ## TODO:: See how to return the execution id 
+        return self.execution_id # use it to stream building status from the task queue service 
+    
         ## TODO:: build simple function to test pubsub, with eventmanager and taskqueue 
         ## use the execution id to return back the res will be vertex by vertex
         ## for ex in case of chat will be chat response streams and so on
         ## remember chat is nothing but a trigger for ex when u click build (this is manuall and no 
-        # chat message provided for that llm chain wont return a message)
+        ## chat message provided for that llm chain wont return a message)
 
       
 

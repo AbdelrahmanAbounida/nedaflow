@@ -24,6 +24,7 @@ export const GenericNodeComponent = memo(
 
     const nodeSelected = currentSelectedNodeId == props.id;
 
+    // TODO:: add styling here for each node type
     return (
       <div
         // onClick={() => {

@@ -1,10 +1,10 @@
 from nedaflow.flow.nodes.io.io import Output
 from nedaflow.flow.types import TextInput, MultilineInput,DropdownInput,BooleanInput,JsonInput,NumberInput
-from nedaflow.flow.nodes.base import BaseNode
 from nedaflow.flow.types import FieldTypes
+from nedaflow.flow.nodes.tools.base import BaseTool
 
 
-class BingSearch(BaseNode):
+class BingSearch(BaseTool):
     name: str  = "BingSearch"
     display_name: str  = "BingSearch"
     description: str  = "Generate text using AIML LLMs."

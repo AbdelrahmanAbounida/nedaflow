@@ -18,6 +18,8 @@ class Vertex:
     
     Vertex >> is the actual node that u are using in the frontend which has name, id, .. 
     Node >> is the main component data inside the vertex which contain information like the node params, execute function ,..
+
+    so in abstract Vertex is a wrapper around the node and node is just data param in the vertex
     """
     def __init__(self, *,
                 #  position: Optional[VertexPosition] = None,
@@ -67,9 +69,9 @@ class Vertex:
         await asyncio.sleep(random.randint(1,3))
         logger.success(f"Building Vertex: {self.id}  {self.execution_time}")
         self.workflow.event_manager.emit(WorkflowEvents.VERTEX_BUILT, vertex=self, task_queue_service=self.workflow.task_queue_service) # TODO:: has enum for events 
-        
+        self.workflow.task_queue_service.add_task
         # TODO:: See how to execute as data for now is dict not node
-        # res = await self.data.execute(*args, **kwargs) # TODO:: How to pass the params, settings 
+        res = await self.data.execute(*args, **kwargs) # TODO:: How to pass the params, settings 
         res = {"vertex_id": self.id}
         for edge in self._output_edges:
             edge.data = res # TODO:: check how this res whould be passed in case of llm , stream, ...

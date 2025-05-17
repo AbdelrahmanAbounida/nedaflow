@@ -1,14 +1,15 @@
-from fastapi.routing import APIRouter 
-from nedaflow.schema import BuildWorkflow
-from nedaflow.api.deps import TaskQueueServiceDep
+from nedaflow.schema import BuildWorkflow, WorkflowBuildResponse
 from nedaflow.flow import Vertex, Edge, WorkflowEngine
-
-
+from nedaflow.api.deps import TaskQueueServiceDep
+from fastapi.responses import StreamingResponse
+from fastapi import APIRouter , Path
+from typing import Annotated
+import json 
 
 router = APIRouter(prefix="/flow", tags=["Flow"])
 
 
-@router.post("/build")
+@router.post("/build", response_model=WorkflowBuildResponse)
 async def build_flow( body: BuildWorkflow,
                      task_queue_service: TaskQueueServiceDep
                      )  :
@@ -24,24 +25,54 @@ async def build_flow( body: BuildWorkflow,
     # then add anthor endpoint for chat and test chat 
 
     # TODO:: use task backend service to build the flow 
-
-
     # TODO:: Clean this design 
+    # logger.info(body)
     flow_execution_engine = WorkflowEngine(
         flow_id=body.flow_id,
         vertexes=[],
         edges=[],
         task_queue_service=task_queue_service
     )
-    vertexex = [Vertex(**vertex.model_dump(), workflow=flow_execution_engine) for vertex in body.vertexes]
+    vertexes = [Vertex(**vertex.model_dump(), workflow=flow_execution_engine) for vertex in body.vertexes]
     edges = [Edge(**edge.model_dump()) for edge in body.edges]
-    flow_execution_engine.add_vertexes(vertexex)
+    flow_execution_engine.add_vertexes(vertexes)
     flow_execution_engine.add_edges(edges)
 
-    await flow_execution_engine.run_workflow(input_data={}) # Start building the flow  
+    execution_id  = await flow_execution_engine.run_workflow(input_data={}) # Start building the flow  
+
     # How to use the workflow task_queue to stream the results (building status per vertex)
     # Later the flow could have chat 
-    return  
+
+    return WorkflowBuildResponse(execution_id=execution_id)
+
+
+
+# @router.get("/stream/{execution_id}")
+# async def stream_flow(execution_id: Annotated[str, Path(title="Execution ID")], task_queue_service: TaskQueueServiceDep):
+#     task_queue_service.stream_task_queue(execution_id)
+
+
+@router.get("/stream/{execution_id}")
+async def stream_flow(execution_id: Annotated[str, Path(title="Execution ID")], task_queue_service: TaskQueueServiceDep):
+    return event_generator(task_queue_service, execution_id)
+
+
+async def event_generator(task_queue_service:TaskQueueServiceDep, execution_id:str):
+
+    queue = await task_queue_service.get_task_queue(execution_id)
+    def _event_generator():
+        while True:
+            event =  queue.get() # this could be building progress , stream chunk
+            if event is None:  # Sentinel for end of stream
+                break
+            # SSE format: "data: <json>\n\n"
+            yield f"data: {json.dumps(event)}\n\n"
+     # TODO:: design schema to contain info about building progress / stream response
+    return StreamingFlowResponse(_event_generator(), content_type="text/event-stream", )
+
+
+class StreamingFlowResponse(StreamingResponse):
+    pass 
 
     # Build Status resp 
     # {

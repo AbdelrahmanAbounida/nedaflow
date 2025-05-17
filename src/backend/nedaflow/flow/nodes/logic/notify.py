@@ -1,10 +1,10 @@
 from nedaflow.flow.nodes.io.io import Output
 from nedaflow.flow.types import TextInput, MultilineInput,DropdownInput,BooleanInput,JsonInput,NumberInput
-from nedaflow.flow.nodes.base import BaseNode
 from nedaflow.flow.types import FieldTypes
+from nedaflow.flow.nodes.logic.base import BaseLogicNode
 
 
-class Notify(BaseNode):
+class Notify(BaseLogicNode):
     name: str  = "Notify"
     display_name: str  = "Notify"
     description: str  = "Generate text using AIML LLMs."

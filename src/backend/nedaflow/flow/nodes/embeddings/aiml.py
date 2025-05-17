@@ -1,10 +1,9 @@
 from nedaflow.flow.nodes.io.io import Output
 from nedaflow.flow.types import TextInput, MultilineInput,DropdownInput,BooleanInput,JsonInput,NumberInput
-from nedaflow.flow.nodes.base import BaseNode
 from nedaflow.flow.types import FieldTypes
+from nedaflow.flow.nodes.embeddings.base import BaseEmbeddingNode
 
-
-class AIMLLLM(BaseNode):
+class AIMLLLM(BaseEmbeddingNode):
     name: str  = "AIML"
     display_name: str  = "AIML"
     description: str  = "Generate text using AIML LLMs."

@@ -1,9 +1,10 @@
 from nedaflow.flow.nodes.io.io import Output
 from nedaflow.flow.types import MultilineInput
-from nedaflow.flow.nodes.base import BaseNode
+from nedaflow.flow.nodes.base import BaseNode, ComponentTypeEnum
 from nedaflow.flow.types import FieldTypes
 
 class ChatOutputComponent(BaseNode):
+    type: ComponentTypeEnum = ComponentTypeEnum.OUTPUT
     display_name: str = "Chat Output"
     name: str = "Chat Output" # nonesense name  for now 
     description: str = "Get chat inputs from the Playground."

@@ -1,10 +1,10 @@
 from nedaflow.flow.types import MultilineInput
 from nedaflow.flow.nodes.io.io import Output
-from nedaflow.flow.nodes.base import BaseNode
+from nedaflow.flow.nodes.base import BaseNode, ComponentTypeEnum
 from nedaflow.flow.types import FieldTypes
 
 class TextInputComponent(BaseNode):
-
+    type: ComponentTypeEnum = ComponentTypeEnum.INPUT
     # these are general fields for the card 
     name: str = "Text Input"
     display_name: str = "Text Input" 

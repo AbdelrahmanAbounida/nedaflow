@@ -3,11 +3,12 @@
 
 from nedaflow.flow.nodes.io.io import Output
 from nedaflow.flow.types import TextInput, MultilineInput,DropdownInput,BooleanInput,JsonInput,NumberInput
-from nedaflow.flow.nodes.base import BaseNode
+from nedaflow.flow.nodes.base import BaseNode, ComponentTypeEnum
 from nedaflow.flow.types import FieldTypes
 
 
 class APIRequest(BaseNode):
+    type: ComponentTypeEnum = ComponentTypeEnum.DATA
     name: str  = "API Request"
     display_name: str  = "API Request"
     description: str  = "Make HTTP requests using URLs or cURL commands."

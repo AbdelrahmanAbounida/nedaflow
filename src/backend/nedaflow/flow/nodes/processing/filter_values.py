@@ -1,10 +1,11 @@
 from nedaflow.flow.nodes.io.io import Output
 from nedaflow.flow.types import TextInput, MultilineInput,DropdownInput,BooleanInput,JsonInput,NumberInput
-from nedaflow.flow.nodes.base import BaseNode
+from nedaflow.flow.nodes.base import BaseNode, ComponentTypeEnum
 from nedaflow.flow.types import FieldTypes
 
 
 class FilterValue(BaseNode):
+    type: ComponentTypeEnum = ComponentTypeEnum.PROCESSING
     name: str  = "Filter Value"
     display_name: str  = "Filter Value"
     description: str  = "Make HTTP requests using URLs or cURL commands."

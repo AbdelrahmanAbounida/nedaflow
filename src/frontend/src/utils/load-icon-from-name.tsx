@@ -2,7 +2,7 @@ import { lazy, Suspense } from "react";
 import dynamicIconImports from "lucide-react/dynamicIconImports";
 import * as LucideIcons from "lucide-react";
 import { cn } from "@/lib/utils";
-import { ALL_ICONS, IconDisplyName } from "@/constants/icons";
+import { ALL_ICONS, IconDisplayName } from "@/constants/icons";
 import Image, { ImageProps } from "next/image";
 
 type IconProps = {
@@ -13,10 +13,13 @@ type IconProps = {
 };
 
 export const LucidIconFromName = ({ name, className, ...props }: IconProps) => {
-  const LucideIcon = lazy(dynamicIconImports[name]);
+  // Correct usage: pass a function returning a promise to lazy
+  const LucideIcon = lazy(() => dynamicIconImports[name]());
 
   return (
-    <Suspense>
+    <Suspense
+      fallback={<span className="inline-block w-6 h-6 bg-gray-200 rounded" />}
+    >
       <LucideIcon className={cn("", className)} {...props} />
     </Suspense>
   );
@@ -38,14 +41,12 @@ export function getLucideIcon(iconName: string): any {
 export const LoadIcon = ({
   name,
   ...props
-}: { name: IconDisplyName } & Omit<ImageProps, "alt" | "src">) => {
-  const iconSrc = ALL_ICONS[name];
-  if (!iconSrc) {
-    return null;
-    // const Icon = <LucidIconFromName name={name as any} />;
-    // return Icon;
+}: { name: IconDisplayName } & Omit<ImageProps, "alt" | "src">) => {
+  const Icon = getLucideIcon(name);
+  if (Icon) {
+    return <Icon {...props} />;
   }
-
+  const iconSrc = ALL_ICONS[name];
   return (
     <Image
       className="text-white"

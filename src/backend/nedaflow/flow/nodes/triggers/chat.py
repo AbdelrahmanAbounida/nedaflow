@@ -1,10 +1,8 @@
 from nedaflow.flow.types import FieldTypes
 from nedaflow.flow.nodes.io.io import Output
-from nedaflow.flow.types import MultilineInput
-from nedaflow.flow.nodes.base import BaseNode
-from pydantic import Field
+from nedaflow.flow.nodes.triggers.base import BaseTriggerNode
 
-class ChatTriggerComponent(BaseNode):
+class ChatTriggerComponent(BaseTriggerNode):
     display_name: str = "Chat Trigger"
     name: str = "Chat Trigger" # nonesense name  for now 
     description: str = "Allows you to test your flow using chat Playground"
@@ -18,3 +16,9 @@ class ChatTriggerComponent(BaseNode):
     outputs: list = [
         Output(display_name="Message", name="message", method="message_response", output_type=FieldTypes.TRIGGER), # see how to have fixed output schema
     ] 
+
+
+    def trigger(self):
+        """ Trigger on getting a chat message"""
+
+        

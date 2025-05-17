@@ -1,10 +1,9 @@
 from nedaflow.flow.nodes.io.io import Output
 from nedaflow.flow.types import TextInput, MultilineInput,DropdownInput,BooleanInput,JsonInput,NumberInput
-from nedaflow.flow.nodes.base import BaseNode
 from nedaflow.flow.types import FieldTypes
+from nedaflow.flow.nodes.vector_stores.base import BaseVectorStoreNode
 
-
-class AstraGraph(BaseNode):
+class AstraGraph(BaseVectorStoreNode):
     name: str  = "AstraGraph"
     display_name: str  = "AstraGraph"
     description: str  = "Make HTTP requests using URLs or cURL commands."

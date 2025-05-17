@@ -1,10 +1,10 @@
 from nedaflow.flow.nodes.io.io import Output
 from nedaflow.flow.types import TextInput, MultilineInput,DropdownInput,BooleanInput,JsonInput,NumberInput
-from nedaflow.flow.nodes.base import BaseNode
 from nedaflow.flow.types import FieldTypes
+from nedaflow.flow.nodes.helpers.base import BaseHelperNode
 
 
-class MessageHistory(BaseNode):
+class MessageHistory(BaseHelperNode):
     name: str  = "MessageHistory"
     display_name: str  = "MessageHistory"
     description: str  = "Generate text using AIML LLMs."

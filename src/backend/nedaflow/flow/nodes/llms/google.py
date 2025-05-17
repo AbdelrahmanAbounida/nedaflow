@@ -8,6 +8,5 @@ class GoogleLLM(BaseLLM):
     icon: str  = "Google"
     minimized: bool = False
     code: str  = ""
-    type: str = "LLM"
 
     

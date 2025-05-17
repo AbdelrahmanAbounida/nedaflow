@@ -3,11 +3,12 @@
 
 from nedaflow.flow.nodes.io.io import Output
 from nedaflow.flow.types import FileInput, TextInput, MultilineInput,DropdownInput,BooleanInput,JsonInput,NumberInput
-from nedaflow.flow.nodes.base import BaseNode
+from nedaflow.flow.nodes.base import BaseNode, ComponentTypeEnum
 from nedaflow.flow.types import FieldTypes
 
 
 class File(BaseNode):
+    type: ComponentTypeEnum = ComponentTypeEnum.DATA
     name: str  = "File"
     display_name: str  = "File"
     description: str  = "Load a file to be used in your project."

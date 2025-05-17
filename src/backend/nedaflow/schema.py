@@ -18,7 +18,7 @@ class VertexProps(BaseModel):
     position: VertexPosition
     id: str 
     name: Optional[str] = None
-    data: Any
+    data: Any # should be Node interface 
 
 class EdgeProps(BaseModel):
     id: str
@@ -31,3 +31,8 @@ class BuildWorkflow(BaseModel):
     name: Optional[str] = None 
     vertexes: list[VertexProps]
     edges: list[EdgeProps]
+
+
+class WorkflowBuildResponse(BaseModel):
+    execution_id: str 
+    

@@ -2,7 +2,7 @@ from nedaflow.flow.types import DependencyType
 from nedaflow.flow.nodes.io.io import Input, Output
 from pydantic import BaseModel , ConfigDict,VERSION as PYDANTIC_VERSION
 from abc import abstractmethod, ABC 
-from typing import Optional, Any
+from typing import Optional, Any, Literal
 from uuid import UUID
 from dataclasses import dataclass
 from enum import Enum 
@@ -10,13 +10,35 @@ from enum import Enum
 # TODO:: think about how to store it in the database 
 
 
-class VertexState(Enum):
+class VertexState(str, Enum):
     PENDING = "PENDING"
     RUNNING = "RUNNING"
     COMPLETED = "COMPLETED"
     FAILED = "FAILED"
     CANCELLED = "CANCELLED"
     SKIPPED = "SKIPPED"
+
+class ComponentTypeEnum(str,Enum):
+    """ List of Nodes categories 'UI Sidebar'"""
+    INPUT = "INPUT"
+    OUTPUT = "OUTPUT"
+    PROMPT = "PROMPT"
+    DATA = "DATA"
+    PROCESSING = "PROCESSING"
+    LLM = "LLM"
+    CHAIN = "CHAIN"
+    VECTOR_STORE = "VECTOR_STORE"
+    EMBEDDING = "EMBEDDING"
+    AGENT = "AGENT"
+    MEMORY = "MEMORY"
+    TOOL = "TOOL"
+    LOGIC = "LOGIC"
+    HELPER = "HELPER"
+    BUNDLE = "BUNDLE"
+    TRIGGER = "TRIGGER"
+
+
+LibraryType = Literal["Langchain", "LamaIndex", "CrewAI", "Dspy"]
 
 
 class BaseNode(ABC,BaseModel): # BaseModel
@@ -38,7 +60,7 @@ class BaseNode(ABC,BaseModel): # BaseModel
     "The icon of the Node. It should be an emoji or svg image"
 
     # TODO:: change type str to fixed enum
-    type: Optional[str] = None
+    type: Optional[ComponentTypeEnum] = None
     "The type of the Node. like trigger, ai , webhook, tool ..."
 
     # Mainly this is what we need 
@@ -66,6 +88,9 @@ class BaseNode(ABC,BaseModel): # BaseModel
     code: Optional[str]  = None
     "Code that represents the Node"
 
+    library: Optional[LibraryType] = "Langchain"
+    """ The main Library used by this Node to design the execute method"""
+
     if int(PYDANTIC_VERSION.split(".")[0]) >= 2:
         model_config = {"extra": "allow"}
 
@@ -89,9 +114,19 @@ class BaseNode(ABC,BaseModel): # BaseModel
     # TODO:: Think how to prettify inputs and outputs 
     def to_dict(self):
         return self.model_dump()
-
     
-    # TODO:: make it abstract
-    def execute():
-        """Main execute function for the Node"""   
-        # raise NotImplementedError("execute function is not implemented")
+    def supply_data(self):
+        """ provide the node as input / provider for anthor nodes ex: LLM, Tool,.."""
+
+    def execute(self):
+        """Main execution function for the Node in case the node is runnable ex: Chain , Agent,.."""   
+        
+        # 1- Get input data 
+
+        # 2- Get custom Settings defined from the ui 
+
+        # 3- Check required providers / tools needed to execute the node 
+
+        # 4- return the response
+
+        # Question:: if this is stream response how to handle it / return it for custom node execution

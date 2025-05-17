@@ -1,10 +1,11 @@
 from nedaflow.flow.types import FieldTypes
 from nedaflow.flow.types import MultilineInput, TextInput
 from nedaflow.flow.nodes.io.io import Output
-from nedaflow.flow.nodes.base import BaseNode
+from nedaflow.flow.nodes.base import BaseNode, ComponentTypeEnum
 
 
 class Prompt(BaseNode):
+    type: ComponentTypeEnum = ComponentTypeEnum.PROMPT
     display_name: str = "Prompt"
     name: str = "Prompt" 
     description: str = "Create a prompt template with dynamic variables."

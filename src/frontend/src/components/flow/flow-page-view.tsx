@@ -29,7 +29,6 @@ import { cn } from "@/lib/utils";
 import "@xyflow/react/dist/style.css";
 import { createFlowNode } from "./utils/create-flow-node";
 import { Component, ComponentTypeEnum } from "@/types/flow/flow-component";
-import { GenericNodeComponent } from "./generic-component/generic-component";
 import { GenericNode } from "@/types/flow/flow";
 import { DeletableEdge } from "./edges/deletable-edge";
 import ConnectionLineComponent from "./edges/connection-line";
@@ -50,6 +49,7 @@ import { FlowPlayground } from "./options-panel/playground";
 import { useBuildFlow } from "@/controllers/flow/mutations";
 import { IBuildWorkflow } from "@/types/api";
 import { toast } from "sonner";
+import { VertexComponent } from "./vertex-ui/vertex";
 
 export interface FlowPageProps {
   params: {
@@ -61,7 +61,7 @@ const initialNodes: GenericNode[] = [];
 const initialEdges: Edge[] = [];
 
 const nodeTypes = {
-  geneicNode: GenericNodeComponent,
+  geneicNode: VertexComponent, // GenericNodeComponent
 };
 const edgeTypes = {
   default: DeletableEdge,
@@ -192,7 +192,10 @@ const FlowPageView = ({ params }: FlowPageProps) => {
           <SidebarTrigger
             size={"icon"}
             variant={"ghost"}
-            className=" text-white z-1000 w-full hover:bg-transparent"
+            className={cn(
+              " text-white z-1000 w-full hover:bg-transparent",
+              "bg-transparent inline-flex items-center justify-center gap-2 whitespace-nowrap focus-visible:ring-offset-2 active:scale-95 focus-visible:ring-offset-background focus-visible:ring-2 focus-visible:ring-ring cursor-pointer text-sm font-medium focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50   transition-all  hover:opacity-90 w-12 min-w-12 min-h-12  slide-in-from-left-[200%] fade-in animate-in  text-foreground left-5 z-50 rounded-full border border-primary drop-shadow-sm duration-1000 "
+            )}
           >
             <PlusIcon className="text-white !z-1000 w-5 h-5" />
           </SidebarTrigger>

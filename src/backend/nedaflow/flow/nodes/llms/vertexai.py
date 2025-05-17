@@ -1,10 +1,10 @@
 from nedaflow.flow.nodes.io.io import Output
 from nedaflow.flow.types import TextInput, MultilineInput,DropdownInput,BooleanInput,JsonInput,NumberInput
-from nedaflow.flow.nodes.base import BaseNode
 from nedaflow.flow.types import FieldTypes
+from nedaflow.flow.nodes.llms.base import BaseLLM
 
 
-class VertexAILLM(BaseNode):
+class VertexAILLM(BaseLLM):
     name: str  = "Vertex AI"
     display_name: str  = "Vertex AI"
     description: str  = "Make HTTP requests using URLs or cURL commands."

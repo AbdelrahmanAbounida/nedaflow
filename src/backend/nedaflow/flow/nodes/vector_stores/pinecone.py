@@ -1,10 +1,10 @@
 from nedaflow.flow.nodes.io.io import Output
 from nedaflow.flow.types import DataInput, TextInput, MultilineInput,EmbeddingInput,BooleanInput,JsonInput,NumberInput
-from nedaflow.flow.nodes.base import BaseNode
 from nedaflow.flow.types import FieldTypes
+from nedaflow.flow.nodes.vector_stores.base import BaseVectorStoreNode
 
 
-class Pinecone(BaseNode):
+class Pinecone(BaseVectorStoreNode):
     name: str  = "Pinecone"
     display_name: str  = "Pinecone"
     description: str  = "Pinecone Vector Store with search capabilities"

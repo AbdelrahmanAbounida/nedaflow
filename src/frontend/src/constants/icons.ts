@@ -1,6 +1,6 @@
 import { Group } from "lucide-react";
 
-export type IconDisplyName =
+export type IconDisplayName =
   | keyof typeof SVG_ICONS_REGISTERY
   | keyof typeof PNG_ICONS_REGISTERY;
 
@@ -10,7 +10,7 @@ export const SVG_ICONS_REGISTERY = {
   Download: "/assets/icons/download.svg",
   Upload: "/assets/icons/upload.svg",
   TerminalSquare: "/assets/icons/square-terminal.svg",
-
+  Play: "/assets/icons/play.svg",
   Directory: "/assets/icons/folder.svg",
   File: "/assets/icons/file-text.svg",
   URL: "/assets/icons/link.svg",

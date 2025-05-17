@@ -1,10 +1,10 @@
 from nedaflow.flow.nodes.io.io import Output
 from nedaflow.flow.types import TextInput, MultilineInput,DropdownInput,BooleanInput,JsonInput,NumberInput
-from nedaflow.flow.nodes.base import BaseNode
 from nedaflow.flow.types import FieldTypes
+from nedaflow.flow.nodes.llms.base import BaseLLM
 
 
-class LMStudio(BaseNode):
+class LMStudio(BaseLLM):
     name: str  = "LM Studio"
     display_name: str  = "LM Studio"
     description: str  = "Make HTTP requests using URLs or cURL commands."

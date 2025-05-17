@@ -1,10 +1,10 @@
 "use client";
 import { cn } from "@/lib/utils";
 import {
-  ComponentHandleColors,
   ComponentParamTypeEnum,
   NodeDependencyTypeEnum,
 } from "@/types/flow/flow-component";
+import { ComponentHandleColors } from "@/types/flow/styles";
 import { Handle, HandleProps } from "@xyflow/react";
 import React, { useCallback } from "react";
 

@@ -1,10 +1,10 @@
 from nedaflow.flow.nodes.io.io import Output
 from nedaflow.flow.types import TextInput, MultilineInput,DropdownInput,BooleanInput,JsonInput,NumberInput
-from nedaflow.flow.nodes.base import BaseNode
 from nedaflow.flow.types import FieldTypes
+from nedaflow.flow.nodes.embeddings.base import BaseEmbeddingNode
 
 
-class TextEmbedder(BaseNode):
+class TextEmbedder(BaseEmbeddingNode):
     name: str  = "TextEmbedder"
     display_name: str  = "TextEmbedder"
     description: str  = "Generate Embeddings for a given message using the specified embedding model."

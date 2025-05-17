@@ -1,10 +1,9 @@
 from nedaflow.flow.nodes.io.io import Output
 from nedaflow.flow.types import TextInput, MultilineInput,DropdownInput,BooleanInput,JsonInput,NumberInput
-from nedaflow.flow.nodes.base import BaseNode
 from nedaflow.flow.types import FieldTypes
+from nedaflow.flow.nodes.tools.base import BaseTool
 
-
-class YahooFinanace (BaseNode):
+class YahooFinanace (BaseTool):
     name: str  = "YahooFinanace "
     display_name: str  = "YahooFinanace "
     description: str  = "Generate text using AIML LLMs."
