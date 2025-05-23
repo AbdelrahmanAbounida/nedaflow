@@ -213,7 +213,7 @@ class WorkflowEngine:
             self.validate()
         
         self.is_running = True
-        start_time = time.time()
+        
         input_data = input_data or {}
 
         # 2- get first vertexes to run (vertexes that have no input edges)
@@ -221,30 +221,23 @@ class WorkflowEngine:
         if not root_vertexes:
             raise ValueError("Workflow does not have any vertexes to run")
 
-        # 3- Start Running process using the TaskQueue 
-        ## We will be following event driven such that each edge got data from a vertex
-        ## it will add a new vertex task to the task queue till all vertexes are done
-
         if not self.task_queue_service:
             raise ValueError("Workflow does not have a task queue service")
 
-        # TODO:: See how to design Task Queue  >> pass job_id to vertex 
-        # so that it can update the task queue status while working 
+
+        # Main Running Process 
+        # start_time = time.time()
+
+        # Run tasks in the background till u start calling the streaming process 
         inital_tasks = [asyncio.create_task(vertex.build()) for vertex in root_vertexes]
+        asyncio.create_task(self.task_queue_service.run_tasks(job_id=self.execution_id, tasks=inital_tasks))
+        # await self.task_queue_service.run_tasks(job_id=self.execution_id, tasks=inital_tasks)
+        # self.is_running = False
+        # end_time = time.time()
+        # self.last_execution_time = end_time - start_time
 
-        await self.task_queue_service.run_tasks(job_id=self.execution_id, tasks=inital_tasks)
-        self.is_running = False
-
-        end_time = time.time()
-        self.last_execution_time = end_time - start_time
         return self.execution_id # use it to stream building status from the task queue service 
     
-        ## TODO:: build simple function to test pubsub, with eventmanager and taskqueue 
-        ## use the execution id to return back the res will be vertex by vertex
-        ## for ex in case of chat will be chat response streams and so on
-        ## remember chat is nothing but a trigger for ex when u click build (this is manuall and no 
-        ## chat message provided for that llm chain wont return a message)
-
       
 
     def cancel(self):

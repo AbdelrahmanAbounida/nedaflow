@@ -66,6 +66,7 @@ class Input(BaseModel):
 
     refresh_button: bool | None = None
     """Specifies if the field should have a refresh button. Defaults to False."""
+    
     refresh_button_text: str | None = None
     """Specifies the text for the refresh button. Defaults to None."""
 

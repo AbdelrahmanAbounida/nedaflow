@@ -4,12 +4,25 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { Maximize } from "lucide-react";
-import React from "react";
+import React, { useState } from "react";
 
-export const TextAreaParam = ({ className, ...props }: any) => {
+export const TextAreaParam = ({
+  className,
+  handleUpdateNode,
+  ...props
+}: any) => {
+  const [value, setvalue] = useState(props.value);
+
   return (
     <div className={cn("relative w-full flex items-center ", className)}>
-      <Input className="" />
+      <Input
+        value={value}
+        onChange={(e) => {
+          setvalue(e.target.value);
+          handleUpdateNode({ newValue: e.target.value });
+        }}
+        className=""
+      />
 
       {/** TODO:: add modal  */}
 

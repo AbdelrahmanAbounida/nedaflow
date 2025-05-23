@@ -6,8 +6,7 @@ class Edge:
 
     # TOODO:: update to match reactflow 
 
-    def __init__(self,id:str, source: str, target: str) -> None:
-        self.data  = None # this will hold the data after building process are done 
+    def __init__(self,id:str, source: str, target: str, data: Any=None) -> None:
         self.id = id
         self.source_id = source
         self.target_id = target
@@ -22,7 +21,9 @@ class Edge:
     
     def to_dict(self):
         return {
+            "id": self.id,
             "source_id": self.source_id,
-            "target_id": self.target_id
+            "target_id": self.target_id,
+            "data": self.data
         }
     

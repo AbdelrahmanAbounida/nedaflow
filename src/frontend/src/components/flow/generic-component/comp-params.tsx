@@ -5,15 +5,17 @@ import { LoadIcon } from "@/utils/load-icon-from-name";
 import { AlertCircle } from "lucide-react";
 import React from "react";
 import { ParamComponent } from "../utils/load-param-component";
-import { Handle, Position } from "@xyflow/react";
+import { Handle, Position, useNodeId, useReactFlow } from "@xyflow/react";
 import CustomHandle from "../utils/custom-handle";
 
 export const ComponentParams = ({
   className,
   params,
+  nodeId,
 }: {
   className?: string;
-  params?: ComponentParam[];
+  params?: ComponentParam[]; // node inputs
+  nodeId?: string;
 }) => {
   return (
     <div className={cn("", className)}>
@@ -35,6 +37,7 @@ export const ComponentParams = ({
             <ParamComponent
               className="mt-2"
               componentName={param.field_type as any}
+              nodeId={nodeId!}
               {...param}
             />
             {param.only_handle && <p className="!h-4 "></p>}

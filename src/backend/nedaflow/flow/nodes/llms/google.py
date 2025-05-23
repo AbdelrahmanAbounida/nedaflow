@@ -1,4 +1,5 @@
 from nedaflow.flow.nodes.llms.base import BaseLLM
+from langchain_google_genai import ChatGoogleGenerativeAI
 
 
 class GoogleLLM(BaseLLM):
@@ -9,4 +10,6 @@ class GoogleLLM(BaseLLM):
     minimized: bool = False
     code: str  = ""
 
-    
+    def supply_data(self,*args, **kwargs):
+        llm = ChatGoogleGenerativeAI(model="gemini-1.5-pro") # TODO:: Load this from other options 
+        return llm

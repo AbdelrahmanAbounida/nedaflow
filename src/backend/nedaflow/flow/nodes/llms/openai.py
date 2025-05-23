@@ -2,6 +2,13 @@ from nedaflow.flow.nodes.io.io import Output
 from nedaflow.flow.types import TextInput, MultilineInput,DropdownInput,BooleanInput,JsonInput,NumberInput
 from nedaflow.flow.types import FieldTypes
 from nedaflow.flow.nodes.llms.base import BaseLLM
+from langchain_openai import OpenAI
+from dotenv import load_dotenv
+import os 
+
+load_dotenv()
+
+os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY", "")
 
 
 class OpenAILLM(BaseLLM):
@@ -52,3 +59,7 @@ class OpenAILLM(BaseLLM):
             output_type=FieldTypes.DATA,
         )
     ]
+
+    def supply_data(self,*args, **kwargs):
+        llm = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+        return llm

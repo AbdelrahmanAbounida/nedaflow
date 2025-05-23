@@ -31,7 +31,7 @@ export const VertexComponent = memo((props: NodeProps & { data: NodeData }) => {
 
   // TODO:: add styling here for each node type
   return (
-    <div className="flex flex-col items-center justify-center gap-1">
+    <div className="flex flex-col items-center justify-center gap-1 !cursor-pointer">
       <div
         className={cn(
           "flex flex-col gap-2  bg-gradient-to-b rounded-full p-1.5 border  w-[285px] relative",
@@ -96,6 +96,7 @@ const NodeWithDependenciesUI = ({ data }: { data: Component }) => {
           </p>
         </div>
       </div>
+
       {/** ********************* */}
       {/** Dependecies >> what nodes needs */}
       {/** ********************* */}
@@ -104,7 +105,7 @@ const NodeWithDependenciesUI = ({ data }: { data: Component }) => {
           key={`bottom-${index}`}
           id={`dependency-handle-${index}`}
           position={Position.Bottom}
-          handleType={dep} // TODO:: see how to have custom dependecies type
+          handleType={dep.type} // TODO:: see how to have custom dependecies type
           type="target"
           onConnect={(e) => console.log("connect", e)}
         />

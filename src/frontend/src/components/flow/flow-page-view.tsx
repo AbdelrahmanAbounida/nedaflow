@@ -50,6 +50,8 @@ import { useBuildFlow } from "@/controllers/flow/mutations";
 import { IBuildWorkflow } from "@/types/api";
 import { toast } from "sonner";
 import { VertexComponent } from "./vertex-ui/vertex";
+import NodeParamsModal from "../modals/node-params-modal";
+import CodeDialog from "../modals/code-modal";
 
 export interface FlowPageProps {
   params: {
@@ -72,17 +74,29 @@ const FlowPageView = ({ params }: FlowPageProps) => {
   const [nodes, setNodes, onNodesChange] =
     useNodesState<GenericNode>(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>(initialEdges);
-  const [isConnecting, setIsConnecting] = useState(false);
-  const { setCurrentSelectedNodeId } = useFlowStore();
 
+  const [isConnecting, setIsConnecting] = useState(false);
+  const {
+    // setFlowNodes,
+    // onNodesChange,
+    // onEdgesChange,
+    // setFlowEdges,
+    // flowNodes,
+    // flowEdges,
+    setCurrentSelectedNodeId,
+  } = useFlowStore();
   const { screenToFlowPosition } = useReactFlow();
+
+  const [showNode, setshowNode] = useState(false);
+  const [nodeToEdit, setNodeToEdit] = useState<GenericNode | null>(null);
 
   const onConnect = useCallback(
     (connection: Connection) => {
       console.log("Start connection");
       setEdges((eds) => addEdge({ ...connection, animated: true }, eds));
+      // setFlowEdges(addEdge({ ...connection, animated: true }, flowEdges));
     },
-    [setEdges]
+    [] // setEdges
   );
 
   const onConnectStart = useCallback(() => {
@@ -119,6 +133,7 @@ const FlowPageView = ({ params }: FlowPageProps) => {
       position,
     });
     setNodes((es) => es.concat(newNode));
+    // setFlowNodes([...flowNodes, newNode]);
   }, []);
 
   const handleCurrentSelectedNode = useCallback((_: any, node: any) => {
@@ -131,8 +146,8 @@ const FlowPageView = ({ params }: FlowPageProps) => {
     try {
       const flow: IBuildWorkflow = {
         flow_id: params.flowId,
-        vertexes: nodes,
-        edges,
+        vertexes: nodes, // flowNodes, //nodes,
+        edges: edges, // flowEdges, // edges
         name: "asd",
       };
       mutateBuildFlow(flow);
@@ -141,6 +156,15 @@ const FlowPageView = ({ params }: FlowPageProps) => {
       toast.error(err + "");
     }
   };
+
+  const onNodeDoubleClick = useCallback((event: any, node: GenericNode) => {
+    if (!node || !node.data) return;
+
+    // TODO:: check if it is stricky note node
+
+    setNodeToEdit(node);
+    setshowNode(true);
+  }, []);
 
   useEffect(() => {
     if (isError && error) {
@@ -180,8 +204,12 @@ const FlowPageView = ({ params }: FlowPageProps) => {
         panOnScroll
         selectionOnDrag
         selectionMode={SelectionMode.Full}
+        onNodeDoubleClick={onNodeDoubleClick}
         // connectionLineComponent={ConnectionLineComponent}
       >
+        {/** ************************* */}
+        {/** Panels */}
+        {/** ************************* */}
         <Panel
           className={cn(
             " group-data-[open=true]/sidebar-wrapper:opacity-0 group-data-[open=true]/sidebar-wrapper:translate-x-full opacity-100",
@@ -201,11 +229,16 @@ const FlowPageView = ({ params }: FlowPageProps) => {
           </SidebarTrigger>
         </Panel>
 
-        <Panel position="top-right">
+        <Panel position="top-right" className="flex items-center gap-2">
           <Button className="">
             <Share2 />
             Publish
           </Button>
+          {/* <Button className="" variant={"outline"}>
+            <Share2 />
+            Show Code
+          </Button> */}
+          <CodeDialog />
         </Panel>
 
         <Panel
@@ -235,6 +268,18 @@ const FlowPageView = ({ params }: FlowPageProps) => {
           )}
         </Panel>
 
+        {/** ************************ */}
+        {/** Dialogs */}
+        {/** ************************ */}
+        <NodeParamsModal
+          show={showNode}
+          node={nodeToEdit!}
+          onCancel={() => setshowNode(false)}
+        />
+
+        {/** ************************ */}
+        {/** Others */}
+        {/** ************************ */}
         <Controls />
         <Background
           color="#000"

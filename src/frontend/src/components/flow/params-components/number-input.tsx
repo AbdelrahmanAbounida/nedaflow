@@ -160,7 +160,11 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
   }
 );
 
-export const NumberInput2 = ({ className, ...props }: any) => {
+export const NumberInput2 = ({
+  className,
+  handleUpdateNode,
+  ...props
+}: any) => {
   return (
     <div className={cn("flex relative ", className)} {...props}>
       <Input className="" type="number" />

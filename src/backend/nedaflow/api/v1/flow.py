@@ -3,8 +3,10 @@ from nedaflow.flow.utils import  get_class_instance_by_name
 from nedaflow.flow import Vertex, Edge, WorkflowEngine
 from nedaflow.api.deps import TaskQueueServiceDep
 from fastapi.responses import StreamingResponse
+from nedaflow.schema import Input, Output
 from fastapi import APIRouter , Path
 from typing import Annotated
+from loguru import logger
 import json 
 
 router = APIRouter(prefix="/flow", tags=["Flow"])
@@ -13,8 +15,7 @@ router = APIRouter(prefix="/flow", tags=["Flow"])
 @router.post("/build", response_model=WorkflowBuildResponse)
 async def build_flow( body: BuildWorkflow,
                      task_queue_service: TaskQueueServiceDep
-                     )  :
-    
+                     ):
     """
         TODO::
            1. See How to traverse the flow nodes and edges and build it 
@@ -34,21 +35,33 @@ async def build_flow( body: BuildWorkflow,
         edges=[],
         task_queue_service=task_queue_service
     )
-    data = body.vertexes[0].data.component
-    ins = get_class_instance_by_name(data.class_name, data.category)
-    print(f"ins(): {ins.execute()}")
-
-
     # TODO:: how to get specific node type , import its class and feed it to vertex
     # So lateron u can call execute , trigger or other methods on it 
 
     # TODO:: use Model Registery instead of dynamic importlib
-    vertexes = [Vertex(**vertex.model_dump(), workflow=flow_execution_engine) for vertex in body.vertexes]
+    # vertexes = [Vertex(**vertex.model_dump(), workflow=flow_execution_engine) for vertex in body.vertexes]
+    vertexes: list[Vertex] = []
+    for vertex in body.vertexes:
+        data = vertex.data.component
 
+        # if vertex has no edges connected in or out remove it 
+        if not data.inputs and not data.outputs:
+            continue
+
+        node_instance = get_class_instance_by_name(data.class_name, data.category)
+        node = node_instance.model_validate(data.model_dump()) # class_name and category should be removed 
+        vertexes.append(Vertex(**vertex.model_dump(), node=node, workflow=flow_execution_engine))
+    
     edges = [Edge(**edge.model_dump()) for edge in body.edges]
+
+    # define node input and output edges 
+    for vertex in vertexes:
+        vertex.inputs = [edge for edge in edges if edge.target_id == vertex.id]
+        vertex.outputs = [edge for edge in edges if edge.source_id == vertex.id]
+
     flow_execution_engine.add_vertexes(vertexes)
     flow_execution_engine.add_edges(edges)
-
+    
     execution_id  = await flow_execution_engine.run_workflow(input_data={}) # Start building the flow  
 
     # How to use the workflow task_queue to stream the results (building status per vertex)

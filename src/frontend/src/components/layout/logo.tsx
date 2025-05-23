@@ -8,8 +8,9 @@ const Logo: FC<
     href?: string;
     withTitle?: boolean;
     logoClassName?: string;
+    className?: string;
   }
-> = ({ logoClassName, href = "/", withTitle = true, ...props }) => {
+> = ({ logoClassName, className, href = "/", withTitle = true, ...props }) => {
   return (
     <Link {...props} href={href} className="flex items-center gap-1 ">
       <Target className={cn("text-primary size-6 ", logoClassName)} />

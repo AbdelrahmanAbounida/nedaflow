@@ -1,5 +1,5 @@
-
-from typing import TypeVar, Generic
+from pydantic import BaseModel, Field
+from typing import TypeVar, Generic, Optional
 from enum import Enum
 
 
@@ -12,9 +12,17 @@ class DependencyType(str,Enum):
     LLM = "LLM"
     CHAIN = "CHAIN"
 
+
+class DependencyDescriptor(BaseModel):
+    """ This define the dependecy per each node """
+    name: str = Field(description="Name of the dependency") # TODO:: make sure this name is unique
+    type: DependencyType = Field(description="type of the dependency")
+    is_required: Optional[bool] = False
+
 class FieldTypes(str,Enum):
     """ This is mainly used for input types """
     TEXT = "TEXT"
+    TEXTAREA="TEXTAREA"
     BOOLEAN="BOOLEAN"
     NUMBER="NUMBER"
     JSON="JSON"
@@ -39,7 +47,7 @@ class MultilineMixin():
 
 class MultilineInput(Input,MultilineMixin):
     multiline: bool = True 
-    field_type:FieldTypes = FieldTypes.TEXT
+    field_type:FieldTypes = FieldTypes.TEXTAREA
 
 class TextInput(Input):
     field_type:FieldTypes = FieldTypes.TEXT

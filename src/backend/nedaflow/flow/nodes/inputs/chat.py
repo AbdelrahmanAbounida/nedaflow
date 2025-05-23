@@ -25,3 +25,7 @@ class ChatInputComponent(BaseNode):
     outputs: list = [
         Output(display_name="Message", name="message", method="message_response", output_type=FieldTypes.TEXT), # see how to have fixed output schema
     ] 
+
+
+    def execute(self, dependencies = {}, *args, **kwargs):
+        return True 

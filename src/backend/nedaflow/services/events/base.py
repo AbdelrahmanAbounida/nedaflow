@@ -16,7 +16,7 @@ class BaseEventManager(ABC, Generic[Event]):
     # TODO:: Check some libs designs like pyee, pyventus, circuits and python eventemitter
 
     @abstractmethod
-    def emit(self, event_name: Event, *args, **kwargs):
+    async def emit(self, event_name: Event, *args, **kwargs):
         ...
     
     @abstractmethod

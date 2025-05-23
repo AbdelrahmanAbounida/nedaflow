@@ -35,6 +35,7 @@ import { GET_STARTED_CARDS, TEMPLATE_CATEGORIES } from "@/constants/templates";
 import { useState } from "react";
 import { GetStartedCardProps } from "@/types/templates";
 import { Arrow } from "@radix-ui/react-dropdown-menu";
+import { useRouter } from "next/navigation";
 
 type TabType = (typeof TEMPLATE_CATEGORIES)[number]["items"][number]["id"];
 const heightStyle =
@@ -201,13 +202,16 @@ const TemplateNavHeader = ({ currentTab }: { currentTab: TabType }) => (
 // *********************
 // Content
 // *********************
+
 const TemplateNavContent = ({ currentTab }: { currentTab: TabType }) => {
+  const router = useRouter();
   if (currentTab == "get-started") {
     return (
       <div className="flex flex-1 h-full w-full justify-start  items-start py-5">
         <div className="grid flex-1  h-full grid-cols-1 gap-4 lg:grid-cols-3">
           {GET_STARTED_CARDS.map((card, index) => (
             <GetStartedCard
+              onClick={() => router.push("/flow/1")}
               className="flex-1"
               key={index}
               category={card.category}
@@ -239,10 +243,12 @@ const GetStartedCard = ({
   description,
   bgImage,
   className,
-}: GetStartedCardProps & { className?: string }) => {
+  onClick,
+}: GetStartedCardProps & { className?: string; onClick?: () => void }) => {
   const Icon = icon;
   return (
     <div
+      onClick={onClick}
       className={cn(
         "group card-shine-effect relative flex h-full w-full cursor-pointer flex-col overflow-hidden rounded-3xl border ",
         className

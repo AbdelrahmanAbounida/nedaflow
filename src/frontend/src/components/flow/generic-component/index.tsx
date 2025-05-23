@@ -82,7 +82,7 @@ export const GenericNodeComponent = memo(
             key={`bottom-${index}`}
             id={`dependency-handle-${index}`}
             position={Position.Bottom}
-            handleType={dep} // TODO:: see how to have custom dependecies type
+            handleType={dep.type} // TODO:: see how to have custom dependecies type
             type="target"
             onConnect={(e) => console.log("connect", e)}
           />

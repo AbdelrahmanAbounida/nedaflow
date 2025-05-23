@@ -1,7 +1,8 @@
 from nedaflow.services.events.base import BaseEventManager
 from typing import Callable , Any 
-from typing import Generic, TypeVar
+from typing import TypeVar
 from collections import defaultdict
+from asyncio import iscoroutinefunction
 
 EventName = TypeVar('EventName', bound=str)
 
@@ -10,10 +11,14 @@ class EventManager(BaseEventManager[EventName]):
     def __init__(self):
         self._events: defaultdict[EventName, list[Callable[..., Any]]] = defaultdict(list)
 
-    def emit(self, event_name: EventName, *args, **kwargs):
+    async def emit(self, event_name: EventName, *args, **kwargs):
         """Call all the callbacks registered for the event"""
         for cb in self._events.get(event_name, []):
-            cb(*args, **kwargs)
+            # cb(*args, **kwargs)
+            if iscoroutinefunction(cb):
+                await cb(*args, **kwargs)
+            else:
+                cb(*args, **kwargs)
 
     def on(self, event_name: EventName, callback: Callable[..., Any]):
         """register callback for event"""

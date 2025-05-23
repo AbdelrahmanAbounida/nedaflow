@@ -1,12 +1,13 @@
-from nedaflow.flow.types import DependencyType
+from nedaflow.flow.types import DependencyDescriptor
+from nedaflow.flow.edge import Edge
 from nedaflow.flow.nodes.io.io import Input, Output
 from pydantic import BaseModel , ConfigDict,VERSION as PYDANTIC_VERSION
-from abc import abstractmethod, ABC 
+from abc import ABC 
 from typing import Optional, Any, Literal, ClassVar
-from uuid import UUID
 from dataclasses import dataclass
 from loguru import logger
 from enum import Enum 
+from functools import lru_cache
 
 # TODO:: think about how to store it in the database 
 
@@ -55,9 +56,12 @@ class BaseNode(ABC,BaseModel): # BaseModel
     Node refers to any tool/Node u need in your AI flow 
     ex: prompt, input message, search tool, api call, agent,....
     """
-
     nodes_registry: ClassVar[dict[str,list[NodeRegisteryItem]]] = {} # className , instance 
     """List of all subclasses of BaseNode as a registery """
+
+    # input_edges: ClassVar[list[Edge]] = []
+    # """ This is the list of the input edges the vertex wrapped around this node. it will be filled during building """
+
 
     name: Optional[str] = None
     "Name of the Node"
@@ -88,7 +92,7 @@ class BaseNode(ABC,BaseModel): # BaseModel
     is_stream: Optional[bool] = False 
     """Decide if the Node is a stream such in case of chat"""
 
-    dependencies: list[DependencyType] = []
+    dependencies: list[DependencyDescriptor] = [] # TODO:: we need to make sure that the name is unique
     "List of dependencies for the Node, ex LLM for chain"
 
     is_dep: bool = False
@@ -103,9 +107,9 @@ class BaseNode(ABC,BaseModel): # BaseModel
     library: Optional[LibraryType] = "Langchain"
     """ The main Library used by this Node to design the execute method"""
 
-    if int(PYDANTIC_VERSION.split(".")[0]) >= 2:
-        model_config = {"extra": "allow"}
-
+   
+    # if int(PYDANTIC_VERSION.split(".")[0]) >= 2:
+    #     model_config = {"extra": "allow"}
     # model_config = ConfigDict(
     #     ignored_types=(
     #         Optional,
@@ -124,9 +128,12 @@ class BaseNode(ABC,BaseModel): # BaseModel
     # template: dict  # Check how to define this type and why we will need it 
 
 
+    # configuration 
+    model_config = ConfigDict(extra='allow', arbitrary_types_allowed=True)
+
     def __init_subclass__(cls, **kwargs):
         super().__init_subclass__(**kwargs)
-        logger.info(f"registering new node {cls.__name__}")
+        # logger.info(f"registering new node {cls.__name__}")
         # cls.nodes_registry.append(cls)
         class_name = cls.__name__ # make sure it is unique 
         category_name = cls.__module__.split(".")[-2]
@@ -147,11 +154,33 @@ class BaseNode(ABC,BaseModel): # BaseModel
     def to_dict(self):
         return self.model_dump()
     
-    def supply_data(self):
+    # def _get_dependency_by_name(self,dependency_name: str) :
+    #     """ get input edges and 
+    #         filter that one with source_id vertex which is dep 
+    #         and then check which one matches that name 
+    #         then return that edge data 
+    #     """
+    #     for edge in self.input_edges:
+    #         source_vertex = self.get_vertex(edge.source_id)
+        
+    #     for dep in deps:
+    #         if dep.name == dependency_name:
+    #             return dep
+    
+    # def _get_input_edges(self) -> list[Edge]:
+    #     """ get list of input edges to the vertex wrapped this node"""
+    #     return self.input_edges
+
+
+    def supply_data(self,dependencies: dict[str, Any] = {}, *args, **kwargs):
         """ provide the node as input / provider for anthor nodes ex: LLM, Tool,.."""
 
-    def execute(self):
+    def execute(self,dependencies: dict[str, Any] = {}, *args, **kwargs):
         """Main execution function for the Node in case the node is runnable ex: Chain , Agent,.."""   
+
+        logger.debug(f"Executing node: {self.__class__.__name__}")
+
+        return True # make it default for none implemented nodes
         
         # 1- Get input data 
 

@@ -1,15 +1,10 @@
-from nedaflow.flow.types import TextInput, DependencyType,FieldTypes
-from nedaflow.flow.nodes.io import Output
+from nedaflow.flow.types import Input, MultilineInput, DependencyDescriptor, DependencyType, FieldTypes
 from nedaflow.flow.nodes.base import BaseNode, ComponentTypeEnum
-from langchain_openai import OpenAI
-from nedaflow.flow.nodes.llms.google import GoogleLLM
-from langchain_core.language_models.llms import BaseLLM
-from dotenv import load_dotenv
-import os 
+from nedaflow.flow.nodes.io import Output
+from typing import Any
+from loguru import logger 
+from langchain_core.language_models.llms import LLM
 
-load_dotenv()
-
-os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
 
 class LLMChainNode(BaseNode):
     type: ComponentTypeEnum = ComponentTypeEnum.CHAIN
@@ -20,20 +15,20 @@ class LLMChainNode(BaseNode):
     minimized: bool = False
     code: str  = ""
 
-    inputs: list = [
-        TextInput(
-            name="text",
-            display_name="Text",
-            description="Sample text to the LLM Chain",
-            
+    inputs: list[Input] = [
+        MultilineInput(
+            name="Prompt",
+            display_name="Prompt",
+            description="Source for Prompt",
+            required=False
         ),
     ]
     # TODO:: see how to pass types of dependecies, inputs and outputs 
-    dependencies: list[DependencyType] = [
-        DependencyType.LLM
+    dependencies: list[DependencyDescriptor] = [
+        DependencyDescriptor(name="llm", type=DependencyType.LLM)
     ]
 
-    outputs: list = [
+    outputs: list[Output] = [
         Output(
             name="data",
             display_name="LLM Response",
@@ -43,35 +38,34 @@ class LLMChainNode(BaseNode):
         )
     ]
 
-
-    def execute(self):
+    def execute(self,dependencies: dict[str, Any], *args, **kwargs):
         """ Run LLM Chain"""
-        # 1- Get input data 
-        input: str = self.inputs[0].value
+        prompt = self.inputs[0].value
 
-        # 2- Get custom Settings defined from the ui 
-
+        if not prompt:
+            logger.warning("No input provided to the LLM Chain")
+            raise ValueError("No input provided to the LLM Chain")
+       
         if self.library == "Langchain":
 
-            # 3- Check required providers / tools needed to execute the node 
-            llm = self._load_langchain_llm()
+            llm: LLM | None = dependencies.get("llm")
 
             # 4- return the response
-            self.outputs[0].value = llm.invoke(input)
+            if prompt:
+                if not llm:
+                    raise ValueError("No LLM provided")
+                llm_output = llm.invoke(prompt)
+                self.outputs[0].value = llm_output
+            else:
+                logger.warning("No input provided to the LLM Chain")
 
-            # Question:: if this is stream response how to handle it / return it for custom node execution
+            # TODO:: if this is stream response how to handle it / return it for custom node execution
         else:
             raise NotImplementedError(f"Library {self.library} not implemented yet")
         
+        logger.warning(f"LLM Chain out: {self.outputs[0].value}")
         return self.outputs[0].value # TODO:: make common response for all nodes
     
 
 
-    def _load_langchain_llm(self) -> BaseLLM: # 
-        if self.library == 'Langchain':
-            # Check the llm type 
-            # llm = GoogleLLM()
-            llm = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-            return llm 
-
-            # TODO:: complete this 
+   

@@ -12,6 +12,5 @@ class BaseTaskQueue(ABC):
     def run_tasks(self):
         ...
 
-
     async def add_tasks(self, tasks: list[Iterable[Awaitable]] = []) -> None:
         ...

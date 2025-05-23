@@ -15,8 +15,6 @@ from scalar_fastapi import get_scalar_api_reference
 
 load_dotenv()
 
-
-
 app = FastAPI(
     lifespan=lifespan,
     dependencies=[],  # TODO: Add dependencies for API authentication if required
@@ -43,8 +41,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-
 
 # *******************
 # Routes

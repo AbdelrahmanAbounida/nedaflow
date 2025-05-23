@@ -32,6 +32,8 @@ class TaskQueueService:
         task_queue = self.get_task_queue(job_id)
         if task_queue:
             await task_queue.add_tasks([task])
+        else:
+            logger.warning(f"Task queue for job {job_id} not found")
     
     async def run_tasks(self,job_id:str, tasks: list[Iterable[Awaitable]] = ()):
         task_queue = self.get_task_queue(job_id)
@@ -41,6 +43,7 @@ class TaskQueueService:
     
     def get_task_queue(self, job_id: str) -> BaseTaskQueue:
         if not job_id in self._task_queues:
+            # logger.warning(f"_task_queues: {self._task_queues}")
             raise KeyError(f"Task queue for job {job_id} not found") # TODO:: see how to initaite the task queue with this 
         return self._task_queues[job_id]      
 

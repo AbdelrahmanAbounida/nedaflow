@@ -1,11 +1,27 @@
 # TODO:: define schemas here 
-from nedaflow.flow.nodes.base import BaseNode
+
+from nedaflow.flow.nodes.base import Input, Output
 from pydantic import BaseModel 
 from typing import Optional, Any
 
 class UINode(BaseModel):
-    class_name: str 
-    category: str 
+    class_name: str # this is extra
+    category: str # this is extra 
+    name: str
+    display_name: str
+    description: str
+    icon: str
+    type: str
+    inputs: list[Input]
+    outputs: list[Output]
+    options: list[str]
+    is_stream: bool
+    dependencies: list[Any] # This should be enum to use later to validate if dependencies exist 
+    is_dep: bool
+    beta: bool
+    code: str
+    library: str
+    minimized: bool
 
 # Base Sidebar entity 
 class NedaFlowSidebarEntity(BaseModel):
