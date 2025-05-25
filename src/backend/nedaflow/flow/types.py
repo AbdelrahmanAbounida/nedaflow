@@ -1,7 +1,19 @@
 from pydantic import BaseModel, Field
 from typing import TypeVar, Generic, Optional
 from enum import Enum
+from dataclasses import dataclass
 
+
+class WorkflowEvents(str,Enum):
+    VERTEX_BUILT = "vertex_built"
+    VERTEX_FAILED = "vertex_failed"
+    WORKFLOW_COMPLETED = "workflow_completed"
+
+
+@dataclass
+class QueueServiceEvent:
+    type: WorkflowEvents
+    data: dict
 
 # ********************
 # Main 

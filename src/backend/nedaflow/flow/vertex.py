@@ -1,7 +1,7 @@
 from functools import cached_property
 from nedaflow.schema import VertexPosition
 from nedaflow.flow.nodes.base import BaseNode, VertexState
-from nedaflow.services.events.managers.workflow import WorkflowEvents
+from nedaflow.flow.types import WorkflowEvents, QueueServiceEvent
 from typing import Optional, Self, TYPE_CHECKING, Any
 from nedaflow.flow.edge  import Edge
 from loguru import logger 
@@ -70,28 +70,33 @@ class Vertex:
         self._output_edges = edges
 
     async def build(self, *args, **kwargs):
+        await asyncio.sleep(3)
 
+        # 1- Load list of connected dependencies and inputs from other nodes 
         dependencies = self.get_dependencies() 
+        inputs = self.get_inputs()
         
+        # 2- call node execution 
         node_is_executable = not self.node.is_dep
         res = None 
         # TODO:: try and except 
         if node_is_executable:
             if self.node.execute and iscoroutinefunction(self.node.execute):
-                res = await self.node.execute(dependencies,*args, **kwargs)
+                res = await self.node.execute(dependencies,inputs,*args, **kwargs)
             elif self.node.execute:
-                res = self.node.execute(dependencies, *args, **kwargs)
+                res = self.node.execute(dependencies,inputs, *args, **kwargs)
             else:
                 logger.warning("No execute function found in the node")
         else:
             if self.node.supply_data and iscoroutinefunction(self.node.supply_data):
-                res = await self.node.supply_data(dependencies,*args, **kwargs)
+                res = await self.node.supply_data(dependencies,inputs,*args, **kwargs)
             elif self.node.supply_data:
-                res = self.node.supply_data(dependencies,*args, **kwargs)
+                res = self.node.supply_data(dependencies,inputs,*args, **kwargs)
             else:
                 logger.warning("No supply_data function found in the node")
-        
-        # logger.warning(f"Updating output edges data: {res} ({type(res)})")
+
+        # 3- updated outer edges with the execution result
+        logger.warning(f"res: {res}")
         for edge in self._output_edges:
             edge.data = res # TODO:: check how this res would be passed in case of llm , stream, ...
         
@@ -107,8 +112,10 @@ class Vertex:
         }
     
     def get_dependencies(self) -> dict[str, Any]:
-        """ 
-        Get the dependencies map of a vertex by its id"""
+        """ Get the dependencies map of a vertex by its id
+
+        Go through the vertex edges and Load data if the edge source is a dependency
+        """
         if not self.workflow._is_prepared:
             raise ValueError("Workflow is not prepared yet. Call prepare_graph() first.")
         
@@ -121,11 +128,35 @@ class Vertex:
             if source_vertex.node.is_dep:
                 for dep_name in dependency_names:
                     if dep_name not in dependencies_map:
-                        print(f"dep_name: {dep_name}")
                         dependencies_map[dep_name] = edge.data
                         break  
         
         return dependencies_map
+    
+    def get_inputs(self) -> dict[str, Any]:
+        """ get list of inputs to a vertex
+        
+        similar to get_dependencies but for inputs , will load these data from the inputs edges
+
+        """
+        if not self.workflow._is_prepared:
+            raise ValueError("Workflow is not prepared yet. Call prepare_graph() first.")
+        
+        # TODO:: name of inputs could be loaded from vertex settings or check if it is dict load it from dict key
+        
+        vertex = self.workflow.get_vertex(self.id)
+        input_names = [inpt.name for inpt in vertex.node.inputs]
+        input_edges = vertex.inputs
+        inputs_map = {}
+        for edge in input_edges:
+            source_vertex = self.workflow.get_vertex(edge.source_id)
+            if not source_vertex.node.is_dep:
+                for inpt_name in input_names:
+                    if inpt_name not in inputs_map:
+                        inputs_map[inpt_name] = edge.data
+                        break
+        return inputs_map
+
 
     @cached_property
     def successors(self) -> list["Vertex"]:
@@ -135,6 +166,9 @@ class Vertex:
             vertex_id = edge.target_id
             if v := self.workflow.get_vertex(vertex_id):
                 out_vertexes.append(v)
+        
+        print(f"out_edges: {out_edges}")
+        print(f"out_vertexes: {out_vertexes}")
         return out_vertexes
 
     @cached_property
@@ -153,7 +187,11 @@ class Vertex:
         """
         if self._is_built:
             return False 
-        return all([edge.data is not None for edge in self._input_edges])
+        # return all([edge.data is not None for edge in self._input_edges])
+        for edge in self._input_edges:
+            if not edge.source_vertex._is_built:
+                return False
+        return True
 
     def add_input_edges(self, edges: list[Edge]):
         for edge in edges:

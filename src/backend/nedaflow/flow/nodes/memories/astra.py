@@ -1,4 +1,4 @@
-from nedaflow.flow.nodes.io.io import Output
+from nedaflow.flow.nodes.io.io import Output, Input
 from nedaflow.flow.types import TextInput, MultilineInput,DropdownInput,BooleanInput,JsonInput,NumberInput
 from nedaflow.flow.types import FieldTypes
 from nedaflow.flow.nodes.memories.base import BaseMemoryNode
@@ -11,7 +11,7 @@ class AstraDBChatMemory(BaseMemoryNode):
     minimized: bool = False
     code: str  = ""
 
-    inputs: list = [
+    inputs: list[Input]= [
         TextInput(
             name="urls",
             display_name="URLs",

@@ -1,7 +1,7 @@
 
 
 
-from nedaflow.flow.nodes.io.io import Output
+from nedaflow.flow.nodes.io.io import Output, Input, Input
 from nedaflow.flow.types import TextInput, MultilineInput,DropdownInput,BooleanInput,JsonInput,NumberInput
 from nedaflow.flow.nodes.base import BaseNode, ComponentTypeEnum
 from nedaflow.flow.types import FieldTypes
@@ -16,7 +16,7 @@ class Directory(BaseNode):
     minimized: bool = False
     code: str  = ""
 
-    inputs: list = [
+    inputs: list[Input]= [
         TextInput(
             name="urls",
             display_name="URLs",

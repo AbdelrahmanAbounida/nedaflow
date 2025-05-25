@@ -62,6 +62,8 @@ class BaseNode(ABC,BaseModel): # BaseModel
     # input_edges: ClassVar[list[Edge]] = []
     # """ This is the list of the input edges the vertex wrapped around this node. it will be filled during building """
 
+    external_data: dict[str,any] = {}
+    """ in case of attaching any custom data to the node like in case of chat triggers u can attach the chat messages """
 
     name: Optional[str] = None
     "Name of the Node"
@@ -172,10 +174,10 @@ class BaseNode(ABC,BaseModel): # BaseModel
     #     return self.input_edges
 
 
-    def supply_data(self,dependencies: dict[str, Any] = {}, *args, **kwargs):
+    def supply_data(self,dependencies: dict[str, Any] = {}, inputs: dict[str, Any] = {}, *args, **kwargs):
         """ provide the node as input / provider for anthor nodes ex: LLM, Tool,.."""
 
-    def execute(self,dependencies: dict[str, Any] = {}, *args, **kwargs):
+    def execute(self,dependencies: dict[str, Any] = {}, inputs: dict[str, Any] = {}, *args, **kwargs):
         """Main execution function for the Node in case the node is runnable ex: Chain , Agent,.."""   
 
         logger.debug(f"Executing node: {self.__class__.__name__}")

@@ -1,7 +1,7 @@
 
 
 
-from nedaflow.flow.nodes.io.io import Output
+from nedaflow.flow.nodes.io.io import Output, Input
 from nedaflow.flow.types import FileInput, TextInput, MultilineInput,DropdownInput,BooleanInput,JsonInput,NumberInput
 from nedaflow.flow.nodes.base import BaseNode, ComponentTypeEnum
 from nedaflow.flow.types import FieldTypes
@@ -16,7 +16,7 @@ class File(BaseNode):
     minimized: bool = False
     code: str  = ""
 
-    inputs: list = [
+    inputs: list[Input]= [
         FileInput(
             name="file_path",
             display_name="File Path",

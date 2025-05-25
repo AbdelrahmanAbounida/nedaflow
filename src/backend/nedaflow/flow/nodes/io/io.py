@@ -50,7 +50,7 @@ class Input(BaseModel):
     """Name of the field. Default is an empty string."""
 
     display_name: str | None = None
-    """Display name of the field. Defaults to None."""
+    """Display name of the field. Defaults to None. This must be unique"""
 
     input_types: list[str] | None = None
     """List of input types for the handle when the field has more than one type. Default is an empty list."""

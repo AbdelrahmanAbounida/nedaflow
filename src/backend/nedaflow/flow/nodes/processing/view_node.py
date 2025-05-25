@@ -1,4 +1,4 @@
-from nedaflow.flow.nodes.io.io import Output
+from nedaflow.flow.nodes.io.io import Output, Input
 from nedaflow.flow.types import TextInput, MultilineInput,DropdownInput,BooleanInput,JsonInput,NumberInput
 from nedaflow.flow.nodes.base import BaseNode, ComponentTypeEnum
 from nedaflow.flow.types import FieldTypes
@@ -13,7 +13,7 @@ class ViewNode(BaseNode):
     minimized: bool = False
     code: str  = ""
 
-    inputs: list = [
+    inputs: list[Input]= [
         MultilineInput(
             name="data",
             display_name="Data",

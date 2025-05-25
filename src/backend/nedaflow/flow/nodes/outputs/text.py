@@ -1,5 +1,5 @@
 from nedaflow.flow.types import MultilineInput
-from nedaflow.flow.nodes.io.io import Output
+from nedaflow.flow.nodes.io.io import Output, Input
 from nedaflow.flow.nodes.base import BaseNode, ComponentTypeEnum
 from nedaflow.flow.types import FieldTypes
 
@@ -11,7 +11,7 @@ class TextOutputComponent(BaseNode):
     icon: str = "Text" 
     code: str = ""
 
-    inputs: list = [
+    inputs: list[Input]= [
         MultilineInput(
             name="input_value",
             display_name="Text",

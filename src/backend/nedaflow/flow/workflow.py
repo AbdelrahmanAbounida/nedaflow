@@ -4,8 +4,7 @@ from nedaflow.services.events.managers.workflow import setup_workflow_event_mana
 from functools import lru_cache
 from nedaflow.flow.vertex import Vertex
 from nedaflow.flow.edge import Edge
-from nedaflow.schema import BuildWorkflow
-from typing import Any,Optional, Self
+from typing import Any,Optional
 from loguru import logger 
 import asyncio
 import time 
@@ -38,6 +37,7 @@ class WorkflowEngine:
         self.is_valid = False
         self.is_running = False
         self.start_execution_time: float = None
+        self.last_execution_time: float = None
         self.end_execution_status: float = None
 
         # Execution Control 
@@ -228,8 +228,11 @@ class WorkflowEngine:
         # Main Running Process 
         # start_time = time.time()
 
-        # Run tasks in the background till u start calling the streaming process 
         inital_tasks = [asyncio.create_task(vertex.build()) for vertex in root_vertexes]
+
+        logger.warning(f"Found {len(inital_tasks)} inital_tasks to run")
+
+        # why i feel like it waits till the task done  which is something i dont need
         asyncio.create_task(self.task_queue_service.run_tasks(job_id=self.execution_id, tasks=inital_tasks))
         # await self.task_queue_service.run_tasks(job_id=self.execution_id, tasks=inital_tasks)
         # self.is_running = False
@@ -253,9 +256,9 @@ class WorkflowEngine:
             "is_running": self.is_running,
             "execution_id": self.execution_id,
             "last_execution_time": self.last_execution_time,
-            "last_execution_status": self.last_execution_status
         }
 
+    @lru_cache
     def get_vertex(self,vertex_id: str) -> Vertex:
         """Get a vertex by its ID"""
         return next(filter(lambda v: v.id == vertex_id, self._vertexes), None)

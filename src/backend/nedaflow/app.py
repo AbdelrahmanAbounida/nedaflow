@@ -27,13 +27,13 @@ app = FastAPI(
     """,
 )
 
-static_dir = Path(__file__).resolve().parent / "static"
-app.mount("/static", StaticFiles(directory=str(static_dir)), name="static")
+# static_dir = Path(__file__).resolve().parent / "static"
+# app.mount("/static", StaticFiles(directory=str(static_dir)), name="static")
 
 
 
 ## Middlewares 
-app.add_middleware(UnifiedResponseMiddleware,)
+# app.add_middleware(UnifiedResponseMiddleware,)
 app.add_middleware(
     CORSMiddleware,
     allow_origins = ["*"],
@@ -42,15 +42,16 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 # *******************
 # Routes
 # *******************
-templates = Jinja2Templates(directory="nedaflow/static/templates")
+# templates = Jinja2Templates(directory="nedaflow/static/templates")
 
 
-@app.get("/",tags=["Home"], response_class=HTMLResponse)
-async def root(request:Request):
-    return templates.TemplateResponse(request=request, name="home.html", context={})
+# @app.get("/",tags=["Home"], response_class=HTMLResponse)
+# async def root(request:Request):
+#     return templates.TemplateResponse(request=request, name="home.html", context={})
 
 
 # ******************

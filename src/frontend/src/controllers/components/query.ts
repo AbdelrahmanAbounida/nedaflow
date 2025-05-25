@@ -21,8 +21,10 @@ export const useGetComponentsTypes = () => {
       >(`${getURL("COMPONENTS_TYPES")}`);
       const data = response?.data;
 
+      console.log({ data });
+
       // TODO:: check other code, error, message
-      setComponentTypes(data?.data);
+      setComponentTypes(data);
       return data;
     } catch (error: any) {
       console.error("An error has occurred while fetching types.");

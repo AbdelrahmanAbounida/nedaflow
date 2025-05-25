@@ -1,5 +1,6 @@
 from collections.abc import Iterable, Awaitable
 from nedaflow.services.task.base import BaseTaskQueue
+from typing import Any
 import asyncio 
 from loguru import logger 
 
@@ -11,7 +12,14 @@ class AsyncioTaskQueue(BaseTaskQueue):
     """
     def __init__(self):
         self._queue = asyncio.Queue()
+        self._event_queue = asyncio.Queue()   # For streaming building progress and results to the ui 
     
+    async def emit_event(self, event: dict):
+        await self._event_queue.put(event)
+    
+    async def get_event(self):
+        return await self._event_queue.get()
+
     async def enqueue(self, task):
         await self._queue.put(task)
     

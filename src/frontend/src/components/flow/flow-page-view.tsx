@@ -46,12 +46,16 @@ import {
 } from "lucide-react";
 import { Card } from "../ui/card";
 import { FlowPlayground } from "./options-panel/playground";
-import { useBuildFlow } from "@/controllers/flow/mutations";
+import {
+  buildFlowWithStream,
+  useBuildFlow,
+} from "@/controllers/flow/mutations";
 import { IBuildWorkflow } from "@/types/api";
 import { toast } from "sonner";
 import { VertexComponent } from "./vertex-ui/vertex";
 import NodeParamsModal from "../modals/node-params-modal";
 import CodeDialog from "../modals/code-modal";
+import { shouldShowChatInterface } from "@/utils/flow";
 
 export interface FlowPageProps {
   params: {
@@ -77,13 +81,14 @@ const FlowPageView = ({ params }: FlowPageProps) => {
 
   const [isConnecting, setIsConnecting] = useState(false);
   const {
-    // setFlowNodes,
+    setFlowNodes,
     // onNodesChange,
     // onEdgesChange,
-    // setFlowEdges,
+    setFlowEdges,
     // flowNodes,
     // flowEdges,
     setCurrentSelectedNodeId,
+    // setShowChatInterface,
   } = useFlowStore();
   const { screenToFlowPosition } = useReactFlow();
 
@@ -142,7 +147,7 @@ const FlowPageView = ({ params }: FlowPageProps) => {
 
   const { mutate: mutateBuildFlow, isPending, isError, error } = useBuildFlow();
 
-  const handleBuildFlow = () => {
+  const handleBuildFlow = async () => {
     try {
       const flow: IBuildWorkflow = {
         flow_id: params.flowId,
@@ -150,7 +155,8 @@ const FlowPageView = ({ params }: FlowPageProps) => {
         edges: edges, // flowEdges, // edges
         name: "asd",
       };
-      mutateBuildFlow(flow);
+      // mutateBuildFlow(flow);
+      await buildFlowWithStream(flow);
     } catch (err) {
       console.log({ err });
       toast.error(err + "");
@@ -172,6 +178,12 @@ const FlowPageView = ({ params }: FlowPageProps) => {
       toast.error(error + "");
     }
   }, [isError]);
+
+  // TODO:: think about optimizing this
+  // useEffect(() => {
+  //   setFlowNodes(nodes);
+  //   setFlowEdges(edges);
+  // }, [nodes, edges]);
 
   return (
     <div className="w-full  h-full bg-canvas/10">
@@ -247,10 +259,6 @@ const FlowPageView = ({ params }: FlowPageProps) => {
           )}
           position="bottom-center"
         >
-          {/* <Button className="!h-9">
-            <MessageCircle className="" />
-            Chat
-          </Button> */}
           <FlowPlayground />
           {isPending ? (
             <Button disabled className="!h-9">

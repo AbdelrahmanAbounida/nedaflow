@@ -1,4 +1,4 @@
-from nedaflow.flow.nodes.io.io import Output
+from nedaflow.flow.nodes.io.io import Output, Input
 from nedaflow.flow.types import DataInput, TextInput, MultilineInput,EmbeddingInput,BooleanInput,JsonInput,NumberInput
 from nedaflow.flow.types import FieldTypes
 from nedaflow.flow.nodes.vector_stores.base import BaseVectorStoreNode
@@ -12,7 +12,7 @@ class Pinecone(BaseVectorStoreNode):
     minimized: bool = False
     code: str  = ""
 
-    inputs: list = [
+    inputs: list[Input]= [
         TextInput(
             name="index_name",
             display_name="Index Name",

@@ -1,5 +1,5 @@
 from nedaflow.flow.types import FieldTypes
-from nedaflow.flow.nodes.io.io import Output
+from nedaflow.flow.nodes.io.io import Output, Input
 from nedaflow.flow.nodes.triggers.base import BaseTriggerNode
 
 class ManualTriggerComponent(BaseTriggerNode):
@@ -10,7 +10,7 @@ class ManualTriggerComponent(BaseTriggerNode):
     minimized: bool = True
     code: str = ""
 
-    inputs: list = [
+    inputs: list[Input]= [
         
     ]
     outputs: list = [

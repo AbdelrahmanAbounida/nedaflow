@@ -12,7 +12,14 @@ import {
   Trash,
   User,
 } from "lucide-react";
-import React, { ReactNode, useState } from "react";
+import React, {
+  Dispatch,
+  ReactNode,
+  SetStateAction,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 import {
@@ -42,15 +49,41 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useFlowStore } from "@/store/flow";
+import { getChatTriggerNode } from "@/utils/flow";
+import { useEdges, useNodes, useReactFlow } from "@xyflow/react";
+import { GenericNode } from "@/types/flow/flow";
+import { toast } from "sonner";
+import { useBuildFlow } from "@/controllers/flow/mutations";
+import { IBuildWorkflow } from "@/types/api";
+import { useParams } from "next/navigation";
 
 export const FlowPlayground = () => {
   return <PlaygroundModal />;
 };
-
 const PlaygroundModal = () => {
+  // This only appeas if the flow nodes contain chat trigger
+
+  // const { showChatInterface } = useFlowStore();
+  // const showChatInterface = useFlowStore((state) => state.showChatInterface);
+  const nodes = useNodes<GenericNode>();
+  const chatTriggerNode = useMemo(() => getChatTriggerNode(nodes), [nodes]);
+  const showChatInterface = !!chatTriggerNode;
+
+  if (!chatTriggerNode) {
+    // toast.error("This chat flow cant run without a chat trigger node");
+    return;
+  }
+
   return (
     <Dialog>
-      <DialogTrigger className={cn("", buttonVariants({ variant: "default" }))}>
+      <DialogTrigger
+        className={cn(
+          "",
+          buttonVariants({ variant: "default" }),
+          !showChatInterface && "hidden"
+        )}
+      >
         <MessageCircle className="" />
         Chat
       </DialogTrigger>
@@ -72,25 +105,6 @@ const PlaygroundModal = () => {
 };
 
 const ChatSidebar = ({ ...props }: React.ComponentProps<typeof Sidebar>) => {
-  const data = {
-    navMain: [
-      {
-        title: "Getting Started",
-        url: "#",
-        items: [
-          {
-            title: "Installation",
-            url: "#",
-          },
-          {
-            title: "Project Structure",
-            url: "#",
-          },
-        ],
-      },
-    ],
-  };
-
   return (
     <Sidebar
       {...props}
@@ -187,7 +201,89 @@ const SideChatDropdown = () => {
 };
 
 const ChatView = () => {
-  // TODO:: Chat Messages
+  // TODO:: optimize this in one general funciton
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [currentMessage, setcurrentMessage] = useState("");
+  const { setNodes } = useReactFlow<GenericNode>();
+  const { mutate: mutateBuildFlow, isPending, isError, error } = useBuildFlow();
+  const nodes = useNodes<GenericNode>();
+  const edges = useEdges();
+  const params = useParams();
+  const flowId = params?.flowId as string;
+  const chatTriggerNode = getChatTriggerNode(nodes);
+
+  if (!chatTriggerNode) {
+    toast.error("This chat flow cant run without a chat trigger node");
+    return;
+  }
+
+  const handleSendMessage = async () => {
+    try {
+      const chatMessages: ChatMessage[] = [
+        ...messages,
+        {
+          role: "user",
+          content: currentMessage,
+          timestamp: new Date().toISOString(),
+        },
+      ];
+      setMessages(chatMessages);
+
+      // Update trigger node with these messages
+      setNodes((nodes) => {
+        return nodes.map((node) => {
+          if (node.id === chatTriggerNode.id) {
+            return {
+              ...node,
+              data: {
+                ...node.data,
+                component: {
+                  ...node.data.component,
+                  external_data: {
+                    messages: chatMessages,
+                  },
+                },
+              },
+            };
+          }
+          return node;
+        });
+      });
+    } catch (err) {
+      console.log({ err });
+      toast.error(err + "");
+    }
+  };
+
+  useEffect(() => {
+    if (isError && error) {
+      toast.error(error + "");
+    }
+  }, [isError, error]);
+
+  useEffect(() => {
+    if (!currentMessage) return;
+
+    const updatedTriggerNode = nodes.find(
+      (node) => node.id === chatTriggerNode.id
+    );
+    const nodeMessages =
+      updatedTriggerNode?.data?.component?.external_data?.messages;
+    const lastNodeMessage = nodeMessages?.[nodeMessages.length - 1];
+
+    if (lastNodeMessage?.content === currentMessage) {
+      // Only mutate if the last message matches the last sent message
+      const flow = {
+        flow_id: flowId!,
+        vertexes: nodes,
+        edges: edges,
+        name: "asd",
+      };
+      mutateBuildFlow(flow);
+      setcurrentMessage("");
+    }
+  }, [nodes, currentMessage]);
+
   return (
     <div className="w-full h-full flex flex-col justify-between ">
       <header className="flex h-16 shrink-0 items-center gap-2  px-4 border-b">
@@ -198,7 +294,7 @@ const ChatView = () => {
       {/* <EmptyChat /> */}
 
       {/** Chat With Messages */}
-      <ChatWithMessages />
+      <ChatWithMessages messages={messages} />
 
       <div className="mx-auto mb-[69px] w-full max-w-[768px] md:w-5/6 flex flex-col">
         <div
@@ -208,16 +304,42 @@ const ChatView = () => {
           )}
         >
           <Textarea
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                handleSendMessage();
+              }
+            }}
+            value={currentMessage}
+            onChange={(e) => {
+              setcurrentMessage(e.target.value);
+            }}
             placeholder="Type a message..."
             className="shadow-none focus:border-none focus:ring-0 ring-0 border-none outline-none resize-none"
             // rows={2}
             // maxLength={200}
           />
           <div className="flex flex-1  w-full items-end justify-end">
-            <Button>Send</Button>
+            {isPending ? (
+              <Button disabled className="cursor-not-allowed">
+                <Loader className="mr-2 h-4 w-4 animate-spin" /> Sending
+              </Button>
+            ) : (
+              <Button disabled={isPending} onClick={handleSendMessage}>
+                Send
+              </Button>
+            )}
           </div>
         </div>
         <p className="text-xs text-gray-500 mx-auto mt-2">
+          {/* <Button
+            onClick={() => {
+              setMessages([]);
+              setcurrentMessage("");
+            }}
+          >
+            reset
+          </Button> */}
           Press Enter to send your message
         </p>
       </div>
@@ -237,27 +359,53 @@ const EmptyChat = () => {
   );
 };
 
+// Make sure it matches NedaFlowChatMessage (python) interface
 interface ChatMessage {
-  role: "user" | "assistant";
+  role: "user" | "assistant" | "system";
   content: string;
+  timestamp: string;
 }
 
-const ChatWithMessages = () => {
+const ChatWithMessages = ({ messages }: { messages: ChatMessage[] }) => {
   const [isLoading, setisLoading] = useState(false);
 
-  const [messages, setMessages] = useState<ChatMessage[]>([
-    {
-      role: "user",
-      content: "Hello, Assistant!",
-    },
-    {
-      role: "assistant",
-      content: "Hello! I'm here to help you with your task.",
-    },
-  ]);
+  // const { setNodes } = useReactFlow<GenericNode>();
+  const nodes = useNodes<GenericNode>();
 
   const [messagesContainerRef, messagesEndRef] =
     useScrollToBottom<HTMLDivElement>();
+
+  // const chatTriggerNode = getChatTriggerNode(nodes);
+
+  // if (!chatTriggerNode) {
+  //   toast.error("This chat flow cant run without a chat trigger node");
+  //   return;
+  // }
+
+  // useEffect(() => {
+  //   // messagesEndRef?.current?.scrollIntoView({ behavior: "smooth" });
+
+  //   // Update trigger node with these messages
+  //   setNodes((nodes) => {
+  //     return nodes.map((node) => {
+  //       if (node.id === chatTriggerNode.id) {
+  //         return {
+  //           ...node,
+  //           data: {
+  //             ...node.data,
+  //             component: {
+  //               ...node.data.component,
+  //               external_data: {
+  //                 messages: messages,
+  //               },
+  //             },
+  //           },
+  //         };
+  //       }
+  //       return node;
+  //     });
+  //   });
+  // }, [messages]);
 
   return (
     <div className="flex flex-col h-full w-full max-w-3xl mx-auto items-center bg-white dark:bg-transparent">
@@ -292,6 +440,7 @@ const ChatWithMessages = () => {
 interface ChatMessageProps {
   content: string | ReactNode;
   role: "user" | "assistant" | "system" | "data";
+  timestamp?: string;
 }
 
 const ChatMessage = ({ role, content }: ChatMessageProps) => {

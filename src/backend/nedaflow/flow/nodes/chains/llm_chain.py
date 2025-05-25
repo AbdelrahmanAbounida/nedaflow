@@ -1,9 +1,10 @@
 from nedaflow.flow.types import Input, MultilineInput, DependencyDescriptor, DependencyType, FieldTypes
 from nedaflow.flow.nodes.base import BaseNode, ComponentTypeEnum
 from nedaflow.flow.nodes.io import Output
-from typing import Any
+from typing_extensions import Any, Doc, Annotated
 from loguru import logger 
 from langchain_core.language_models.llms import LLM
+from nedaflow.flow.chat import NedaFlowChatMessage, nedaflowmsgs_to_langchain_msgs
 
 
 class LLMChainNode(BaseNode):
@@ -14,6 +15,7 @@ class LLMChainNode(BaseNode):
     icon: str  = "Route"
     minimized: bool = False
     code: str  = ""
+
 
     inputs: list[Input] = [
         MultilineInput(
@@ -38,9 +40,19 @@ class LLMChainNode(BaseNode):
         )
     ]
 
-    def execute(self,dependencies: dict[str, Any], *args, **kwargs):
+    def execute(self,
+                dependencies: dict[str, Any],
+                inputs: Annotated[dict[str, Any], Doc("List of inptus data loaded fron connected edges of other nodes")], *args, **kwargs):
         """ Run LLM Chain"""
-        prompt = self.inputs[0].value
+
+        # Load Prompt as inputs 
+        logger.debug(f"LLM inputs: {inputs}")
+        local_prompt = self.inputs[0].value
+        outer_prompt = inputs.get("Prompt")
+
+        # TODO:: Load Messages 
+        logger.debug(f"local_prompt: {local_prompt} \n outer_prompt: {outer_prompt}")
+        prompt = outer_prompt if outer_prompt else local_prompt # TODO:: according to settings 
 
         if not prompt:
             logger.warning("No input provided to the LLM Chain")
@@ -54,7 +66,16 @@ class LLMChainNode(BaseNode):
             if prompt:
                 if not llm:
                     raise ValueError("No LLM provided")
-                llm_output = llm.invoke(prompt)
+                
+                # check typr of prompt
+                if isinstance(prompt, str):
+                    llm_output = llm.invoke(prompt)
+                elif isinstance(prompt, list) and len(prompt) > 0 and isinstance(prompt[0], NedaFlowChatMessage):
+                    msgs = nedaflowmsgs_to_langchain_msgs(prompt)
+                    llm_output = llm.invoke(msgs)
+                else:
+                    logger.error(f"Prompt type not supported: {type(prompt)}")
+                    raise ValueError(f"Prompt type not supported: {type(prompt)}")
                 self.outputs[0].value = llm_output
             else:
                 logger.warning("No input provided to the LLM Chain")

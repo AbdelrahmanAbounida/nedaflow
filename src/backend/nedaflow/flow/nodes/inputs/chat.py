@@ -1,8 +1,9 @@
 from nedaflow.flow.types import FieldTypes
-from nedaflow.flow.nodes.io.io import Output
-from nedaflow.flow.types import MultilineInput
+from nedaflow.flow.nodes.io.io import Output, Input
+from nedaflow.flow.types import MultilineInput, Input
 from nedaflow.flow.nodes.base import BaseNode, ComponentTypeEnum
 from pydantic import Field
+from loguru import logger 
 
 class ChatInputComponent(BaseNode):
     type: ComponentTypeEnum = ComponentTypeEnum.INPUT
@@ -13,7 +14,7 @@ class ChatInputComponent(BaseNode):
     minimized: bool = True
     code: str = ""
 
-    inputs: list = [
+    inputs: list[Input] = [
         MultilineInput(
             name="input_value",
             display_name="Text",
@@ -28,4 +29,6 @@ class ChatInputComponent(BaseNode):
 
 
     def execute(self, dependencies = {}, *args, **kwargs):
-        return True 
+        input = self.inputs[0].value
+        logger.debug(f"input: {input}")
+        return input

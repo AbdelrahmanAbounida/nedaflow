@@ -1,3 +1,4 @@
+import { useFlowStore } from "@/store/flow";
 import { GenericNode } from "@/types/flow/flow";
 import { Component, ComponentTypeEnum } from "@/types/flow/flow-component";
 import { XYPosition } from "@xyflow/react";
@@ -10,6 +11,15 @@ export const createFlowNode = ({
   position?: XYPosition;
 }): GenericNode => {
   // u can return different node types and match then in nodetypes
+
+  const setShowChatInterface = useFlowStore.getState().setShowChatInterface;
+
+  if (
+    data.type === ComponentTypeEnum.TRIGGER &&
+    data.name.toLowerCase().includes("chat")
+  ) {
+    setShowChatInterface(true);
+  }
 
   return {
     id: crypto.randomUUID(),

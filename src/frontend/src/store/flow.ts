@@ -1,5 +1,7 @@
 import { FlowComponentSchema } from "@/types/flow";
 import { Flow, GenericNode } from "@/types/flow/flow";
+import { ComponentTypeEnum } from "@/types/flow/flow-component";
+import { shouldShowChatInterface } from "@/utils/flow";
 import {
   applyEdgeChanges,
   applyNodeChanges,
@@ -37,6 +39,16 @@ export type FlowStoreType = {
 
   currentSelectedNodeId: string;
   setCurrentSelectedNodeId: (id: string) => void;
+
+  // Playground
+  showChatInterface: boolean;
+  setShowChatInterface: (val: boolean) => void;
+
+  // building process
+  buildController?: AbortController;
+  setBuildController: (controller: AbortController | null) => void;
+
+  updateNodeStatus: (nodeId: string, data: any) => void;
 };
 
 export const useFlowStore = create<FlowStoreType>((set, get) => ({
@@ -56,6 +68,7 @@ export const useFlowStore = create<FlowStoreType>((set, get) => ({
     set(() => ({ loadingFlow: val }));
   },
 
+  // Note: These values are not used for now ,they are loaded directly from reactflow context
   currentFLow: null,
   setCurrentFlow: (val) => {
     set(() => ({ currentFLow: val }));
@@ -64,6 +77,7 @@ export const useFlowStore = create<FlowStoreType>((set, get) => ({
   flowNodes: [],
   setFlowNodes: (nodes) => {
     set(() => ({ flowNodes: nodes }));
+    set(() => ({ showChatInterface: shouldShowChatInterface(nodes) }));
   },
   addFlowNode: (node: GenericNode) => {
     set({
@@ -92,5 +106,23 @@ export const useFlowStore = create<FlowStoreType>((set, get) => ({
   currentSelectedNodeId: "",
   setCurrentSelectedNodeId: (id) => {
     set(() => ({ currentSelectedNodeId: id }));
+  },
+
+  // playground
+  showChatInterface: shouldShowChatInterface(get()?.flowNodes),
+  setShowChatInterface: (val) => {
+    set(() => ({ showChatInterface: val }));
+  },
+
+  // building process
+  buildController: undefined,
+  setBuildController: (controller) => {
+    set(() => ({ buildController: controller }));
+  },
+
+  updateNodeStatus: (nodeId: string, data: any) => {
+    // TODO:: update reactflow nodes
+    console.log("Updating node with id", nodeId);
+    console.log("Data:", data);
   },
 }));

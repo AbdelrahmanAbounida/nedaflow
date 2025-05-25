@@ -22,6 +22,7 @@ class UINode(BaseModel):
     code: str
     library: str
     minimized: bool
+    external_data: Optional[dict[str,Any]]
 
 # Base Sidebar entity 
 class NedaFlowSidebarEntity(BaseModel):

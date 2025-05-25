@@ -21,6 +21,7 @@ export interface Component {
   minimized?: boolean;
   disabled?: boolean;
   is_dep?: boolean;
+  external_data: Record<string, any>;
 }
 
 // add here list of all categories we have or will have >> it should be loaded from backend

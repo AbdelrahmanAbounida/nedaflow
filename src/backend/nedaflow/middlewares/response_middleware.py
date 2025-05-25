@@ -27,15 +27,22 @@ class UnifiedResponseMiddleware(BaseHTTPMiddleware):
             if not "/api" in path:
                 return response
             
+            print(f"Response Type : {type(response)}")
             if isinstance(response, JSONResponse):
+                logger.debug(f"JSON response detected, skipping unification")
                 return self.handle_json_response(response)
-            elif isinstance(response, StreamingResponse):
+            elif isinstance(response, StreamingResponse): #  or isinstance(response, _StreamingResponse):
+                logger.debug(f"Streaming response detected, skipping unification")
                 # logger.debug(f"response: {response}")
-                return self.handle_streaming_response(response)
+                return response
+                # return self.handle_streaming_response(response)
             elif isinstance(response, (HTMLResponse, PlainTextResponse)):
                 return self.handle_text_response(response)
             elif isinstance(response, _StreamingResponse):
-                return await self.handle_streaming_response_async(response)
+                # return await self.handle_streaming_response_async(response)
+                return  response
+            else:
+                logger.warning(f"Unknown response type: {type(response)}")
             return response
         except Exception as e:
             logger.error(f"error: {e}")
@@ -77,6 +84,7 @@ class UnifiedResponseMiddleware(BaseHTTPMiddleware):
         
         not sure if there are some other kind of responses that returned from fastapi"""
         try:
+            logger.debug(f">>>>>>>>>>> Streammmmmmmming response: {response}")
             response_body = [chunk async for chunk in response.body_iterator]
             response.body_iterator = iterate_in_threadpool(iter(response_body))
             response_body = (b''.join(response_body)).decode()

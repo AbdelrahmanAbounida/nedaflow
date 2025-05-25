@@ -1,6 +1,6 @@
 from nedaflow.flow.types import FieldTypes
 from nedaflow.flow.types import MultilineInput, TextInput
-from nedaflow.flow.nodes.io.io import Output
+from nedaflow.flow.nodes.io.io import Output, Input
 from nedaflow.flow.nodes.base import BaseNode, ComponentTypeEnum
 
 
@@ -12,7 +12,7 @@ class Prompt(BaseNode):
     icon: str = "TerminalSquare"
     minimized: bool = False
     code: str = ""
-    inputs: list = [
+    inputs: list[Input]= [
         MultilineInput(
             name="prompt",
             display_name="Template",
